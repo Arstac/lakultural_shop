@@ -1,17 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
 import { CartButton } from "@/components/site/CartButton";
 import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
 import Image from "next/image";
+import { useLocale } from "next-intl";
 
 export function Header() {
+    const locale = useLocale();
+
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
-                    <Link href="/" className="flex items-center">
+                    <Link href={`/${locale}`} className="flex items-center">
                         <Image
                             src="/kroma_lletres.png"
                             alt="KROMA"
@@ -22,6 +27,7 @@ export function Header() {
                         />
                     </Link>
                 </div>
+
 
                 {/* Right Side: Social & Contact */}
                 <div className="flex items-center gap-2 md:gap-4">

@@ -1,14 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { Product } from "@/lib/products";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "next-intl";
 
 interface ProductCardProps {
     product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+    const locale = useLocale();
+
     return (
         <Card className="group overflow-hidden border-none shadow-none hover:shadow-lg transition-all duration-300">
             <CardHeader className="p-0">
@@ -32,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </CardContent>
             <CardFooter>
                 <Button className="w-full rounded-full" asChild>
-                    <Link href={`/producto/${product.slug}`}>
+                    <Link href={`/${locale}/producto/${product.slug}`}>
                         Ver Detalles
                     </Link>
                 </Button>
@@ -40,3 +45,4 @@ export function ProductCard({ product }: ProductCardProps) {
         </Card>
     );
 }
+

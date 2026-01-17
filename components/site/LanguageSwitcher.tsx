@@ -26,8 +26,13 @@ export function LanguageSwitcher() {
     const handleLocaleChange = (newLocale: string) => {
         // Replace current locale in path
         const segments = pathname.split("/");
-        segments[1] = newLocale;
-        router.push(segments.join("/"));
+        if (segments[1] && ["ca", "es", "fr", "en"].includes(segments[1])) {
+            segments[1] = newLocale;
+        } else {
+            segments.splice(1, 0, newLocale);
+        }
+        const newPath = segments.join("/") || `/${newLocale}`;
+        router.replace(newPath);
     };
 
     const currentLocale = locales.find((l) => l.code === locale);
