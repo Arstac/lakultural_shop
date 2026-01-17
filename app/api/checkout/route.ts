@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { CartItem } from "@/lib/store";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2024-12-18.acacia",
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "dummy_key_for_build", {
+    apiVersion: "2025-12-15.clover" as any,
+    typescript: true,
 });
 
 const SHIPPING_RATE_ID = process.env.STRIPE_SHIPPING_RATE_ID; // Optional if using free shipping
