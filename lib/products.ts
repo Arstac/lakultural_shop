@@ -1,3 +1,11 @@
+export interface Variant {
+    id: string;
+    name: string;
+    description?: string;
+    image: string; // Specific image for this variant
+    priceId?: string; // Stripe Price ID (starts with price_...)
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -7,8 +15,8 @@ export interface Product {
     features: string[];
     dimensions: string;
     materials: string;
-    images: string[];
-    stripeLink: string;
+    images: string[]; // Fallback gallery
+    variants: Variant[];
 }
 
 export const products: Product[] = [
@@ -27,10 +35,12 @@ export const products: Product[] = [
         materials: "Nylon impermeable de alta resistencia.",
         images: [
             "/placeholder-mini-1.jpg",
-            "/placeholder-mini-2.jpg",
-            "/placeholder-mini-3.jpg"
+            "/placeholder-mini-2.jpg"
         ],
-        stripeLink: "https://buy.stripe.com/test_placeholder_mini"
+        variants: [
+            { id: "mini-black", name: "Negro", image: "/placeholder-mini-1.jpg", priceId: "replace_with_price_id_mini_black" },
+            { id: "mini-olive", name: "Verde Oliva", image: "/placeholder-mini-2.jpg", priceId: "replace_with_price_id_mini_olive" }
+        ]
     },
     {
         id: "todoterreno",
@@ -47,10 +57,13 @@ export const products: Product[] = [
         materials: "Lona encerada y forro de algodón.",
         images: [
             "/placeholder-todo-1.jpg",
-            "/placeholder-todo-2.jpg",
-            "/placeholder-todo-3.jpg"
+            "/placeholder-todo-2.jpg"
         ],
-        stripeLink: "https://buy.stripe.com/test_placeholder_todoterreno"
+        variants: [
+            { id: "todo-navy", name: "Azul Marino", image: "/placeholder-todo-1.jpg", priceId: "replace_with_price_id_todo_navy" },
+            { id: "todo-sand", name: "Arena", image: "/placeholder-todo-2.jpg", priceId: "replace_with_price_id_todo_sand" },
+            { id: "todo-terracotta", name: "Terracota", image: "/placeholder-todo-3.jpg", priceId: "replace_with_price_id_todo_terracotta" }
+        ]
     },
     {
         id: "maxi",
@@ -67,9 +80,11 @@ export const products: Product[] = [
         materials: "Cordura 1000D y cremalleras YKK.",
         images: [
             "/placeholder-maxi-1.jpg",
-            "/placeholder-maxi-2.jpg",
-            "/placeholder-maxi-3.jpg"
+            "/placeholder-maxi-2.jpg"
         ],
-        stripeLink: "https://buy.stripe.com/test_placeholder_maxi"
+        variants: [
+            { id: "maxi-camo", name: "Camuflaje", image: "/placeholder-maxi-1.jpg", priceId: "replace_with_price_id_maxi_camo" },
+            { id: "maxi-black", name: "Negro Total", image: "/placeholder-maxi-2.jpg", priceId: "replace_with_price_id_maxi_black" }
+        ]
     }
 ];

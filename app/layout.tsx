@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "Riñoneras hechas a mano. Tres tamaños, un estilo. Diseñadas para tu día a día.",
 };
 
+import { CartSheet } from "@/components/site/CartSheet";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${outfit.variable} antialiased min-h-screen flex flex-col font-sans`}>
+        <CartSheet />
         <Header />
         <main className="flex-1">
           {children}
