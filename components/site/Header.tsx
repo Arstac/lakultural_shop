@@ -3,14 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
 import { CartButton } from "@/components/site/CartButton";
 
+import Image from "next/image"; // Added import
+
 export function Header() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
-                    <Link href="/" className="text-xl font-bold uppercase tracking-widest text-primary">
-                        KROMA
+                    <Link href="/" className="flex items-center">
+                        <Image
+                            src="/kroma_lletres.png"
+                            alt="KROMA"
+                            width={120}
+                            height={40}
+                            className="h-8 w-auto object-contain"
+                            priority
+                        />
                     </Link>
                 </div>
 
