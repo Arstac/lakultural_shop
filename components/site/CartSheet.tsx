@@ -61,7 +61,7 @@ export function CartSheet() {
                             </Button>
                         </div>
                     ) : (
-                        <div className="space-y-6">
+                        <div className="space-y-6 px-4">
                             {items.map((item) => (
                                 <div key={item.id} className="flex gap-4">
                                     <div className="relative w-20 h-20 rounded-md overflow-hidden bg-muted shrink-0">
