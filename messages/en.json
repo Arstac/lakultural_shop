@@ -1,0 +1,60 @@
+{
+    "Header": {
+        "contact": "Contact"
+    },
+    "Hero": {
+        "title": "The ultimate fanny pack.",
+        "subtitle": "Three sizes, one style.",
+        "description": "Handmade to accompany you on every adventure, from festivals to mountains.",
+        "cta": "View Collection"
+    },
+    "Products": {
+        "title": "Our Collection",
+        "viewDetails": "View Details"
+    },
+    "ValueProps": {
+        "title": "Why KROMA?",
+        "handmade": {
+            "title": "Handmade",
+            "description": "Each piece is unique, sewn with love."
+        },
+        "sustainable": {
+            "title": "Premium Materials",
+            "description": "Resistant and durable fabrics."
+        },
+        "local": {
+            "title": "Local Design",
+            "description": "Designed and produced close to you."
+        }
+    },
+    "ProductPage": {
+        "handmade": "Handmade",
+        "modelColor": "Model / Color",
+        "addToCart": "Add to Cart",
+        "features": "Features",
+        "dimensions": "Dimensions",
+        "materials": "Materials & Care",
+        "sizeGuide": "Not sure about the size?",
+        "sizeReference": "Size reference"
+    },
+    "Cart": {
+        "title": "Your Cart",
+        "empty": "Your cart is empty",
+        "viewCollection": "View collection",
+        "total": "Total",
+        "checkout": "Checkout",
+        "processing": "Processing..."
+    },
+    "Footer": {
+        "rights": "All rights reserved.",
+        "legal": "Terms & Conditions"
+    },
+    "Success": {
+        "title": "Thank you for your purchase!",
+        "message": "We've received your order and are preparing it with care.",
+        "back": "Back to store"
+    },
+    "Legal": {
+        "title": "Terms & Conditions"
+    }
+}

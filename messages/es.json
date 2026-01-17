@@ -1,0 +1,60 @@
+{
+    "Header": {
+        "contact": "Contacto"
+    },
+    "Hero": {
+        "title": "La riñonera definitiva.",
+        "subtitle": "Tres tamaños, un estilo.",
+        "description": "Hechas a mano para acompañarte en cada aventura, desde el festival hasta la montaña.",
+        "cta": "Ver Colección"
+    },
+    "Products": {
+        "title": "Nuestra Colección",
+        "viewDetails": "Ver Detalles"
+    },
+    "ValueProps": {
+        "title": "¿Por qué KROMA?",
+        "handmade": {
+            "title": "Hecho a Mano",
+            "description": "Cada pieza es única, cosida con cariño."
+        },
+        "sustainable": {
+            "title": "Materiales Premium",
+            "description": "Telas resistentes y duraderas."
+        },
+        "local": {
+            "title": "Diseño Local",
+            "description": "Diseñado y producido cerca de ti."
+        }
+    },
+    "ProductPage": {
+        "handmade": "Hecho a mano",
+        "modelColor": "Modelo / Color",
+        "addToCart": "Añadir al Carrito",
+        "features": "Características",
+        "dimensions": "Medidas",
+        "materials": "Materiales y Cuidados",
+        "sizeGuide": "¿Dudas con el tamaño?",
+        "sizeReference": "Referencia de tamaño"
+    },
+    "Cart": {
+        "title": "Tu Carrito",
+        "empty": "Tu carrito está vacío",
+        "viewCollection": "Ver colección",
+        "total": "Total",
+        "checkout": "Tramitar Pedido",
+        "processing": "Procesando..."
+    },
+    "Footer": {
+        "rights": "Todos los derechos reservados.",
+        "legal": "Términos y Condiciones"
+    },
+    "Success": {
+        "title": "¡Gracias por tu compra!",
+        "message": "Hemos recibido tu pedido y lo estamos preparando con mucho cariño.",
+        "back": "Volver a la tienda"
+    },
+    "Legal": {
+        "title": "Términos y Condiciones"
+    }
+}

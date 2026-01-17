@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/site/Header";
-import { Footer } from "@/components/site/Footer";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -15,23 +13,17 @@ export const metadata: Metadata = {
   description: "Riñoneras hechas a mano. Tres tamaños, un estilo. Diseñadas para tu día a día.",
 };
 
-import { CartSheet } from "@/components/site/CartSheet";
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth">
+    <html className="scroll-smooth" suppressHydrationWarning>
       <body className={`${outfit.variable} antialiased min-h-screen flex flex-col font-sans`}>
-        <CartSheet />
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
 }
+

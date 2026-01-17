@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
 import { CartButton } from "@/components/site/CartButton";
-
-import Image from "next/image"; // Added import
+import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
+import Image from "next/image";
 
 export function Header() {
     return (
@@ -24,13 +24,14 @@ export function Header() {
                 </div>
 
                 {/* Right Side: Social & Contact */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
+                    <LanguageSwitcher />
                     <CartButton />
-                    <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
                         <Instagram className="h-5 w-5" />
                         <span className="sr-only">Instagram</span>
                     </Link>
-                    <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm" asChild className="hidden md:flex">
                         <Link href="mailto:hola@kroma.com">
                             Contacto
                         </Link>

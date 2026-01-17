@@ -1,0 +1,60 @@
+{
+    "Header": {
+        "contact": "Contact"
+    },
+    "Hero": {
+        "title": "La banane ultime.",
+        "subtitle": "Trois tailles, un style.",
+        "description": "Faites main pour t'accompagner dans chaque aventure, du festival à la montagne.",
+        "cta": "Voir la Collection"
+    },
+    "Products": {
+        "title": "Notre Collection",
+        "viewDetails": "Voir Détails"
+    },
+    "ValueProps": {
+        "title": "Pourquoi KROMA?",
+        "handmade": {
+            "title": "Fait Main",
+            "description": "Chaque pièce est unique, cousue avec amour."
+        },
+        "sustainable": {
+            "title": "Matériaux Premium",
+            "description": "Tissus résistants et durables."
+        },
+        "local": {
+            "title": "Design Local",
+            "description": "Conçu et produit près de chez toi."
+        }
+    },
+    "ProductPage": {
+        "handmade": "Fait main",
+        "modelColor": "Modèle / Couleur",
+        "addToCart": "Ajouter au Panier",
+        "features": "Caractéristiques",
+        "dimensions": "Dimensions",
+        "materials": "Matériaux et Entretien",
+        "sizeGuide": "Des doutes sur la taille?",
+        "sizeReference": "Référence de taille"
+    },
+    "Cart": {
+        "title": "Ton Panier",
+        "empty": "Ton panier est vide",
+        "viewCollection": "Voir collection",
+        "total": "Total",
+        "checkout": "Commander",
+        "processing": "Traitement..."
+    },
+    "Footer": {
+        "rights": "Tous droits réservés.",
+        "legal": "Conditions Générales"
+    },
+    "Success": {
+        "title": "Merci pour ton achat!",
+        "message": "Nous avons reçu ta commande et la préparons avec soin.",
+        "back": "Retour à la boutique"
+    },
+    "Legal": {
+        "title": "Conditions Générales"
+    }
+}

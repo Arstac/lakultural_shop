@@ -1,0 +1,60 @@
+{
+    "Header": {
+        "contact": "Contacte"
+    },
+    "Hero": {
+        "title": "La ronyonera definitiva.",
+        "subtitle": "Tres mides, un estil.",
+        "description": "Fetes a mà per acompanyar-te en cada aventura, del festival a la muntanya.",
+        "cta": "Veure Col·lecció"
+    },
+    "Products": {
+        "title": "La Nostra Col·lecció",
+        "viewDetails": "Veure Detalls"
+    },
+    "ValueProps": {
+        "title": "Per què KROMA?",
+        "handmade": {
+            "title": "Fet a Mà",
+            "description": "Cada peça és única, cosida amb afecte."
+        },
+        "sustainable": {
+            "title": "Materials Premium",
+            "description": "Teles resistents i duradores."
+        },
+        "local": {
+            "title": "Disseny Local",
+            "description": "Dissenyat i produït a prop teu."
+        }
+    },
+    "ProductPage": {
+        "handmade": "Fet a mà",
+        "modelColor": "Model / Color",
+        "addToCart": "Afegir al Carret",
+        "features": "Característiques",
+        "dimensions": "Mides",
+        "materials": "Materials i Cures",
+        "sizeGuide": "Dubtes amb la mida?",
+        "sizeReference": "Referència de mida"
+    },
+    "Cart": {
+        "title": "El Teu Carret",
+        "empty": "El teu carret és buit",
+        "viewCollection": "Veure col·lecció",
+        "total": "Total",
+        "checkout": "Tramitar Comanda",
+        "processing": "Processant..."
+    },
+    "Footer": {
+        "rights": "Tots els drets reservats.",
+        "legal": "Termes i Condicions"
+    },
+    "Success": {
+        "title": "Gràcies per la teva compra!",
+        "message": "Hem rebut la teva comanda i l'estem preparant amb molta cura.",
+        "back": "Tornar a la botiga"
+    },
+    "Legal": {
+        "title": "Termes i Condicions"
+    }
+}

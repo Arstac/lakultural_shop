@@ -1,17 +1,24 @@
 import { products } from "@/lib/products";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/site/ProductDetail";
+import { routing } from "@/i18n/routing";
 
 interface ProductPageProps {
     params: Promise<{
+        locale: string;
         slug: string;
     }>;
 }
 
 export async function generateStaticParams() {
-    return products.map((product) => ({
-        slug: product.slug,
-    }));
+    // Generate all combinations of locale + slug
+    const params: { locale: string; slug: string }[] = [];
+    for (const locale of routing.locales) {
+        for (const product of products) {
+            params.push({ locale, slug: product.slug });
+        }
+    }
+    return params;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
