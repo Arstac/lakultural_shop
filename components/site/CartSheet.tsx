@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -71,7 +72,13 @@ export function CartSheet() {
                                     </div>
                                     <div className="flex-1 flex flex-col justify-between">
                                         <div>
-                                            <h4 className="font-semibold text-sm line-clamp-1">{item.product.name}</h4>
+                                            <Link
+                                                href={`/producto/${item.product.slug}`}
+                                                onClick={() => setIsOpen(false)}
+                                                className="font-semibold text-sm line-clamp-1 hover:underline hover:text-primary transition-colors"
+                                            >
+                                                {item.product.name}
+                                            </Link>
                                             <p className="text-sm text-muted-foreground">{item.variant.name}</p>
                                         </div>
                                         <div className="flex items-center justify-between">
