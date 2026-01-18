@@ -10,21 +10,21 @@
     },
     "Products": {
         "title": "Our Collection",
+        "description": "Designed with you in mind. Choose the size that best fits your lifestyle.",
         "viewDetails": "View Details"
     },
     "ValueProps": {
-        "title": "Why KROMA?",
         "handmade": {
             "title": "Handmade",
-            "description": "Each piece is unique, sewn with love."
+            "description": "Each piece is unique, handcrafted in our local workshop."
         },
-        "sustainable": {
-            "title": "Premium Materials",
-            "description": "Resistant and durable fabrics."
+        "waterproof": {
+            "title": "Waterproof Fabric",
+            "description": "Weather-resistant materials to protect your belongings."
         },
-        "local": {
-            "title": "Local Design",
-            "description": "Designed and produced close to you."
+        "shipping": {
+            "title": "Fast Shipping",
+            "description": "Receive your Kroma in 24/48h and start enjoying it right away."
         }
     },
     "ProductPage": {
@@ -50,11 +50,74 @@
         "legal": "Terms & Conditions"
     },
     "Success": {
-        "title": "Thank you for your purchase!",
-        "message": "We've received your order and are preparing it with care.",
-        "back": "Back to store"
+        "title": "Thank you for your order!",
+        "description": "We've received your order correctly. You'll soon receive a confirmation email with shipping details.",
+        "backHome": "Back to Home"
     },
     "Legal": {
-        "title": "Terms & Conditions"
+        "title": "Terms & Conditions",
+        "intro": {
+            "title": "1. Introduction",
+            "content": "Welcome to KROMA. By accessing and using this website, you agree to comply with the following terms and conditions."
+        },
+        "shipping": {
+            "title": "2. Shipping & Returns",
+            "content": "We ship across the peninsula in 24/48h. If you're not satisfied with your purchase, you have 14 calendar days to make changes or returns, provided the product is in perfect condition."
+        },
+        "warranty": {
+            "title": "3. Warranty",
+            "content": "Our fanny packs are handmade with high-quality materials. We offer a 2-year warranty against manufacturing defects."
+        },
+        "privacy": {
+            "title": "4. Privacy",
+            "content": "Your personal data is treated confidentially and is only used to process your order and improve your shopping experience."
+        }
+    },
+    "ProductData": {
+        "la-mini": {
+            "name": "La Mini",
+            "description": "Perfect for essentials. Keys, cards, and little else. Total freedom.",
+            "features": [
+                "Compact and lightweight",
+                "Adjustable strap",
+                "Security closure"
+            ],
+            "materials": "High-resistance waterproof nylon."
+        },
+        "la-todoterreno": {
+            "name": "La Todoterreno",
+            "description": "The perfect balance. Fits your phone, sunglasses, and wallet. Your daily companion.",
+            "features": [
+                "Versatile size",
+                "Interior zip pocket",
+                "Water-resistant fabric"
+            ],
+            "materials": "Waxed canvas and cotton lining."
+        },
+        "la-maxi": {
+            "name": "La Maxi",
+            "description": "For those who leave nothing behind. Water bottle, planner, and more.",
+            "features": [
+                "Large capacity",
+                "Double compartment",
+                "Reinforced base"
+            ],
+            "materials": "1000D Cordura and YKK zippers."
+        },
+        "variants": {
+            "mini-black": "Black",
+            "mini-olive": "Olive Green",
+            "todo-navy": "Navy Blue",
+            "todo-sand": "Sand",
+            "todo-terracotta": "Terracotta",
+            "maxi-camo": "Camouflage",
+            "maxi-black": "Total Black"
+        },
+        "sizeGuide": {
+            "title": "Not sure about the size?",
+            "mini": "La Mini: Keys + Card holder",
+            "todoterreno": "La Todoterreno: Phone + Sunglasses + Wallet",
+            "maxi": "La Maxi: 50cl Bottle + Planner + Everything else"
+        }
     }
 }

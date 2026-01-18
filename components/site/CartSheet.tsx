@@ -14,11 +14,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations, useLocale } from "next-intl";
 
 export function CartSheet() {
     const { items, removeItem, updateQuantity, isOpen, setIsOpen } = useCart();
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const t = useTranslations("Cart");
+    const locale = useLocale();
 
     const total = items.reduce(
         (acc, item) => acc + item.product.price * item.quantity,
@@ -48,16 +51,16 @@ export function CartSheet() {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetContent className="flex flex-col w-full sm:max-w-md">
                 <SheetHeader>
-                    <SheetTitle>Tu Carrito ({items.length})</SheetTitle>
+                    <SheetTitle>{t("title")} ({items.length})</SheetTitle>
                 </SheetHeader>
 
                 <div className="flex-1 overflow-y-auto py-6">
                     {items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-4">
                             <ShoppingBag className="w-12 h-12 opacity-20" />
-                            <p>Tu carrito está vacío</p>
+                            <p>{t("empty")}</p>
                             <Button variant="link" onClick={() => setIsOpen(false)}>
-                                Ver colección
+                                {t("viewCollection")}
                             </Button>
                         </div>
                     ) : (
@@ -126,11 +129,11 @@ export function CartSheet() {
                     <SheetFooter className="border-t pt-6">
                         <div className="w-full space-y-4">
                             <div className="flex justify-between items-center font-bold text-lg">
-                                <span>Total</span>
+                                <span>{t("total")}</span>
                                 <span>{total.toFixed(2)}€</span>
                             </div>
                             <Button className="w-full" size="lg" onClick={handleCheckout} disabled={isLoading}>
-                                {isLoading ? "Procesando..." : "Tramitar Pedido"}
+                                {isLoading ? t("processing") : t("checkout")}
                             </Button>
                         </div>
                     </SheetFooter>

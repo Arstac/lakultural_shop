@@ -6,10 +6,11 @@ import { Instagram } from "lucide-react";
 import { CartButton } from "@/components/site/CartButton";
 import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function Header() {
     const locale = useLocale();
+    const t = useTranslations("Header");
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,7 +40,7 @@ export function Header() {
                     </Link>
                     <Button variant="outline" size="sm" asChild className="hidden md:flex">
                         <Link href="mailto:hola@kroma.com">
-                            Contacto
+                            {t("contact")}
                         </Link>
                     </Button>
                 </div>

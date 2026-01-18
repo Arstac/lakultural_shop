@@ -10,21 +10,21 @@
     },
     "Products": {
         "title": "La Nostra Col·lecció",
+        "description": "Dissenyades pensant en tu. Tria la mida que millor s'adapti al teu ritme de vida.",
         "viewDetails": "Veure Detalls"
     },
     "ValueProps": {
-        "title": "Per què KROMA?",
         "handmade": {
             "title": "Fet a Mà",
-            "description": "Cada peça és única, cosida amb afecte."
+            "description": "Cada peça és única, fabricada artesanalment al nostre taller local."
         },
-        "sustainable": {
-            "title": "Materials Premium",
-            "description": "Teles resistents i duradores."
+        "waterproof": {
+            "title": "Tela Impermeable",
+            "description": "Materials resistents a la pluja per protegir les teves pertinences."
         },
-        "local": {
-            "title": "Disseny Local",
-            "description": "Dissenyat i produït a prop teu."
+        "shipping": {
+            "title": "Enviament Ràpid",
+            "description": "Rep la teva Kroma en 24/48h i comença a gaudir-la quan abans."
         }
     },
     "ProductPage": {
@@ -50,11 +50,74 @@
         "legal": "Termes i Condicions"
     },
     "Success": {
-        "title": "Gràcies per la teva compra!",
-        "message": "Hem rebut la teva comanda i l'estem preparant amb molta cura.",
-        "back": "Tornar a la botiga"
+        "title": "Gràcies per la teva comanda!",
+        "description": "Hem rebut la teva comanda correctament. Aviat rebràs un email de confirmació amb els detalls de l'enviament.",
+        "backHome": "Tornar a l'Inici"
     },
     "Legal": {
-        "title": "Termes i Condicions"
+        "title": "Termes i Condicions",
+        "intro": {
+            "title": "1. Introducció",
+            "content": "Benvingut a KROMA. En accedir i utilitzar aquest lloc web, acceptes complir amb els següents termes i condicions."
+        },
+        "shipping": {
+            "title": "2. Enviaments i Devolucions",
+            "content": "Fem enviaments a tota la península en 24/48h. Si no estàs satisfet amb la teva compra, disposes de 14 dies naturals per fer canvis o devolucions, sempre que el producte estigui en perfecte estat."
+        },
+        "warranty": {
+            "title": "3. Garantia",
+            "content": "Les nostres ronyoneres estan fetes a mà amb materials d'alta qualitat. Oferim una garantia de 2 anys contra defectes de fabricació."
+        },
+        "privacy": {
+            "title": "4. Privacitat",
+            "content": "Les teves dades personals són tractades amb confidencialitat i només s'utilitzen per processar la teva comanda i millorar la teva experiència de compra."
+        }
+    },
+    "ProductData": {
+        "la-mini": {
+            "name": "La Mini",
+            "description": "Perfecta per a allò essencial. Claus, targetes i poc més. Llibertat total.",
+            "features": [
+                "Compacta i lleugera",
+                "Corretja ajustable",
+                "Tancament de seguretat"
+            ],
+            "materials": "Niló impermeable d'alta resistència."
+        },
+        "la-todoterreno": {
+            "name": "La Todoterreno",
+            "description": "L'equilibri perfecte. Hi cap el mòbil, ulleres i cartera. La teva companya diària.",
+            "features": [
+                "Mida versàtil",
+                "Butxaca interior amb cremallera",
+                "Tela resistent a l'aigua"
+            ],
+            "materials": "Lona encerada i folre de cotó."
+        },
+        "la-maxi": {
+            "name": "La Maxi",
+            "description": "Per als que no deixen res a casa. Ampolla d'aigua, agenda i més.",
+            "features": [
+                "Gran capacitat",
+                "Doble compartiment",
+                "Reforç a la base"
+            ],
+            "materials": "Cordura 1000D i cremalleres YKK."
+        },
+        "variants": {
+            "mini-black": "Negre",
+            "mini-olive": "Verd Oliva",
+            "todo-navy": "Blau Marí",
+            "todo-sand": "Sorra",
+            "todo-terracotta": "Terracota",
+            "maxi-camo": "Camuflatge",
+            "maxi-black": "Negre Total"
+        },
+        "sizeGuide": {
+            "title": "Dubtes amb la mida?",
+            "mini": "La Mini: Claus + Targeter",
+            "todoterreno": "La Todoterreno: Mòbil + Ulleres + Cartera",
+            "maxi": "La Maxi: Ampolla 50cl + Agenda + Tot el demés"
+        }
     }
 }

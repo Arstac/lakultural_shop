@@ -10,21 +10,21 @@
     },
     "Products": {
         "title": "Notre Collection",
+        "description": "Conçues en pensant à toi. Choisis la taille qui s'adapte le mieux à ton rythme de vie.",
         "viewDetails": "Voir Détails"
     },
     "ValueProps": {
-        "title": "Pourquoi KROMA?",
         "handmade": {
             "title": "Fait Main",
-            "description": "Chaque pièce est unique, cousue avec amour."
+            "description": "Chaque pièce est unique, fabriquée artisanalement dans notre atelier local."
         },
-        "sustainable": {
-            "title": "Matériaux Premium",
-            "description": "Tissus résistants et durables."
+        "waterproof": {
+            "title": "Tissu Imperméable",
+            "description": "Matériaux résistants à la pluie pour protéger tes affaires."
         },
-        "local": {
-            "title": "Design Local",
-            "description": "Conçu et produit près de chez toi."
+        "shipping": {
+            "title": "Livraison Rapide",
+            "description": "Reçois ta Kroma en 24/48h et commence à en profiter rapidement."
         }
     },
     "ProductPage": {
@@ -50,11 +50,74 @@
         "legal": "Conditions Générales"
     },
     "Success": {
-        "title": "Merci pour ton achat!",
-        "message": "Nous avons reçu ta commande et la préparons avec soin.",
-        "back": "Retour à la boutique"
+        "title": "Merci pour ta commande!",
+        "description": "Nous avons bien reçu ta commande. Tu recevras bientôt un email de confirmation avec les détails de livraison.",
+        "backHome": "Retour à l'Accueil"
     },
     "Legal": {
-        "title": "Conditions Générales"
+        "title": "Conditions Générales",
+        "intro": {
+            "title": "1. Introduction",
+            "content": "Bienvenue chez KROMA. En accédant et en utilisant ce site web, tu acceptes de respecter les conditions générales suivantes."
+        },
+        "shipping": {
+            "title": "2. Livraison et Retours",
+            "content": "Nous livrons dans toute la péninsule en 24/48h. Si tu n'es pas satisfait de ton achat, tu disposes de 14 jours pour effectuer des changements ou retours, à condition que le produit soit en parfait état."
+        },
+        "warranty": {
+            "title": "3. Garantie",
+            "content": "Nos sacs banane sont faits main avec des matériaux de haute qualité. Nous offrons une garantie de 2 ans contre les défauts de fabrication."
+        },
+        "privacy": {
+            "title": "4. Confidentialité",
+            "content": "Tes données personnelles sont traitées de manière confidentielle et ne sont utilisées que pour traiter ta commande et améliorer ton expérience d'achat."
+        }
+    },
+    "ProductData": {
+        "la-mini": {
+            "name": "La Mini",
+            "description": "Parfaite pour l'essentiel. Clés, cartes et pas grand-chose d'autre. Liberté totale.",
+            "features": [
+                "Compacte et légère",
+                "Sangle ajustable",
+                "Fermeture de sécurité"
+            ],
+            "materials": "Nylon imperméable haute résistance."
+        },
+        "la-todoterreno": {
+            "name": "La Todoterreno",
+            "description": "L'équilibre parfait. Contient téléphone, lunettes et portefeuille. Ta compagne quotidienne.",
+            "features": [
+                "Taille polyvalente",
+                "Poche intérieure zippée",
+                "Tissu résistant à l'eau"
+            ],
+            "materials": "Toile cirée et doublure coton."
+        },
+        "la-maxi": {
+            "name": "La Maxi",
+            "description": "Pour ceux qui n'oublient rien. Bouteille d'eau, agenda et plus encore.",
+            "features": [
+                "Grande capacité",
+                "Double compartiment",
+                "Base renforcée"
+            ],
+            "materials": "Cordura 1000D et fermetures YKK."
+        },
+        "variants": {
+            "mini-black": "Noir",
+            "mini-olive": "Vert Olive",
+            "todo-navy": "Bleu Marine",
+            "todo-sand": "Sable",
+            "todo-terracotta": "Terracotta",
+            "maxi-camo": "Camouflage",
+            "maxi-black": "Noir Total"
+        },
+        "sizeGuide": {
+            "title": "Des doutes sur la taille?",
+            "mini": "La Mini: Clés + Porte-cartes",
+            "todoterreno": "La Todoterreno: Téléphone + Lunettes + Portefeuille",
+            "maxi": "La Maxi: Bouteille 50cl + Agenda + Tout le reste"
+        }
     }
 }

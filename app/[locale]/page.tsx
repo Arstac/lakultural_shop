@@ -1,9 +1,14 @@
+"use client";
+
 import { Hero } from "@/components/site/Hero";
 import { ProductCard } from "@/components/site/ProductCard";
 import { ValueProps } from "@/components/site/ValueProps";
 import { products } from "@/lib/products";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
+  const t = useTranslations("Products");
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))]">
       <Hero />
@@ -11,10 +16,10 @@ export default function Home() {
       <section id="productos" className="py-20 container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Nuestra Colección
+            {t("title")}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Diseñadas pensando en ti. Elige el tamaño que mejor se adapte a tu ritmo de vida.
+            {t("description")}
           </p>
         </div>
 
@@ -29,3 +34,4 @@ export default function Home() {
     </div>
   );
 }
+

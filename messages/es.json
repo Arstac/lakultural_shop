@@ -10,21 +10,21 @@
     },
     "Products": {
         "title": "Nuestra Colección",
+        "description": "Diseñadas pensando en ti. Elige el tamaño que mejor se adapte a tu ritmo de vida.",
         "viewDetails": "Ver Detalles"
     },
     "ValueProps": {
-        "title": "¿Por qué KROMA?",
         "handmade": {
             "title": "Hecho a Mano",
-            "description": "Cada pieza es única, cosida con cariño."
+            "description": "Cada pieza es única, fabricada artesanalmente en nuestro taller local."
         },
-        "sustainable": {
-            "title": "Materiales Premium",
-            "description": "Telas resistentes y duraderas."
+        "waterproof": {
+            "title": "Tela Impermeable",
+            "description": "Materiales resistentes a la lluvia para proteger tus pertenencias."
         },
-        "local": {
-            "title": "Diseño Local",
-            "description": "Diseñado y producido cerca de ti."
+        "shipping": {
+            "title": "Envío Rápido",
+            "description": "Recibe tu Kroma en 24/48h y empieza a disfrutarla cuanto antes."
         }
     },
     "ProductPage": {
@@ -50,11 +50,74 @@
         "legal": "Términos y Condiciones"
     },
     "Success": {
-        "title": "¡Gracias por tu compra!",
-        "message": "Hemos recibido tu pedido y lo estamos preparando con mucho cariño.",
-        "back": "Volver a la tienda"
+        "title": "¡Gracias por tu pedido!",
+        "description": "Hemos recibido tu pedido correctamente. En breve recibirás un email de confirmación con los detalles del envío.",
+        "backHome": "Volver al Inicio"
     },
     "Legal": {
-        "title": "Términos y Condiciones"
+        "title": "Términos y Condiciones",
+        "intro": {
+            "title": "1. Introducción",
+            "content": "Bienvenido a KROMA. Al acceder y utilizar este sitio web, aceptas cumplir con los siguientes términos y condiciones."
+        },
+        "shipping": {
+            "title": "2. Envíos y Devoluciones",
+            "content": "Realizamos envíos a toda la península en 24/48h. Si no estás satisfecho con tu compra, dispones de 14 días naturales para realizar cambios o devoluciones, siempre que el producto esté en perfecto estado."
+        },
+        "warranty": {
+            "title": "3. Garantía",
+            "content": "Nuestras riñoneras están hechas a mano con materiales de alta calidad. Ofrecemos una garantía de 2 años contra defectos de fabricación."
+        },
+        "privacy": {
+            "title": "4. Privacidad",
+            "content": "Tus datos personales son tratados con confidencialidad y solo se utilizan para procesar tu pedido y mejorar tu experiencia de compra."
+        }
+    },
+    "ProductData": {
+        "la-mini": {
+            "name": "La Mini",
+            "description": "Perfecta para lo esencial. Llaves, tarjetas y poco más. Libertad total.",
+            "features": [
+                "Compacta y ligera",
+                "Correa ajustable",
+                "Cierre de seguridad"
+            ],
+            "materials": "Nylon impermeable de alta resistencia."
+        },
+        "la-todoterreno": {
+            "name": "La Todoterreno",
+            "description": "El equilibrio perfecto. Cabe el móvil, gafas y cartera. Tu compañera diaria.",
+            "features": [
+                "Tamaño versátil",
+                "Bolsillo interior con cremallera",
+                "Tela resistente al agua"
+            ],
+            "materials": "Lona encerada y forro de algodón."
+        },
+        "la-maxi": {
+            "name": "La Maxi",
+            "description": "Para los que no dejan nada en casa. Botella de agua, agenda y más.",
+            "features": [
+                "Gran capacidad",
+                "Doble compartimento",
+                "Refuerzo en la base"
+            ],
+            "materials": "Cordura 1000D y cremalleras YKK."
+        },
+        "variants": {
+            "mini-black": "Negro",
+            "mini-olive": "Verde Oliva",
+            "todo-navy": "Azul Marino",
+            "todo-sand": "Arena",
+            "todo-terracotta": "Terracota",
+            "maxi-camo": "Camuflaje",
+            "maxi-black": "Negro Total"
+        },
+        "sizeGuide": {
+            "title": "¿Dudas con el tamaño?",
+            "mini": "La Mini: Llaves + Tarjetero",
+            "todoterreno": "La Todoterreno: Móvil + Gafas + Cartera",
+            "maxi": "La Maxi: Botella 50cl + Agenda + Todo lo demás"
+        }
     }
 }
