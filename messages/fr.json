@@ -1,6 +1,8 @@
 {
     "Header": {
-        "contact": "Contact"
+        "contact": "Contact",
+        "rework": "REWORK",
+        "collection": "Collection"
     },
     "Hero": {
         "title": "La banane ultime.",
@@ -12,6 +14,10 @@
         "title": "Notre Collection",
         "description": "Conçues en pensant à toi. Choisis la taille qui s'adapte le mieux à ton rythme de vie.",
         "viewDetails": "Voir Détails"
+    },
+    "ReworkPage": {
+        "title": "Rework",
+        "description": "Pièces uniques et exclusives. Une seule unité de chaque modèle. Si vous clignez des yeux, c'est raté."
     },
     "ValueProps": {
         "handmade": {
@@ -104,6 +110,26 @@
             ],
             "materials": "Cordura 1000D et fermetures YKK."
         },
+        "kroma-denim-vol-1": {
+            "name": "Kroma Denim Vol.1",
+            "description": "Pièce unique confectionnée à partir de jeans vintage récupérés.",
+            "features": [
+                "Pièce unique 1/1",
+                "Tissu denim recyclé",
+                "Doublure intérieure imprimée"
+            ],
+            "materials": "Denim vintage 100% coton."
+        },
+        "patchwork-ecleptico": {
+            "name": "Patchwork Éclectique",
+            "description": "Mélange de textures et couleurs dans une composition unique.",
+            "features": [
+                "Design Patchwork exclusif",
+                "Sangle de sécurité renforcée",
+                "Poche secrète"
+            ],
+            "materials": "Chutes de coton et toile technique."
+        },
         "variants": {
             "mini-black": "Noir",
             "mini-olive": "Vert Olive",
@@ -111,7 +137,9 @@
             "todo-sand": "Sable",
             "todo-terracotta": "Terracotta",
             "maxi-camo": "Camouflage",
-            "maxi-black": "Noir Total"
+            "maxi-black": "Noir Total",
+            "rework-denim-01": "Denim Unique",
+            "rework-patchwork-01": "Patchwork"
         },
         "sizeGuide": {
             "title": "Des doutes sur la taille?",

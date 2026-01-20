@@ -1,6 +1,8 @@
 {
     "Header": {
-        "contact": "Contacte"
+        "contact": "Contacte",
+        "rework": "REWORK",
+        "collection": "Col·lecció"
     },
     "Hero": {
         "title": "La ronyonera definitiva.",
@@ -12,6 +14,10 @@
         "title": "La Nostra Col·lecció",
         "description": "Dissenyades pensant en tu. Tria la mida que millor s'adapti al teu ritme de vida.",
         "viewDetails": "Veure Detalls"
+    },
+    "ReworkPage": {
+        "title": "Rework",
+        "description": "Peces úniques i exclusives. Una sola unitat de cada model. Si parpelleges, t'ho perds."
     },
     "ValueProps": {
         "handmade": {
@@ -104,6 +110,26 @@
             ],
             "materials": "Cordura 1000D i cremalleres YKK."
         },
+        "kroma-denim-vol-1": {
+            "name": "Kroma Denim Vol.1",
+            "description": "Peça única confeccionada a partir de texans vintage recuperats.",
+            "features": [
+                "Peça única 1/1",
+                "Teixit denim reciclat",
+                "Folre interior estampat"
+            ],
+            "materials": "Denim vintage 100% cotó."
+        },
+        "patchwork-ecleptico": {
+            "name": "Patchwork Eclèctic",
+            "description": "Barreja de textures i colors en una composició irrepetible.",
+            "features": [
+                "Disseny Patchwork exclusiu",
+                "Corretja de seguretat reforçada",
+                "Butxaca secreta"
+            ],
+            "materials": "Retalls de cotó i lona tècnica."
+        },
         "variants": {
             "mini-black": "Negre",
             "mini-olive": "Verd Oliva",
@@ -111,7 +137,9 @@
             "todo-sand": "Sorra",
             "todo-terracotta": "Terracota",
             "maxi-camo": "Camuflatge",
-            "maxi-black": "Negre Total"
+            "maxi-black": "Negre Total",
+            "rework-denim-01": "Denim Únic",
+            "rework-patchwork-01": "Patchwork"
         },
         "sizeGuide": {
             "title": "Dubtes amb la mida?",

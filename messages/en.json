@@ -1,6 +1,8 @@
 {
     "Header": {
-        "contact": "Contact"
+        "contact": "Contact",
+        "rework": "REWORK",
+        "collection": "Collection"
     },
     "Hero": {
         "title": "The ultimate fanny pack.",
@@ -12,6 +14,10 @@
         "title": "Our Collection",
         "description": "Designed with you in mind. Choose the size that best fits your lifestyle.",
         "viewDetails": "View Details"
+    },
+    "ReworkPage": {
+        "title": "Rework",
+        "description": "Unique and exclusive pieces. Only one unit of each model. Blink and you'll miss it."
     },
     "ValueProps": {
         "handmade": {
@@ -104,6 +110,26 @@
             ],
             "materials": "1000D Cordura and YKK zippers."
         },
+        "kroma-denim-vol-1": {
+            "name": "Kroma Denim Vol.1",
+            "description": "Unique piece made from recovered vintage jeans.",
+            "features": [
+                "Unique 1/1 piece",
+                "Recycled denim fabric",
+                "Printed inner lining"
+            ],
+            "materials": "100% cotton vintage denim."
+        },
+        "patchwork-ecleptico": {
+            "name": "Eclectic Patchwork",
+            "description": "Mix of textures and colors in an unrepeatable composition.",
+            "features": [
+                "Exclusive Patchwork design",
+                "Reinforced security strap",
+                "Secret pocket"
+            ],
+            "materials": "Cotton scraps and technical canvas."
+        },
         "variants": {
             "mini-black": "Black",
             "mini-olive": "Olive Green",
@@ -111,7 +137,9 @@
             "todo-sand": "Sand",
             "todo-terracotta": "Terracotta",
             "maxi-camo": "Camouflage",
-            "maxi-black": "Total Black"
+            "maxi-black": "Total Black",
+            "rework-denim-01": "Unique Denim",
+            "rework-patchwork-01": "Patchwork"
         },
         "sizeGuide": {
             "title": "Not sure about the size?",

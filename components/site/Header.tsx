@@ -4,9 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
 import { CartButton } from "@/components/site/CartButton";
-import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
+
+const LanguageSwitcher = dynamic(
+    () => import("@/components/site/LanguageSwitcher").then((mod) => mod.LanguageSwitcher),
+    { ssr: false }
+);
 
 export function Header() {
     const locale = useLocale();
@@ -28,6 +33,22 @@ export function Header() {
                         />
                     </Link>
                 </div>
+
+                {/* Center: Navigation */}
+                <nav className="hidden md:flex items-center gap-8">
+                    <Link
+                        href={`/${locale}/#productos`}
+                        className="text-sm font-medium transition-colors hover:text-primary"
+                    >
+                        {t("collection")}
+                    </Link>
+                    <Link
+                        href={`/${locale}/rework`}
+                        className="text-sm font-medium transition-colors hover:text-primary"
+                    >
+                        {t("rework")}
+                    </Link>
+                </nav>
 
 
                 {/* Right Side: Social & Contact */}

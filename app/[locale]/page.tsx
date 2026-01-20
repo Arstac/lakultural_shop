@@ -3,11 +3,13 @@
 import { Hero } from "@/components/site/Hero";
 import { ProductCard } from "@/components/site/ProductCard";
 import { ValueProps } from "@/components/site/ValueProps";
+import { ReworkTeaser } from "@/components/site/ReworkTeaser";
 import { products } from "@/lib/products";
 import { useTranslations } from "next-intl";
 
 export default function Home() {
   const t = useTranslations("Products");
+  const reworkProducts = products.filter(p => p.category === "rework");
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))]">
@@ -24,11 +26,15 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {products
+            .filter((p) => p.category === "standard")
+            .map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
         </div>
       </section>
+
+      <ReworkTeaser products={reworkProducts} />
 
       <ValueProps />
     </div>

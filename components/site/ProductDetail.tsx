@@ -100,7 +100,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
                                                 variant.id.includes("sand") ? "bg-[#F4A460]" :
                                                     variant.id.includes("terracotta") ? "bg-[#E2725B]" :
                                                         variant.id.includes("camo") ? "bg-[#2F4F4F]" :
-                                                            "bg-gray-400"
+                                                            variant.id.includes("denim") ? "bg-[#3b82f6]" :
+                                                                variant.id.includes("patchwork") ? "bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-red-400 via-green-400 to-blue-400" :
+                                                                    "bg-gray-400"
                                 )} />
                                 <span className="text-sm font-medium">{getVariantName(variant.id)}</span>
                             </button>

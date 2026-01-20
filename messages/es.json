@@ -1,6 +1,8 @@
 {
     "Header": {
-        "contact": "Contacto"
+        "contact": "Contacto",
+        "rework": "REWORK",
+        "collection": "Colección"
     },
     "Hero": {
         "title": "La riñonera definitiva.",
@@ -12,6 +14,10 @@
         "title": "Nuestra Colección",
         "description": "Diseñadas pensando en ti. Elige el tamaño que mejor se adapte a tu ritmo de vida.",
         "viewDetails": "Ver Detalles"
+    },
+    "ReworkPage": {
+        "title": "Rework",
+        "description": "Piezas únicas y exclusivas. Una sola unidad de cada modelo. Si pestañeas, te lo pierdes."
     },
     "ValueProps": {
         "handmade": {
@@ -104,6 +110,26 @@
             ],
             "materials": "Cordura 1000D y cremalleras YKK."
         },
+        "kroma-denim-vol-1": {
+            "name": "Kroma Denim Vol.1",
+            "description": "Pieza única confeccionada a partir de tejanos vintage recuperados.",
+            "features": [
+                "Pieza única 1/1",
+                "Tejido denim reciclado",
+                "Forro interior estampado"
+            ],
+            "materials": "Denim vintage 100% algodón."
+        },
+        "patchwork-ecleptico": {
+            "name": "Patchwork Ecléptico",
+            "description": "Mezcla de texturas y colores en una composición irrepetible.",
+            "features": [
+                "Diseño Patchwork exclusivo",
+                "Correa de seguridad reforzada",
+                "Bolsillo secreto"
+            ],
+            "materials": "Retales de algodón y lona técnica."
+        },
         "variants": {
             "mini-black": "Negro",
             "mini-olive": "Verde Oliva",
@@ -111,7 +137,9 @@
             "todo-sand": "Arena",
             "todo-terracotta": "Terracota",
             "maxi-camo": "Camuflaje",
-            "maxi-black": "Negro Total"
+            "maxi-black": "Negro Total",
+            "rework-denim-01": "Denim Único",
+            "rework-patchwork-01": "Patchwork"
         },
         "sizeGuide": {
             "title": "¿Dudas con el tamaño?",

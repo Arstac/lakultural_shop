@@ -11,6 +11,9 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "KROMA | Riñoneras Artesanales",
   description: "Riñoneras hechas a mano. Tres tamaños, un estilo. Diseñadas para tu día a día.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

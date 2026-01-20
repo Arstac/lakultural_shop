@@ -21,7 +21,7 @@ export function ProductCard({ product }: ProductCardProps) {
     const productDescription = tProduct(`${product.slug}.description`);
 
     return (
-        <Card className="group overflow-hidden border-none shadow-none hover:shadow-lg transition-all duration-300">
+        <Card className="group overflow-hidden border-none shadow-none hover:shadow-lg transition-all duration-300 h-full flex flex-col">
             <CardHeader className="p-0">
                 <div className="aspect-square relative overflow-hidden bg-muted">
                     {/* Placeholder for image until we have real ones */}
@@ -30,7 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     </div>
                 </div>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 flex-1">
                 <div className="flex justify-between items-start mb-2">
                     <h3 className="text-xl font-bold">{productName}</h3>
                     <Badge variant="secondary" className="text-base">
