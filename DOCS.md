@@ -1,4 +1,4 @@
-# KROMA Frontend - Documentación Técnica Exhaustiva
+# Lakultural Shop - Documentación Técnica Exhaustiva
 
 **Versión:** 0.1.0  
 **Última actualización:** Enero 2026  
@@ -30,7 +30,7 @@
 
 ## Resumen del Proyecto
 
-KROMA es una tienda online de **riñoneras artesanales** construida como landing page de alta conversión. El objetivo es que el usuario entre, se enamore del producto y compre en la menor cantidad de clics posible.
+Lakultural Shop es una tienda online de **riñoneras artesanales** construida como landing page de alta conversión. El objetivo es que el usuario entre, se enamore del producto y compre en la menor cantidad de clics posible.
 
 ### Productos
 
@@ -134,7 +134,7 @@ graph TB
 ## Estructura de Archivos
 
 ```
-kroma_frontend/
+lakultural_shop/
 ├── .agent/workflows/         # Workflows automatizados
 │   └── git-push.md
 ├── app/                      # Next.js App Router
