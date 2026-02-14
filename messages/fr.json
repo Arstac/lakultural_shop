@@ -5,43 +5,49 @@
         "collection": "Collection"
     },
     "Hero": {
-        "title": "La banane ultime.",
-        "subtitle": "Trois tailles, un style.",
-        "description": "Faites main pour t'accompagner dans chaque aventure, du festival à la montagne.",
-        "cta": "Voir la Collection"
+        "title": "Son Analogique.",
+        "subtitle": "La Kultural Records.",
+        "description": "Vinyles en édition limitée, cassettes et téléchargements numériques de vos artistes locaux préférés.",
+        "cta": "Explorer le Catalogue"
     },
     "Products": {
-        "title": "Notre Collection",
-        "description": "Conçues en pensant à toi. Choisis la taille qui s'adapte le mieux à ton rythme de vie.",
-        "viewDetails": "Voir Détails"
+        "title": "Nouveautés",
+        "description": "Découvrez les derniers joyaux musicaux de notre collection.",
+        "viewDetails": "Voir l'Album"
     },
     "ReworkPage": {
-        "title": "Rework",
-        "description": "Pièces uniques et exclusives. Une seule unité de chaque modèle. Si vous clignez des yeux, c'est raté."
+        "title": "Éditions Spéciales",
+        "description": "Sorties limitées et raretés."
     },
     "ValueProps": {
         "handmade": {
-            "title": "Fait Main",
-            "description": "Chaque pièce est unique, fabriquée artisanalement dans notre atelier local."
+            "title": "Vinyle 180g",
+            "description": "Pressage de haute qualité pour un son profond et chaud."
         },
         "waterproof": {
-            "title": "Tissu Imperméable",
-            "description": "Matériaux résistants à la pluie pour protéger tes affaires."
+            "title": "Art Exclusif",
+            "description": "Pochettes conçues par des artistes locaux en édition limitée."
         },
         "shipping": {
-            "title": "Livraison Rapide",
-            "description": "Reçois ta Kroma en 24/48h et commence à en profiter rapidement."
+            "title": "Envoi Sécurisé",
+            "description": "Emballage renforcé pour que vos disques arrivent parfaits."
         }
     },
     "ProductPage": {
-        "handmade": "Fait main",
-        "modelColor": "Modèle / Couleur",
-        "addToCart": "Ajouter au Panier",
-        "features": "Caractéristiques",
-        "dimensions": "Dimensions",
-        "materials": "Matériaux et Entretien",
-        "sizeGuide": "Des doutes sur la taille?",
-        "sizeReference": "Référence de taille"
+        "handmade": "Édition Limitée",
+        "modelColor": "Format / Édition",
+        "addToCart": "Ajouter",
+        "features": "Détails",
+        "dimensions": "Durée",
+        "materials": "Crédits",
+        "sizeGuide": "Besoin d'aide ?",
+        "sizeReference": "Référence de format",
+        "tracklist": "Liste des Pistes",
+        "purchaseOptions": "Formats Disponibles",
+        "vinyl": "Vinyle LP",
+        "digital": "Album Numérique",
+        "play": "Écouter",
+        "pause": "Pause"
     },
     "Cart": {
         "title": "Ton Panier",

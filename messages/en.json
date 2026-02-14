@@ -5,43 +5,49 @@
         "collection": "Collection"
     },
     "Hero": {
-        "title": "The ultimate fanny pack.",
-        "subtitle": "Three sizes, one style.",
-        "description": "Handmade to accompany you on every adventure, from festivals to mountains.",
-        "cta": "View Collection"
+        "title": "Analog Sound.",
+        "subtitle": "La Kultural Records.",
+        "description": "Limited edition vinyls, cassettes, and digital downloads from your favorite local artists.",
+        "cta": "Explore Catalog"
     },
     "Products": {
-        "title": "Our Collection",
-        "description": "Designed with you in mind. Choose the size that best fits your lifestyle.",
-        "viewDetails": "View Details"
+        "title": "New Releases",
+        "description": "Discover the latest musical gems in our collection.",
+        "viewDetails": "View Album"
     },
     "ReworkPage": {
-        "title": "Rework",
-        "description": "Unique and exclusive pieces. Only one unit of each model. Blink and you'll miss it."
+        "title": "Special Editions",
+        "description": "Limited releases and rarities."
     },
     "ValueProps": {
         "handmade": {
-            "title": "Handmade",
-            "description": "Each piece is unique, handcrafted in our local workshop."
+            "title": "180g Vinyl",
+            "description": "High-quality pressing for deep, warm sound."
         },
         "waterproof": {
-            "title": "Waterproof Fabric",
-            "description": "Weather-resistant materials to protect your belongings."
+            "title": "Exclusive Art",
+            "description": "Limited edition covers designed by local artists."
         },
         "shipping": {
-            "title": "Fast Shipping",
-            "description": "Receive your Kroma in 24/48h and start enjoying it right away."
+            "title": "Safe Shipping",
+            "description": "Reinforced packaging ensuring your records arrive perfectly."
         }
     },
     "ProductPage": {
-        "handmade": "Handmade",
-        "modelColor": "Model / Color",
+        "handmade": "Limited Edition",
+        "modelColor": "Format / Edition",
         "addToCart": "Add to Cart",
-        "features": "Features",
-        "dimensions": "Dimensions",
-        "materials": "Materials & Care",
-        "sizeGuide": "Not sure about the size?",
-        "sizeReference": "Size reference"
+        "features": "Details",
+        "dimensions": "Duration",
+        "materials": "Credits",
+        "sizeGuide": "Need help?",
+        "sizeReference": "Format Reference",
+        "tracklist": "Tracklist",
+        "purchaseOptions": "Available Formats",
+        "vinyl": "Vinyl LP",
+        "digital": "Digital Album",
+        "play": "Play",
+        "pause": "Pause"
     },
     "Cart": {
         "title": "Your Cart",

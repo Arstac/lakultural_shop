@@ -5,43 +5,49 @@
         "collection": "Col·lecció"
     },
     "Hero": {
-        "title": "La ronyonera definitiva.",
-        "subtitle": "Tres mides, un estil.",
-        "description": "Fetes a mà per acompanyar-te en cada aventura, del festival a la muntanya.",
-        "cta": "Veure Col·lecció"
+        "title": "So Analògic.",
+        "subtitle": "La Kultural Records.",
+        "description": "Vinils d'edició limitada, cassets i descàrregues digitals dels teus artistes locals preferits.",
+        "cta": "Explorar Catàleg"
     },
     "Products": {
-        "title": "La Nostra Col·lecció",
-        "description": "Dissenyades pensant en tu. Tria la mida que millor s'adapti al teu ritme de vida.",
-        "viewDetails": "Veure Detalls"
+        "title": "Nous Llançaments",
+        "description": "Descobreix les últimes joies musicals de la nostra col·lecció.",
+        "viewDetails": "Veure Àlbum"
     },
     "ReworkPage": {
-        "title": "Rework",
-        "description": "Peces úniques i exclusives. Una sola unitat de cada model. Si parpelleges, t'ho perds."
+        "title": "Edicions Especials",
+        "description": "Llançaments limitats i rareses."
     },
     "ValueProps": {
         "handmade": {
-            "title": "Fet a Mà",
-            "description": "Cada peça és única, fabricada artesanalment al nostre taller local."
+            "title": "Vinil 180g",
+            "description": "Premsatge d'alta qualitat per a un so càlid i profund."
         },
         "waterproof": {
-            "title": "Tela Impermeable",
-            "description": "Materials resistents a la pluja per protegir les teves pertinences."
+            "title": "Art Exclusiu",
+            "description": "Portades dissenyades per artistes locals en edició limitada."
         },
         "shipping": {
-            "title": "Enviament Ràpid",
-            "description": "Rep la teva Kroma en 24/48h i comença a gaudir-la quan abans."
+            "title": "Enviament Segur",
+            "description": "Embalatge reforçat perquè els teus discos arribin perfectes."
         }
     },
     "ProductPage": {
-        "handmade": "Fet a mà",
-        "modelColor": "Model / Color",
-        "addToCart": "Afegir al Carret",
-        "features": "Característiques",
-        "dimensions": "Mides",
-        "materials": "Materials i Cures",
-        "sizeGuide": "Dubtes amb la mida?",
-        "sizeReference": "Referència de mida"
+        "handmade": "Edició Limitada",
+        "modelColor": "Format / Edició",
+        "addToCart": "Afegir",
+        "features": "Detalls",
+        "dimensions": "Durada",
+        "materials": "Crèdits",
+        "sizeGuide": "Dubtes?",
+        "sizeReference": "Referència de format",
+        "tracklist": "Llista de Cançons",
+        "purchaseOptions": "Formats Disponibles",
+        "vinyl": "Vinil LP",
+        "digital": "Àlbum Digital",
+        "play": "Escoltar",
+        "pause": "Pausar"
     },
     "Cart": {
         "title": "El Teu Carret",

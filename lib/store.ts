@@ -1,22 +1,35 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Product, Variant } from "@/lib/products";
+import { Album, Track } from "@/lib/products";
 
 export interface CartItem {
-    id: string; // Unique ID (product.id + variant.id)
-    product: Product;
-    variant: Variant;
+    cartId: string;
+    type: 'album_physical' | 'album_digital' | 'track';
+    album: Album;
+    track?: Track; // Only if type === 'track'
     quantity: number;
 }
 
 interface CartState {
     items: CartItem[];
-    addItem: (product: Product, variant: Variant) => void;
-    removeItem: (itemId: string) => void;
-    updateQuantity: (itemId: string, quantity: number) => void;
+    addAlbum: (album: Album, format: 'physical' | 'digital') => void;
+    addTrack: (album: Album, track: Track) => void;
+    removeItem: (cartId: string) => void;
+    updateQuantity: (cartId: string, quantity: number) => void;
     clearCart: () => void;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
+}
+
+interface PlayerState {
+    currentTrack: Track | null;
+    currentAlbum: Album | null;
+    isPlaying: boolean;
+    play: (track: Track, album: Album) => void;
+    pause: () => void;
+    toggle: () => void;
+    nextTrack: () => void;
+    prevTrack: () => void;
 }
 
 export const useCart = create<CartState>()(
@@ -26,15 +39,15 @@ export const useCart = create<CartState>()(
             isOpen: false,
             setIsOpen: (isOpen) => set({ isOpen }),
 
-            addItem: (product, variant) => {
+            addAlbum: (album, format) => {
                 const { items } = get();
-                const itemId = `${product.id}-${variant.id}`;
-                const existingItem = items.find((item) => item.id === itemId);
+                const cartId = `${album.id}-${format}`;
+                const existingItem = items.find((item) => item.cartId === cartId);
 
                 if (existingItem) {
                     set({
                         items: items.map((item) =>
-                            item.id === itemId
+                            item.cartId === cartId
                                 ? { ...item, quantity: item.quantity + 1 }
                                 : item
                         ),
@@ -42,21 +55,54 @@ export const useCart = create<CartState>()(
                     });
                 } else {
                     set({
-                        items: [...items, { id: itemId, product, variant, quantity: 1 }],
+                        items: [...items, {
+                            cartId,
+                            type: format === 'physical' ? 'album_physical' : 'album_digital',
+                            album,
+                            quantity: 1
+                        }],
                         isOpen: true,
                     });
                 }
             },
 
-            removeItem: (itemId) => {
-                set({ items: get().items.filter((item) => item.id !== itemId) });
+            addTrack: (album, track) => {
+                const { items } = get();
+                const cartId = `${album.id}-${track.id}`;
+                const existingItem = items.find((item) => item.cartId === cartId);
+
+                if (existingItem) {
+                    set({
+                        items: items.map((item) =>
+                            item.cartId === cartId
+                                ? { ...item, quantity: item.quantity + 1 }
+                                : item
+                        ),
+                        isOpen: true,
+                    });
+                } else {
+                    set({
+                        items: [...items, {
+                            cartId,
+                            type: 'track',
+                            album,
+                            track,
+                            quantity: 1
+                        }],
+                        isOpen: true,
+                    });
+                }
             },
 
-            updateQuantity: (itemId, quantity) => {
+            removeItem: (cartId) => {
+                set({ items: get().items.filter((item) => item.cartId !== cartId) });
+            },
+
+            updateQuantity: (cartId, quantity) => {
                 if (quantity < 1) return;
                 set({
                     items: get().items.map((item) =>
-                        item.id === itemId ? { ...item, quantity } : item
+                        item.cartId === cartId ? { ...item, quantity } : item
                     )
                 });
             },
@@ -65,7 +111,32 @@ export const useCart = create<CartState>()(
         }),
         {
             name: "kroma-cart",
-            partialize: (state) => ({ items: state.items }), // Only persist items
+            partialize: (state) => ({ items: state.items }),
         }
     )
 );
+
+export const usePlayer = create<PlayerState>((set, get) => ({
+    currentTrack: null,
+    currentAlbum: null,
+    isPlaying: false,
+    play: (track, album) => set({ currentTrack: track, currentAlbum: album, isPlaying: true }),
+    pause: () => set({ isPlaying: false }),
+    toggle: () => set((state) => ({ isPlaying: !state.isPlaying })),
+    nextTrack: () => {
+        const { currentTrack, currentAlbum } = get();
+        if (!currentTrack || !currentAlbum) return;
+        const currentIndex = currentAlbum.tracks.findIndex(t => t.id === currentTrack.id);
+        if (currentIndex < currentAlbum.tracks.length - 1) {
+            set({ currentTrack: currentAlbum.tracks[currentIndex + 1], isPlaying: true });
+        }
+    },
+    prevTrack: () => {
+        const { currentTrack, currentAlbum } = get();
+        if (!currentTrack || !currentAlbum) return;
+        const currentIndex = currentAlbum.tracks.findIndex(t => t.id === currentTrack.id);
+        if (currentIndex > 0) {
+            set({ currentTrack: currentAlbum.tracks[currentIndex - 1], isPlaying: true });
+        }
+    }
+}));

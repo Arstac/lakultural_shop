@@ -9,10 +9,10 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "KROMA | Riñoneras Artesanales",
-  description: "Riñoneras hechas a mano. Tres tamaños, un estilo. Diseñadas para tu día a día.",
+  title: "La Kultural Records | Tienda de Música",
+  description: "Vinilos, Cassettes y Descargas Digitales. Tu tienda de música independiente.",
   icons: {
-    icon: "/icon.png",
+    icon: "/icon.png", // TODO: Replace with music icon
   },
 };
 

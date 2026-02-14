@@ -42,12 +42,7 @@ export function Header() {
                     >
                         {t("collection")}
                     </Link>
-                    <Link
-                        href={`/${locale}/rework`}
-                        className="text-sm font-medium transition-colors hover:text-primary"
-                    >
-                        {t("rework")}
-                    </Link>
+
                 </nav>
 
 

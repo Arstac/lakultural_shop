@@ -1,54 +1,69 @@
 "use client";
 
 import Link from "next/link";
-import { Product } from "@/lib/products";
+import { Album } from "@/lib/products";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
+import { Disc } from "lucide-react";
 
 interface ProductCardProps {
-    product: Product;
+    album: Album;
+    locale?: string;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
-    const locale = useLocale();
+export function ProductCard({ album, locale }: ProductCardProps) {
+    const currentLocale = locale || useLocale();
     const t = useTranslations("Products");
-    const tProduct = useTranslations("ProductData");
-
-    // Get translated product name and description using the slug
-    const productName = tProduct(`${product.slug}.name`);
-    const productDescription = tProduct(`${product.slug}.description`);
 
     return (
-        <Card className="group overflow-hidden border-none shadow-none hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-            <CardHeader className="p-0">
-                <div className="aspect-square relative overflow-hidden bg-muted">
-                    {/* Placeholder for image until we have real ones */}
-                    <div className="w-full h-full flex items-center justify-center bg-secondary text-secondary-foreground">
-                        <span className="font-bold text-2xl">{productName}</span>
+        <Card className="group overflow-hidden border-none shadow-none hover:shadow-xl transition-all duration-300 h-full flex flex-col bg-card">
+            <CardHeader className="p-0 relative aspect-square overflow-hidden rounded-md">
+                {/* Vinyl Record Visual Effect */}
+                <div className="absolute inset-0 bg-black rounded-full scale-95 opacity-0 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-4 transition-all duration-500 ease-out z-0 flex items-center justify-center">
+                    <div className="w-1/3 h-1/3 bg-zinc-800 rounded-full border-4 border-zinc-900 flex items-center justify-center">
+                        <div className="w-2 h-2 bg-black rounded-full"></div>
                     </div>
                 </div>
+
+                {/* Cover Image */}
+                <div className="relative z-10 w-full h-full bg-muted transition-transform duration-300 group-hover:-translate-x-4 group-hover:rotate-[-2deg]">
+                    {album.coverImage ? (
+                        <img
+                            src={album.coverImage}
+                            alt={album.title}
+                            className="w-full h-full object-cover shadow-lg"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-800 text-zinc-400">
+                            <Disc className="w-16 h-16 mb-2 opacity-50" />
+                            <span className="font-bold text-xl text-center px-4">{album.title}</span>
+                        </div>
+                    )}
+                </div>
             </CardHeader>
-            <CardContent className="pt-6 flex-1">
-                <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold">{productName}</h3>
-                    <Badge variant="secondary" className="text-base">
-                        {product.price}€
+            <CardContent className="pt-6 flex-1 text-center">
+                <div className="flex flex-col items-center mb-2">
+                    <h3 className="text-xl font-bold leading-tight">{album.title}</h3>
+                    <p className="text-muted-foreground text-sm font-medium">{album.artist}</p>
+                </div>
+                <div className="flex gap-2 justify-center mt-2">
+                    <Badge variant="outline" className="text-xs">
+                        Vinyl: {album.physicalPrice}€
+                    </Badge>
+                    <Badge variant="secondary" className="text-xs">
+                        Digital: {album.digitalPrice}€
                     </Badge>
                 </div>
-                <p className="text-muted-foreground line-clamp-2">
-                    {productDescription}
-                </p>
             </CardContent>
             <CardFooter>
                 <Button className="w-full rounded-full" asChild>
-                    <Link href={`/${locale}/producto/${product.slug}`}>
-                        {t("viewDetails")}
+                    <Link href={`/${locale}/producto/${album.slug}`}>
+                        {t("viewDetails") || "View Details"}
                     </Link>
                 </Button>
             </CardFooter>
         </Card>
     );
 }
-

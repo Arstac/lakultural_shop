@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
 import { CartSheet } from '@/components/site/CartSheet';
+import { Player } from '@/components/site/Player';
 
 interface LocaleLayoutProps {
     children: React.ReactNode;
@@ -34,6 +35,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
                 {children}
             </main>
             <Footer />
+            <Player />
         </NextIntlClientProvider>
     );
 }

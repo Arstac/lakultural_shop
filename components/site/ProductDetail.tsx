@@ -1,154 +1,134 @@
 "use client";
 
-import { Product, Variant } from "@/lib/products";
-import { useState } from "react";
-import { ProductGallery } from "./ProductGallery";
+import { Album, Track } from "@/lib/products";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Lock, ShoppingCart } from "lucide-react";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
-import { useCart } from "@/lib/store";
+import { Play, Pause, ShoppingCart, Disc, Download, Music } from "lucide-react";
+import { useCart, usePlayer } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 interface ProductDetailProps {
-    product: Product;
+    album: Album;
 }
 
-export function ProductDetail({ product }: ProductDetailProps) {
-    const [selectedVariant, setSelectedVariant] = useState<Variant>(product.variants[0]);
-    const { addItem, setIsOpen } = useCart();
+export function ProductDetail({ album }: ProductDetailProps) {
+    const { addAlbum, addTrack, setIsOpen } = useCart();
+    const { currentTrack, isPlaying, play, pause } = usePlayer();
 
     // Translations
+    // Note: ensure these keys exist in your messages/*.json or add fallback strings
     const t = useTranslations("ProductPage");
-    const tProduct = useTranslations("ProductData");
 
-    // Get translated product content
-    const productName = tProduct(`${product.slug}.name`);
-    const productDescription = tProduct(`${product.slug}.description`);
-    const productMaterials = tProduct(`${product.slug}.materials`);
-
-    // Get translated variant name
-    const getVariantName = (variantId: string) => {
-        return tProduct(`variants.${variantId}`);
-    };
-
-    const handleAddToCart = () => {
-        addItem(product, selectedVariant);
-        setIsOpen(true);
+    const handlePlay = (track: Track) => {
+        if (currentTrack?.id === track.id && isPlaying) {
+            pause();
+        } else {
+            play(track, album);
+        }
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-            {/* Left: Gallery - Updates with variant image */}
-            <div>
-                <ProductGallery
-                    images={[selectedVariant.image, ...product.images]}
-                    productName={`${productName} - ${getVariantName(selectedVariant.id)}`}
-                />
-
-                <div className="mt-8 hidden md:block text-muted-foreground text-sm space-y-2">
-                    <p className="font-medium text-foreground">{tProduct("sizeGuide.title")}</p>
-                    <p>• {tProduct("sizeGuide.mini")}</p>
-                    <p>• {tProduct("sizeGuide.todoterreno")}</p>
-                    <p>• {tProduct("sizeGuide.maxi")}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
+            {/* Left: Album Cover */}
+            <div className="relative group perspective-1000">
+                <div className="relative w-full aspect-square rounded-lg shadow-2xl overflow-hidden bg-muted transition-transform duration-700 ease-out group-hover:rotate-y-12">
+                    {album.coverImage ? (
+                        <img
+                            src={album.coverImage}
+                            alt={album.title}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900 text-zinc-500">
+                            <Disc className="w-32 h-32 opacity-20" />
+                        </div>
+                    )}
+                </div>
+                {/* Vinyl Record sliding out */}
+                <div className="absolute top-2 bottom-2 right-2 w-[95%] rounded-full bg-black -z-10 flex items-center justify-center transition-transform duration-700 ease-out group-hover:translate-x-1/3">
+                    <div className="w-1/3 h-1/3 bg-zinc-800 rounded-full border-4 border-zinc-900"></div>
                 </div>
             </div>
 
-            {/* Right: Info & Purchase */}
+            {/* Right: Info & Tracks */}
             <div className="flex flex-col">
-                <Badge className="w-fit mb-4" variant="outline">
-                    {t("handmade")}
-                </Badge>
-                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-                    {productName}
-                </h1>
-                <p className="text-3xl font-medium text-primary mb-6">
-                    {product.price}€
-                </p>
-
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                    {productDescription}
-                </p>
-
-                {/* Variant Selector */}
-                <div className="mb-8">
-                    <h3 className="text-sm font-medium mb-3">{t("modelColor")}: <span className="text-muted-foreground">{getVariantName(selectedVariant.id)}</span></h3>
-                    <div className="flex flex-wrap gap-3">
-                        {product.variants.map((variant) => (
-                            <button
-                                key={variant.id}
-                                onClick={() => setSelectedVariant(variant)}
-                                className={cn(
-                                    "group relative flex items-center gap-2 px-4 py-2 rounded-full border transition-all",
-                                    selectedVariant.id === variant.id
-                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                        : "border-input hover:border-primary/50"
-                                )}
-                            >
-                                {/* Circle Color Indicator */}
-                                <div className={cn(
-                                    "w-4 h-4 rounded-full border",
-                                    variant.id.includes("black") ? "bg-black" :
-                                        variant.id.includes("olive") ? "bg-[#556B2F]" :
-                                            variant.id.includes("navy") ? "bg-[#000080]" :
-                                                variant.id.includes("sand") ? "bg-[#F4A460]" :
-                                                    variant.id.includes("terracotta") ? "bg-[#E2725B]" :
-                                                        variant.id.includes("camo") ? "bg-[#2F4F4F]" :
-                                                            variant.id.includes("denim") ? "bg-[#3b82f6]" :
-                                                                variant.id.includes("patchwork") ? "bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-red-400 via-green-400 to-blue-400" :
-                                                                    "bg-gray-400"
-                                )} />
-                                <span className="text-sm font-medium">{getVariantName(variant.id)}</span>
-                            </button>
-                        ))}
+                <div className="mb-6">
+                    <h2 className="text-2xl font-semibold text-muted-foreground mb-1">{album.artist}</h2>
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">{album.title}</h1>
+                    <div className="flex gap-2 mb-4">
+                        <Badge variant="secondary">{album.genre}</Badge>
+                        <Badge variant="outline">{album.releaseDate || "2024"}</Badge>
                     </div>
                 </div>
 
-                <Button size="lg" className="w-full text-lg py-8 rounded-full mb-8 shadow-lg hover:shadow-xl transition-all" onClick={handleAddToCart}>
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    {t("addToCart")} - {product.price}€
-                </Button>
-
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="features">
-                        <AccordionTrigger>{t("features")}</AccordionTrigger>
-                        <AccordionContent>
-                            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                                {[0, 1, 2].map((i) => (
-                                    <li key={i}>{tProduct(`${product.slug}.features.${i}`)}</li>
-                                ))}
-                            </ul>
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="dimensions">
-                        <AccordionTrigger>{t("dimensions")}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">
-                            {product.dimensions}
-                        </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="materials">
-                        <AccordionTrigger>{t("materials")}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">
-                            {productMaterials}
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-
-                {/* Mobile size guide fallback */}
-                <div className="mt-8 md:hidden text-muted-foreground text-sm space-y-2 p-4 bg-muted/30 rounded-lg">
-                    <p className="font-medium text-foreground">{t("sizeReference")}:</p>
-                    <p>• {tProduct("sizeGuide.mini")}</p>
-                    <p>• {tProduct("sizeGuide.todoterreno")}</p>
-                    <p>• {tProduct("sizeGuide.maxi")}</p>
+                <div className="prose prose-zinc dark:prose-invert mb-8 text-muted-foreground">
+                    <p>{album.description}</p>
                 </div>
+
+                {/* Purchase Options */}
+                <div className="flex flex-col gap-4 mb-10 p-6 bg-secondary/20 rounded-xl border">
+                    <h3 className="font-semibold text-lg">{t("purchaseOptions") || "Purchase Options"}</h3>
+
+                    <div className="flex gap-4 flex-wrap">
+                        <Button
+                            size="lg"
+                            className="flex-1 min-w-[200px]"
+                            onClick={() => { addAlbum(album, 'physical'); setIsOpen(true); }}
+                        >
+                            <Disc className="w-5 h-5 mr-2" />
+                            <span>Vinyl Record</span>
+                            <span className="ml-auto font-bold">{album.physicalPrice}€</span>
+                        </Button>
+
+                        <Button
+                            size="lg"
+                            variant="secondary"
+                            className="flex-1 min-w-[200px]"
+                            onClick={() => { addAlbum(album, 'digital'); setIsOpen(true); }}
+                        >
+                            <Download className="w-5 h-5 mr-2" />
+                            <span>Digital Album</span>
+                            <span className="ml-auto font-bold">{album.digitalPrice}€</span>
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Tracklist */}
+                <div>
+                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                        <Music className="w-5 h-5" />
+                        {t("tracklist") || "Tracklist"}
+                    </h3>
+                    <div className="space-y-2">
+                        {album.tracks.map((track, index) => {
+                            const isCurrent = currentTrack?.id === track.id;
+                            return (
+                                <div
+                                    key={track.id}
+                                    className={cn(
+                                        "group flex items-center p-3 rounded-lg transition-colors hover:bg-secondary/50",
+                                        isCurrent && "bg-secondary"
+                                    )}
+                                >
+                                    {/* Play Button */}
+                                    <button
+                                        onClick={() => handlePlay(track)}
+                                        className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all mr-4 flex-shrink-0"
+                                    >
+                                        {isCurrent && isPlaying ? (
+                                            <Pause className="w-4 h-4" />
+                                        ) : (
+                                            <Play className="w-4 h-4 ml-0.5" />
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
             </div>
         </div>
     );
 }
-

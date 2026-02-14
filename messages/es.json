@@ -5,43 +5,45 @@
         "collection": "Colección"
     },
     "Hero": {
-        "title": "La riñonera definitiva.",
-        "subtitle": "Tres tamaños, un estilo.",
-        "description": "Hechas a mano para acompañarte en cada aventura, desde el festival hasta la montaña.",
-        "cta": "Ver Colección"
+        "title": "Sonido Analógico.",
+        "subtitle": "La Kultural Records.",
+        "description": "Vinilos de edición limitada, cassettes y descargas digitales de tus artistas locales favoritos.",
+        "cta": "Explorar Catálogo"
     },
     "Products": {
-        "title": "Nuestra Colección",
-        "description": "Diseñadas pensando en ti. Elige el tamaño que mejor se adapte a tu ritmo de vida.",
-        "viewDetails": "Ver Detalles"
+        "title": "Nuevos Lanzamientos",
+        "description": "Descubre las últimas joyas musicales de nuestra colección.",
+        "viewDetails": "Ver Álbum"
     },
     "ReworkPage": {
-        "title": "Rework",
-        "description": "Piezas únicas y exclusivas. Una sola unidad de cada modelo. Si pestañeas, te lo pierdes."
+        "title": "Ediciones Especiales",
+        "description": "Lanzamientos limitados y rarezas."
     },
     "ValueProps": {
         "handmade": {
-            "title": "Hecho a Mano",
-            "description": "Cada pieza es única, fabricada artesanalmente en nuestro taller local."
+            "title": "Vinilo 180g",
+            "description": "Prensado de alta calidad para un sonido cálido y profundo."
         },
         "waterproof": {
-            "title": "Tela Impermeable",
-            "description": "Materiales resistentes a la lluvia para proteger tus pertenencias."
+            "title": "Arte Exclusivo",
+            "description": "Portadas diseñadas por artistas locales en edición limitada."
         },
         "shipping": {
-            "title": "Envío Rápido",
-            "description": "Recibe tu Kroma en 24/48h y empieza a disfrutarla cuanto antes."
+            "title": "Envío Seguro",
+            "description": "Embalaje reforzado para que tus discos lleguen perfectos."
         }
     },
     "ProductPage": {
-        "handmade": "Hecho a mano",
-        "modelColor": "Modelo / Color",
-        "addToCart": "Añadir al Carrito",
-        "features": "Características",
-        "dimensions": "Medidas",
-        "materials": "Materiales y Cuidados",
-        "sizeGuide": "¿Dudas con el tamaño?",
-        "sizeReference": "Referencia de tamaño"
+        "tracklist": "Lista de Canciones",
+        "purchaseOptions": "Formatos Disponibles",
+        "vinyl": "Vinilo LP",
+        "digital": "Álbum Digital",
+        "addToCart": "Añadir",
+        "play": "Escuchar",
+        "pause": "Pausar",
+        "features": "Detalles",
+        "dimensions": "Duración",
+        "materials": "Créditos"
     },
     "Cart": {
         "title": "Tu Carrito",

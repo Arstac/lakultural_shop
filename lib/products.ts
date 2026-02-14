@@ -1,137 +1,159 @@
-export interface Variant {
-    id: string;
-    name: string;
-    description?: string;
-    image: string; // Specific image for this variant
-    priceId?: string; // Stripe Price ID (starts with price_...)
-}
+import { client, urlFor } from "./sanity.client";
+import { groq } from "next-sanity";
 
-export interface Product {
-    id: string;
-    name: string;
-    slug: string;
+export interface Track {
+    id: string; // Sanity _key or _id
+    title: string;
+    duration: string;
+    previewUrl: string; // URL to audio file
     price: number;
-    description: string;
-    features: string[];
-    dimensions: string;
-    materials: string;
-    images: string[]; // Fallback gallery
-    variants: Variant[];
-    category?: 'standard' | 'rework';
 }
 
-export const products: Product[] = [
+export interface Album {
+    id: string; // Sanity _id
+    title: string;
+    artist: string;
+    slug: string;
+    description: string;
+    coverImage: string;
+    physicalPrice: number;
+    digitalPrice: number;
+    tracks: Track[];
+    releaseDate?: string;
+    genre?: string;
+}
+
+// GROQ Queries
+const albumsQuery = groq`*[_type == "album"] {
+    _id,
+    title,
+    artist,
+    "slug": slug.current,
+    description,
+    coverImage,
+    physicalPrice,
+    digitalPrice,
+    genre,
+    releaseDate,
+    tracks[] {
+        _key,
+        title,
+        duration,
+        price,
+        "previewUrl": previewAudio.asset->url
+    }
+}`;
+
+const albumBySlugQuery = groq`*[_type == "album" && slug.current == $slug][0] {
+    _id,
+    title,
+    artist,
+    "slug": slug.current,
+    description,
+    coverImage,
+    physicalPrice,
+    digitalPrice,
+    genre,
+    releaseDate,
+    tracks[] {
+        _key,
+        title,
+        duration,
+        price,
+        "previewUrl": previewAudio.asset->url
+    }
+}`;
+
+// Helper to map Sanity result to Album interface
+const mapSanityAlbum = (sanityAlbum: any): Album => ({
+    id: sanityAlbum._id,
+    title: sanityAlbum.title,
+    artist: sanityAlbum.artist,
+    slug: sanityAlbum.slug,
+    description: sanityAlbum.description,
+    coverImage: sanityAlbum.coverImage ? urlFor(sanityAlbum.coverImage).url() : "/placeholder-album-1.jpg",
+    physicalPrice: sanityAlbum.physicalPrice,
+    digitalPrice: sanityAlbum.digitalPrice,
+    genre: sanityAlbum.genre,
+    releaseDate: sanityAlbum.releaseDate,
+    tracks: sanityAlbum.tracks?.map((t: any) => ({
+        id: t._key,
+        title: t.title,
+        duration: t.duration,
+        price: t.price,
+        previewUrl: t.previewUrl || ""
+    })) || []
+});
+
+export const getAlbums = async (): Promise<Album[]> => {
+    try {
+        const data = await client.fetch(albumsQuery);
+        return data.map(mapSanityAlbum);
+    } catch (error) {
+        console.error("Error fetching albums:", error);
+        return [];
+    }
+};
+
+export const getAlbumBySlug = async (slug: string): Promise<Album | null> => {
+    try {
+        const data = await client.fetch(albumBySlugQuery, { slug });
+        if (!data) return null;
+        return mapSanityAlbum(data);
+    } catch (error) {
+        console.error(`Error fetching album ${slug}:`, error);
+        return null;
+    }
+};
+
+// Home Page Content Interface
+export interface HomePageContent {
+    headline: string;
+    subheadline: string;
+    description: string;
+    heroImage: string;
+    ctaText: string;
+}
+
+// Fetch function
+export const getHomePageContent = async (): Promise<HomePageContent | null> => {
+    try {
+        const query = groq`*[_type == "homePage"][0] {
+            headline,
+            subheadline,
+            description,
+            ctaText,
+            heroImage
+        }`;
+        const data = await client.fetch(query);
+        if (!data) return null;
+
+        return {
+            headline: data.headline,
+            subheadline: data.subheadline,
+            description: data.description,
+            ctaText: data.ctaText || "Explorar Catálogo",
+            heroImage: data.heroImage ? urlFor(data.heroImage).url() : "/hero_music.jpg"
+        };
+    } catch (error) {
+        console.error("Error fetching home page content:", error);
+        return null;
+    }
+};
+export const staticAlbums: Album[] = [
     {
-        id: "mini",
-        name: "La Mini",
-        slug: "la-mini",
-        price: 20,
-        description: "Perfecta para lo esencial. Llaves, tarjetas y poco más. Libertad total.",
-        features: [
-            "Compacta y ligera",
-            "Correa ajustable",
-            "Cierre de seguridad"
-        ],
-        dimensions: "15cm x 10cm x 5cm",
-        materials: "Nylon impermeable de alta resistencia.",
-        images: [
-            "/placeholder-mini-1.jpg",
-            "/placeholder-mini-2.jpg"
-        ],
-        variants: [
-            { id: "mini-black", name: "Negro", image: "/placeholder-mini-1.jpg", priceId: "replace_with_price_id_mini_black" },
-            { id: "mini-olive", name: "Verde Oliva", image: "/placeholder-mini-2.jpg", priceId: "replace_with_price_id_mini_olive" }
-        ],
-        category: 'standard'
-    },
-    {
-        id: "todoterreno",
-        name: "La Todoterreno",
-        slug: "la-todoterreno",
-        price: 25,
-        description: "El equilibrio perfecto. Cabe el móvil, gafas y cartera. Tu compañera diaria.",
-        features: [
-            "Tamaño versátil",
-            "Bolsillo interior con cremallera",
-            "Tela resistente al agua"
-        ],
-        dimensions: "20cm x 14cm x 6cm",
-        materials: "Lona encerada y forro de algodón.",
-        images: [
-            "/placeholder-todo-1.jpg",
-            "/placeholder-todo-2.jpg"
-        ],
-        variants: [
-            { id: "todo-navy", name: "Azul Marino", image: "/placeholder-todo-1.jpg", priceId: "replace_with_price_id_todo_navy" },
-            { id: "todo-sand", name: "Arena", image: "/placeholder-todo-2.jpg", priceId: "replace_with_price_id_todo_sand" },
-            { id: "todo-terracotta", name: "Terracota", image: "/placeholder-todo-3.jpg", priceId: "replace_with_price_id_todo_terracotta" }
-        ],
-        category: 'standard'
-    },
-    {
-        id: "maxi",
-        name: "La Maxi",
-        slug: "la-maxi",
-        price: 30,
-        description: "Para los que no dejan nada en casa. Botella de agua, agenda y más.",
-        features: [
-            "Gran capacidad",
-            "Doble compartimento",
-            "Refuerzo en la base"
-        ],
-        dimensions: "25cm x 18cm x 8cm",
-        materials: "Cordura 1000D y cremalleras YKK.",
-        images: [
-            "/placeholder-maxi-1.jpg",
-            "/placeholder-maxi-2.jpg"
-        ],
-        variants: [
-            { id: "maxi-camo", name: "Camuflaje", image: "/placeholder-maxi-1.jpg", priceId: "replace_with_price_id_maxi_camo" },
-            { id: "maxi-black", name: "Negro Total", image: "/placeholder-maxi-2.jpg", priceId: "replace_with_price_id_maxi_black" }
-        ],
-        category: 'standard'
-    },
-    // REWORK ITEMS
-    {
-        id: "rework-denim-01",
-        name: "Kroma Denim Vol.1",
-        slug: "kroma-denim-vol-1",
-        price: 45,
-        description: "Pieza única confeccionada a partir de tejanos vintage recuperados.",
-        features: [
-            "Pieza única 1/1",
-            "Tejido denim reciclado",
-            "Forro interior estampado"
-        ],
-        dimensions: "22cm x 15cm x 6cm",
-        materials: "Denim vintage 100% algodón.",
-        images: [
-            "/rework-placeholder.png"
-        ],
-        variants: [
-            { id: "rework-denim-01", name: "Denim Único", image: "/rework-placeholder.png", priceId: "replace_with_price_id_rework_01" }
-        ],
-        category: 'rework'
-    },
-    {
-        id: "rework-patchwork-01",
-        name: "Patchwork Ecléptico",
-        slug: "patchwork-ecleptico",
-        price: 50,
-        description: "Mezcla de texturas y colores en una composición irrepetible.",
-        features: [
-            "Diseño Patchwork exclusivo",
-            "Correa de seguridad reforzada",
-            "Bolsillo secreto"
-        ],
-        dimensions: "20cm x 14cm x 6cm",
-        materials: "Retales de algodón y lona técnica.",
-        images: [
-            "/rework-placeholder.png"
-        ],
-        variants: [
-            { id: "rework-patchwork-01", name: "Patchwork", image: "/rework-placeholder.png", priceId: "replace_with_price_id_rework_02" }
-        ],
-        category: 'rework'
+        id: "album-1",
+        title: "Neon Nights",
+        artist: "La Kultural",
+        slug: "neon-nights",
+        description: "A synth-wave journey through the midnight city streets.",
+        coverImage: "/placeholder-album-1.jpg",
+        physicalPrice: 25,
+        digitalPrice: 12,
+        genre: "Synthwave",
+        tracks: [
+            { id: "t1-1", title: "Midnight Drive", duration: "3:45", price: 1.50, previewUrl: "/audio/placeholder.mp3" },
+            { id: "t1-2", title: "Neon Lights", duration: "4:20", price: 1.50, previewUrl: "/audio/placeholder.mp3" },
+        ]
     }
 ];

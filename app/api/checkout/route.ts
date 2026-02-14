@@ -7,11 +7,17 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "dummy_key_for_build"
     typescript: true,
 });
 
-const SHIPPING_RATE_ID = process.env.STRIPE_SHIPPING_RATE_ID; // Optional if using free shipping
-
 export async function POST(req: Request) {
     try {
-        const { items } = (await req.json()) as { items: CartItem[] };
+        // Mock success for development/demo if key is missing
+        if (process.env.STRIPE_SECRET_KEY?.startsWith("dummy") || !process.env.STRIPE_SECRET_KEY) {
+            console.log("Mocking Stripe checkout session for development");
+            const origin = req.headers.get("origin") || "http://localhost:3000";
+            return NextResponse.json({ url: `${origin}/success` });
+        }
+
+        const body = await req.json();
+        const items = body.items as CartItem[];
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: "Empty cart" }, { status: 400 });
@@ -19,36 +25,63 @@ export async function POST(req: Request) {
 
         // Transform cart items to Stripe line items
         const lineItems = items.map((item) => {
-            // Priority: Use priceId IF it exists (ideal for production)
-            // Fallback: Create ad-hoc price data (good for testing/prototyping)
-            if (item.variant.priceId && item.variant.priceId.startsWith("price_")) {
-                return {
-                    price: item.variant.priceId,
-                    quantity: item.quantity,
-                }
-            } else {
-                return {
-                    price_data: {
-                        currency: "eur",
-                        product_data: {
-                            name: `${item.product.name} - ${item.variant.name}`,
-                            description: item.product.description,
-                            images: item.variant.image ? [new URL(item.variant.image, req.headers.get("origin") || "http://localhost:3000").toString()] : undefined,
-                        },
-                        unit_amount: Math.round(item.product.price * 100), // cents
-                    },
-                    quantity: item.quantity,
+            let name = "";
+            let description = "";
+            let image = "";
+            let unitAmount = 0; // in cents
+
+            if (item.type === 'album_physical') {
+                name = `Vinyl: ${item.album.title}`;
+                description = `${item.album.artist} - Physical Record`;
+                image = item.album.coverImage;
+                unitAmount = Math.round(item.album.physicalPrice * 100);
+            } else if (item.type === 'album_digital') {
+                name = `Digital: ${item.album.title}`;
+                description = `${item.album.artist} - Digital Download`;
+                image = item.album.coverImage;
+                unitAmount = Math.round(item.album.digitalPrice * 100);
+            } else if (item.type === 'track' && item.track) {
+                name = `Track: ${item.track.title}`;
+                description = `${item.album.artist} - Single Track`;
+                image = item.album.coverImage;
+                unitAmount = Math.round(item.track.price * 100);
+            }
+
+            // Ensure absolute URL for images if it's a relative path
+            let imageUrls: string[] = [];
+            if (image) {
+                if (image.startsWith("http")) {
+                    imageUrls = [image];
+                } else {
+                    const origin = req.headers.get("origin") || "http://localhost:3000";
+                    // Handle case where image path might already have a leading slash
+                    const imagePath = image.startsWith("/") ? image : `/${image}`;
+                    imageUrls = [`${origin}${imagePath}`];
                 }
             }
+
+            return {
+                price_data: {
+                    currency: "eur",
+                    product_data: {
+                        name,
+                        description,
+                        images: imageUrls.length > 0 ? imageUrls : undefined,
+                    },
+                    unit_amount: unitAmount,
+                },
+                quantity: item.quantity,
+            };
         });
+
+        const origin = req.headers.get("origin") || "http://localhost:3000";
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
             line_items: lineItems,
             shipping_address_collection: {
-                allowed_countries: ["ES"], // Spain only for now
+                allowed_countries: ["ES", "FR", "GB", "US"],
             },
-            // shipping_options: SHIPPING_RATE_ID ? [{ shipping_rate: SHIPPING_RATE_ID }] : [],
             shipping_options: [
                 {
                     shipping_rate_data: {
@@ -57,16 +90,16 @@ export async function POST(req: Request) {
                             amount: 0,
                             currency: 'eur',
                         },
-                        display_name: 'Envío Estándar',
+                        display_name: 'Standard Shipping',
                         delivery_estimate: {
-                            minimum: { unit: 'business_day', value: 2 },
-                            maximum: { unit: 'business_day', value: 4 },
+                            minimum: { unit: 'business_day', value: 3 },
+                            maximum: { unit: 'business_day', value: 5 },
                         },
                     },
                 },
             ],
-            success_url: `${req.headers.get("origin")}/success`,
-            cancel_url: `${req.headers.get("origin")}/`,
+            success_url: `${origin}/success`,
+            cancel_url: `${origin}/`,
         });
 
         return NextResponse.json({ url: session.url });
