@@ -4,10 +4,18 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
+import { useCart } from "@/lib/store";
+import { useEffect } from "react";
 
 export default function SuccessPage() {
     const t = useTranslations("Success");
     const locale = useLocale();
+
+    const { clearCart } = useCart();
+
+    useEffect(() => {
+        clearCart();
+    }, [clearCart]);
 
     return (
         <div className="container flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-16">

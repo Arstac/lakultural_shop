@@ -100,6 +100,12 @@ export async function POST(req: Request) {
             ],
             success_url: `${origin}/success`,
             cancel_url: `${origin}/`,
+            // Add metadata to track order in webhook
+            metadata: {
+                source: "lakultural_shop",
+            },
+            // Ask for customer email to be pre-filled if available, or just collected
+            customer_email: undefined, // Add logic if we have user auth
         });
 
         return NextResponse.json({ url: session.url });

@@ -43,7 +43,8 @@ El stack base se mantiene respecto a la versión anterior:
 - **UI**: Tailwind CSS + Shadcn UI
 - **Estado**: Zustand (Carrito + Reproductor)
 - **i18n**: next-intl
-- **Pagos**: Stripe (integración API)
+- **Pagos**: Stripe (Checkout + Webhooks)
+- **Base de Datos**: Sanity.io (Productos + Pedidos)
 
 ---
 
@@ -108,6 +109,7 @@ Se ha integrado **Sanity.io** para gestionar el contenido dinámico sin necesida
 ### Schemas
 - **Album**: Productos principales (Título, Artista, Precios, Tracks).
 - **Track**: Canciones individuales (Audio Preview [MP3], Precio).
+- **Order**: Registro de pedidos (Cliente, Items, Estado, Total).
 - **HomePage**: Singleton para editar la Portada (Hero Image, Textos, CTA).
 
 ### Rutas
@@ -145,6 +147,23 @@ interface Album {
     digitalPrice: number;  // Precio Digital
     tracks: Track[];
     genre: string;
+}
+
+### Order
+```typescript
+interface Order {
+    orderId: string; // Stripe Session ID
+    customerName: string;
+    customerEmail: string;
+    amount: number;
+    status: 'pending' | 'paid' | 'shipped' | 'cancelled';
+    items: {
+        name: string;
+        type: string;
+        quantity: number;
+        price: number;
+    }[];
+    createdAt: string;
 }
 ```
 
