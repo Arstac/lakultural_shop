@@ -1,13 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Album, Track, Event } from "@/lib/products";
+import { Album, Track } from "@/lib/products";
 
 export interface CartItem {
     cartId: string;
-    type: 'album_physical' | 'album_digital' | 'track' | 'event';
+    type: 'album_physical' | 'album_digital' | 'track';
     album?: Album;
     track?: Track; // Only if type === 'track'
-    event?: Event; // Only if type === 'event'
     quantity: number;
 }
 
@@ -15,7 +14,6 @@ interface CartState {
     items: CartItem[];
     addAlbum: (album: Album, format: 'physical' | 'digital') => void;
     addTrack: (album: Album, track: Track) => void;
-    addEvent: (event: Event) => void;
     removeItem: (cartId: string) => void;
     updateQuantity: (cartId: string, quantity: number) => void;
     clearCart: () => void;
@@ -96,32 +94,7 @@ export const useCart = create<CartState>()(
                 }
             },
 
-            addEvent: (event) => {
-                const { items } = get();
-                const cartId = `event-${event.id}`;
-                const existingItem = items.find((item) => item.cartId === cartId);
 
-                if (existingItem) {
-                    set({
-                        items: items.map((item) =>
-                            item.cartId === cartId
-                                ? { ...item, quantity: item.quantity + 1 }
-                                : item
-                        ),
-                        isOpen: true,
-                    });
-                } else {
-                    set({
-                        items: [...items, {
-                            cartId,
-                            type: 'event',
-                            event,
-                            quantity: 1
-                        }],
-                        isOpen: true,
-                    });
-                }
-            },
 
             removeItem: (cartId) => {
                 set({ items: get().items.filter((item) => item.cartId !== cartId) });

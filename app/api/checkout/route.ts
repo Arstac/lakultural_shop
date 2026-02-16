@@ -45,11 +45,8 @@ export async function POST(req: Request) {
                 description = `${item.album.artist} - Single Track`;
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.track.price * 100);
-            } else if (item.type === 'event' && item.event) {
-                name = `Ticket: ${item.event.title}`;
-                description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
-                image = item.event.image;
-                unitAmount = Math.round(item.event.price * 100);
+            } else {
+                return undefined;
             }
 
             // Ensure absolute URL for images if it's a relative path
@@ -73,9 +70,8 @@ export async function POST(req: Request) {
                         description,
                         images: imageUrls.length > 0 ? imageUrls : undefined,
                         metadata: {
-                            sanity_id: item.type === 'event' && item.event ? item.event.id :
-                                item.type === 'track' && item.track ? item.track.id :
-                                    item.album ? item.album.id : "",
+                            sanity_id: item.type === 'track' && item.track ? item.track.id :
+                                item.album ? item.album.id : "",
                             type: item.type
                         }
                     },
@@ -83,7 +79,7 @@ export async function POST(req: Request) {
                 },
                 quantity: item.quantity,
             };
-        });
+        }).filter((item) => item !== undefined) as Stripe.Checkout.SessionCreateParams.LineItem[];
 
         const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
