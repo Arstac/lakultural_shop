@@ -48,11 +48,11 @@ export function ProductCard({ album, locale }: ProductCardProps) {
                     <h3 className="text-xl font-bold leading-tight">{album.title}</h3>
                     <p className="text-muted-foreground text-sm font-medium">{album.artist}</p>
                 </div>
-                <div className="flex gap-2 justify-center mt-2">
-                    <Badge variant="outline" className="text-xs">
+                <div className="flex gap-2 justify-center mt-3">
+                    <Badge variant="outline" className="text-sm font-semibold px-3 py-1 bg-white/50 backdrop-blur-sm">
                         Vinyl: {album.physicalPrice}€
                     </Badge>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-sm font-semibold px-3 py-1">
                         Digital: {album.digitalPrice}€
                     </Badge>
                 </div>

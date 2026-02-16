@@ -122,6 +122,25 @@ export function ProductDetail({ album }: ProductDetailProps) {
                                             <Play className="w-4 h-4 ml-0.5" />
                                         )}
                                     </button>
+                                    {/* Track Info */}
+                                    <div className="flex-1 flex items-center justify-between min-w-0">
+                                        <div className="flex flex-col min-w-0 mr-4">
+                                            <span className={cn(
+                                                "font-medium truncate",
+                                                isCurrent && isPlaying ? "text-primary" : "text-foreground"
+                                            )}>
+                                                {track.title}
+                                            </span>
+                                            <span className="text-xs text-muted-foreground">
+                                                {track.duration}
+                                            </span>
+                                        </div>
+                                        {track.price > 0 && (
+                                            <span className="text-sm font-semibold whitespace-nowrap">
+                                                {track.price.toFixed(2)}€
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}

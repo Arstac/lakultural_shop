@@ -25,7 +25,7 @@ export default defineType({
             title: 'Preview Audio (MP3)',
             type: 'file',
             options: {
-                accept: 'audio/mp3',
+                accept: 'audio/*, video/mp4, video/x-m4v',
             },
         }),
     ],
