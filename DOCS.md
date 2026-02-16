@@ -237,3 +237,42 @@ Gestiona la reproducción de música global.
 
 Se mantienen los archivos en `messages/` (es, en, ca, fr).
 **Nota:** Es necesario actualizar las claves de traducción para cubrir los nuevos términos ("Vinyl", "Digital Album", "Tracklist", etc.). Actualmente se usan fallbacks en inglés en el código si faltan las traducciones.
+
+---
+
+## Sistema de Entradas (Eventos y QR)
+
+### 1. Nuevos Schemas (Sanity)
+
+**Event**
+- Representa un evento físico (con fecha, lugar, precio, imagen).
+- Se puede añadir al carrito como un producto más (type: 'event').
+
+**Ticket**
+- Se genera automáticamente tras la compra de un Evento.
+- Campos:
+  - `code`: UUID único (QR).
+  - `status`: 'active' | 'used' | 'cancelled'.
+  - `event`: Referencia al Evento.
+  - `order`: Referencia al Pedido.
+  - `attendeeName` / `attendeeEmail`: Datos del asistente.
+
+### 2. Flujo de Compra y Generación
+1. Usuario añade Evento al carrito.
+2. Checkout:
+   - **Pago (Stripe)**: Si total > 0. Webhook genera los tickets.
+   - **Gratis (0€)**: Flow específico (`/api/checkout/free`) que crea Order y Tickets directamente en Sanity.
+3. Success Page: Enlace a "Ver Entradas" o envío por email (pendiente de implementar email).
+4. Visualización: `/tickets/[orderId]` muestra los códigos QR.
+
+### 3. Validación (Admin)
+- Ruta: `/qr`
+- Protegida por PIN (`QR_ACCESS_PIN` en `.env`).
+- Funcionalidad: Escáner de cámara (html5-qrcode) que valida el UUID contra Sanity.
+- Lógica:
+  - Si existe y `status: 'active'` -> Marca como `used` y permite acceso.
+  - Si `used` o `cancelled` -> Deniega acceso.
+
+### 4. Variables de Entorno Nuevas
+- `QR_ACCESS_PIN`: PIN para acceder al escáner.
+- `SANITY_API_TOKEN`: Token con permisos de escritura (Editor) para crear Orders y Tickets y actualizar estado.

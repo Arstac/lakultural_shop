@@ -38,40 +38,71 @@ export async function POST(req: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     if (event.type === "checkout.session.completed") {
-        // 1. Retrieve the items from the session (expand line_items)
-        // Note: We might need to fetch the session again to get line items if not present
+        // 1. Retrieve the items from the session (expand line_items and product metadata)
         const sessionWithLineItems = await stripe.checkout.sessions.retrieve(session.id, {
-            expand: ['line_items'],
+            expand: ['line_items', 'line_items.data.price.product'],
         });
 
         const lineItems = sessionWithLineItems.line_items?.data || [];
 
         // 2. Map Stripe items to our Order schema format
-        const orderItems = lineItems.map((item) => ({
-            _key: item.id, // Sanity needs a key for array items
-            name: item.description,
-            // We can't easily map back to 'physical' | 'digital' | 'track' perfectly 
-            // unless we store that in metadata on the line item. 
-            // For now, we'll try to guess based on description or just store as generic.
-            // Better approach: Add metadata to line items in checkout route.
-            type: item.description?.toLowerCase().includes('vinyl') ? 'physical' :
-                item.description?.toLowerCase().includes('digital') ? 'digital' : 'track',
-            quantity: item.quantity,
-            price: (item.price?.unit_amount || 0) / 100,
-        }));
+        const orderItems = lineItems.map((item) => {
+            const product = item.price?.product as Stripe.Product;
+            const metadata = product?.metadata || {};
+
+            return {
+                _key: item.id,
+                name: item.description,
+                type: metadata.type || (item.description?.toLowerCase().includes('vinyl') ? 'physical' :
+                    item.description?.toLowerCase().includes('digital') ? 'digital' : 'track'),
+                quantity: item.quantity || 1,
+                price: (item.price?.unit_amount || 0) / 100,
+                sanity_id: metadata.sanity_id
+            };
+        });
 
         // 3. Create Order in Sanity
         try {
-            await client.create({
+            const createdOrder = await client.create({
                 _type: 'order',
                 orderId: session.id,
                 customerName: session.customer_details?.name || 'Guest',
                 customerEmail: session.customer_details?.email || '',
                 amount: (session.amount_total || 0) / 100,
                 status: 'paid', // Initially paid since this event confirms it
-                items: orderItems,
+                items: orderItems.map(item => ({
+                    _key: item._key,
+                    name: item.name,
+                    type: item.type,
+                    quantity: item.quantity,
+                    price: item.price
+                })),
                 createdAt: new Date().toISOString()
             });
+
+            // 4. Generate Tickets for Events
+            for (const item of orderItems) {
+                if (item.type === 'event' && item.sanity_id) {
+                    for (let i = 0; i < item.quantity; i++) {
+                        await client.create({
+                            _type: 'ticket',
+                            code: crypto.randomUUID(),
+                            status: 'active',
+                            event: {
+                                _type: 'reference',
+                                _ref: item.sanity_id
+                            },
+                            order: {
+                                _type: 'reference',
+                                _ref: createdOrder._id
+                            },
+                            attendeeName: session.customer_details?.name || 'Guest',
+                            attendeeEmail: session.customer_details?.email || ''
+                        });
+                    }
+                }
+            }
+
             console.log(`Order created for session ${session.id}`);
         } catch (sanityError) {
             console.error('Error creating order in Sanity:', sanityError);

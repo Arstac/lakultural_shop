@@ -30,21 +30,26 @@ export async function POST(req: Request) {
             let image = "";
             let unitAmount = 0; // in cents
 
-            if (item.type === 'album_physical') {
+            if (item.type === 'album_physical' && item.album) {
                 name = `Vinyl: ${item.album.title}`;
                 description = `${item.album.artist} - Physical Record`;
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.album.physicalPrice * 100);
-            } else if (item.type === 'album_digital') {
+            } else if (item.type === 'album_digital' && item.album) {
                 name = `Digital: ${item.album.title}`;
                 description = `${item.album.artist} - Digital Download`;
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.album.digitalPrice * 100);
-            } else if (item.type === 'track' && item.track) {
+            } else if (item.type === 'track' && item.track && item.album) {
                 name = `Track: ${item.track.title}`;
                 description = `${item.album.artist} - Single Track`;
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.track.price * 100);
+            } else if (item.type === 'event' && item.event) {
+                name = `Ticket: ${item.event.title}`;
+                description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
+                image = item.event.image;
+                unitAmount = Math.round(item.event.price * 100);
             }
 
             // Ensure absolute URL for images if it's a relative path
@@ -67,6 +72,12 @@ export async function POST(req: Request) {
                         name,
                         description,
                         images: imageUrls.length > 0 ? imageUrls : undefined,
+                        metadata: {
+                            sanity_id: item.type === 'event' && item.event ? item.event.id :
+                                item.type === 'track' && item.track ? item.track.id :
+                                    item.album ? item.album.id : "",
+                            type: item.type
+                        }
                     },
                     unit_amount: unitAmount,
                 },
@@ -74,7 +85,9 @@ export async function POST(req: Request) {
             };
         });
 
-        const origin = req.headers.get("origin") || "http://localhost:3000";
+        const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
+        const locale = body.locale || "es";
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
@@ -98,8 +111,8 @@ export async function POST(req: Request) {
                     },
                 },
             ],
-            success_url: `${origin}/success`,
-            cancel_url: `${origin}/`,
+            success_url: `${origin}/${locale}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${origin}/${locale}/`,
             // Add metadata to track order in webhook
             metadata: {
                 source: "lakultural_shop",

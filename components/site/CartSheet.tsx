@@ -9,24 +9,40 @@ import {
     SheetFooter,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2, ShoppingBag, Disc, Download, Music } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Disc, Download, Music, Ticket } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function CartSheet() {
-    const { items, removeItem, updateQuantity, isOpen, setIsOpen } = useCart();
+    const { items, removeItem, updateQuantity, isOpen, setIsOpen, clearCart } = useCart();
     const [isLoading, setIsLoading] = useState(false);
+    const [isFreeCheckoutOpen, setIsFreeCheckoutOpen] = useState(false);
+    const [customerName, setCustomerName] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
+
     const router = useRouter();
     const t = useTranslations("Cart");
+    const locale = useLocale();
 
     const total = items.reduce(
         (acc, item) => {
             let price = 0;
-            if (item.type === 'album_physical') price = item.album.physicalPrice;
-            else if (item.type === 'album_digital') price = item.album.digitalPrice;
+            if (item.type === 'album_physical' && item.album) price = item.album.physicalPrice;
+            else if (item.type === 'album_digital' && item.album) price = item.album.digitalPrice;
             else if (item.type === 'track' && item.track) price = item.track.price;
+            else if (item.type === 'event' && item.event) price = item.event.price;
             return acc + price * item.quantity;
         },
         0
@@ -38,7 +54,7 @@ export function CartSheet() {
             const response = await fetch("/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items }),
+                body: JSON.stringify({ items, locale }),
             });
             const data = await response.json();
             if (data.url) router.push(data.url);
@@ -49,30 +65,78 @@ export function CartSheet() {
         }
     };
 
+    const handleFreeCheckout = async () => {
+        if (!customerName || !customerEmail) return;
+
+        setIsLoading(true);
+        try {
+            const response = await fetch("/api/checkout/free", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items,
+                    customerName,
+                    customerEmail,
+                    locale
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.orderId) {
+                clearCart();
+                setIsOpen(false);
+                setIsFreeCheckoutOpen(false);
+                router.push(`/${locale}/success?order_id=${data.orderId}`);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const getItemName = (item: any) => {
         if (item.type === 'track' && item.track) return item.track.title;
-        return item.album.title;
+        if (item.type === 'event' && item.event) return item.event.title;
+        if (item.album) return item.album.title;
+        return "Unknown Item";
     };
 
     const getItemDetail = (item: any) => {
-        if (item.type === 'track') return `Single - ${item.album.artist}`;
+        if (item.type === 'track' && item.album) return `Single - ${item.album.artist}`;
         if (item.type === 'album_physical') return `Vinyl Record`;
         if (item.type === 'album_digital') return `Digital Album`;
+        if (item.type === 'event' && item.event) return `Event Ticket - ${new Date(item.event.date).toLocaleDateString()}`;
         return "";
     };
 
     const getItemPrice = (item: any) => {
-        if (item.type === 'album_physical') return item.album.physicalPrice;
-        if (item.type === 'album_digital') return item.album.digitalPrice;
+        if (item.type === 'album_physical' && item.album) return item.album.physicalPrice;
+        if (item.type === 'album_digital' && item.album) return item.album.digitalPrice;
         if (item.type === 'track' && item.track) return item.track.price;
+        if (item.type === 'event' && item.event) return item.event.price;
         return 0;
     };
 
     const getItemIcon = (type: string) => {
         if (type === 'album_physical') return <Disc className="w-4 h-4" />;
         if (type === 'album_digital') return <Download className="w-4 h-4" />;
+        if (type === 'event') return <Ticket className="w-4 h-4" />;
         return <Music className="w-4 h-4" />;
     };
+
+    const getItemImage = (item: any) => {
+        if (item.type === 'event' && item.event) return item.event.image;
+        if (item.album) return item.album.coverImage;
+        return null;
+    }
+
+    const getItemLink = (item: any) => {
+        if (item.type === 'event' && item.event) return `/tickets/${item.event.slug}`; // Assuming event page exists or just link nowhere
+        if (item.album) return `/producto/${item.album.slug}`;
+        return "#";
+    }
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -93,16 +157,18 @@ export function CartSheet() {
                     ) : (
                         <div className="space-y-6 px-1">
                             {items.map((item) => {
-                                // Safety check: if album data is missing (e.g. stale cart), skip rendering to avoid crash
-                                if (!item.album) {
+                                // Safety check
+                                if (!item.album && !item.event) {
                                     return null;
                                 }
+
+                                const image = getItemImage(item);
 
                                 return (
                                     <div key={item.cartId} className="flex gap-4">
                                         <div className="relative w-16 h-16 rounded-md overflow-hidden bg-muted shrink-0 flex items-center justify-center border">
-                                            {item.album.coverImage ? (
-                                                <img src={item.album.coverImage} className="w-full h-full object-cover" />
+                                            {image ? (
+                                                <img src={image} className="w-full h-full object-cover" />
                                             ) : (
                                                 getItemIcon(item.type)
                                             )}
@@ -110,7 +176,7 @@ export function CartSheet() {
                                         <div className="flex-1 flex flex-col justify-between">
                                             <div>
                                                 <Link
-                                                    href={`/producto/${item.album.slug}`}
+                                                    href={getItemLink(item)}
                                                     onClick={() => setIsOpen(false)}
                                                     className="font-semibold text-sm line-clamp-1 hover:underline hover:text-primary transition-colors"
                                                 >
@@ -170,13 +236,64 @@ export function CartSheet() {
                                 <span>{t("total") || "Total"}</span>
                                 <span>{total.toFixed(2)}€</span>
                             </div>
-                            <Button className="w-full" size="lg" onClick={handleCheckout} disabled={isLoading}>
-                                {isLoading ? (t("processing") || "Processing...") : (t("checkout") || "Checkout")}
-                            </Button>
+                            {total === 0 ? (
+                                <Button
+                                    className="w-full"
+                                    size="lg"
+                                    onClick={() => setIsFreeCheckoutOpen(true)}
+                                >
+                                    {t("completeFreeOrder") || "Complete Free Order"}
+                                </Button>
+                            ) : (
+                                <Button className="w-full" size="lg" onClick={handleCheckout} disabled={isLoading}>
+                                    {isLoading ? (t("processing") || "Processing...") : (t("checkout") || "Checkout")}
+                                </Button>
+                            )}
                         </div>
                     </SheetFooter>
                 )}
             </SheetContent>
+
+            <Dialog open={isFreeCheckoutOpen} onOpenChange={setIsFreeCheckoutOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Complete Free Order</DialogTitle>
+                        <DialogDescription>
+                            Please provide your details to receive your tickets.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                placeholder="Your Name"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="your@email.com"
+                                value={customerEmail}
+                                onChange={(e) => setCustomerEmail(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsFreeCheckoutOpen(false)}>Cancel</Button>
+                        <Button
+                            onClick={handleFreeCheckout}
+                            disabled={isLoading || !customerName || !customerEmail}
+                        >
+                            {isLoading ? "Processing..." : "Confirm"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Sheet>
     );
 }

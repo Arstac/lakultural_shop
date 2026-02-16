@@ -140,20 +140,68 @@ export const getHomePageContent = async (): Promise<HomePageContent | null> => {
         return null;
     }
 };
-export const staticAlbums: Album[] = [
-    {
-        id: "album-1",
-        title: "Neon Nights",
-        artist: "La Kultural",
-        slug: "neon-nights",
-        description: "A synth-wave journey through the midnight city streets.",
-        coverImage: "/placeholder-album-1.jpg",
-        physicalPrice: 25,
-        digitalPrice: 12,
-        genre: "Synthwave",
-        tracks: [
-            { id: "t1-1", title: "Midnight Drive", duration: "3:45", price: 1.50, previewUrl: "/audio/placeholder.mp3" },
-            { id: "t1-2", title: "Neon Lights", duration: "4:20", price: 1.50, previewUrl: "/audio/placeholder.mp3" },
-        ]
+
+export interface Event {
+    id: string;
+    title: string;
+    slug: string;
+    date: string;
+    location: string;
+    price: number;
+    image: string;
+    description: string;
+}
+
+const eventsQuery = groq`*[_type == "event"] {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    location,
+    price,
+    image,
+    description
+} | order(date asc)`;
+
+const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    location,
+    price,
+    image,
+    description
+}`;
+
+const mapSanityEvent = (sanityEvent: any): Event => ({
+    id: sanityEvent._id,
+    title: sanityEvent.title,
+    slug: sanityEvent.slug,
+    date: sanityEvent.date,
+    location: sanityEvent.location,
+    price: sanityEvent.price,
+    image: sanityEvent.image ? urlFor(sanityEvent.image).url() : "/placeholder-event.jpg",
+    description: sanityEvent.description,
+});
+
+export const getEvents = async (): Promise<Event[]> => {
+    try {
+        const data = await client.fetch(eventsQuery);
+        return data.map(mapSanityEvent);
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        return [];
     }
-];
+};
+
+export const getEventBySlug = async (slug: string): Promise<Event | null> => {
+    try {
+        const data = await client.fetch(eventBySlugQuery, { slug });
+        if (!data) return null;
+        return mapSanityEvent(data);
+    } catch (error) {
+        console.error(`Error fetching event ${slug}:`, error);
+        return null;
+    }
+};
