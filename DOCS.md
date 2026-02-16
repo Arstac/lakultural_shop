@@ -107,7 +107,7 @@ Se ha integrado **Sanity.io** para gestionar el contenido dinámico sin necesida
 
 ### Schemas
 - **Album**: Productos principales (Título, Artista, Precios, Tracks).
-- **Track**: Canciones individuales (Audio Preview, Precio).
+- **Track**: Canciones individuales (Audio Preview [MP3], Precio).
 - **HomePage**: Singleton para editar la Portada (Hero Image, Textos, CTA).
 
 ### Rutas
