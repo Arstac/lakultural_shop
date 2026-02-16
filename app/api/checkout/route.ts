@@ -45,6 +45,11 @@ export async function POST(req: Request) {
                 description = `${item.album.artist} - Single Track`;
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.track.price * 100);
+            } else if (item.type === 'event' && item.event) {
+                name = `Ticket: ${item.event.title}`;
+                description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
+                image = item.event.image;
+                unitAmount = Math.round(item.event.price * 100);
             } else {
                 return undefined;
             }
@@ -70,8 +75,9 @@ export async function POST(req: Request) {
                         description,
                         images: imageUrls.length > 0 ? imageUrls : undefined,
                         metadata: {
-                            sanity_id: item.type === 'track' && item.track ? item.track.id :
-                                item.album ? item.album.id : "",
+                            sanity_id: item.type === 'event' && item.event ? item.event.id :
+                                item.type === 'track' && item.track ? item.track.id :
+                                    item.album ? item.album.id : "",
                             type: item.type
                         }
                     },

@@ -158,3 +158,68 @@ export const staticAlbums: Album[] = [
         ]
     }
 ];
+
+export interface Event {
+    id: string;
+    title: string;
+    slug: string;
+    date: string;
+    location: string;
+    price: number;
+    image: string;
+    description: string;
+}
+
+const eventsQuery = groq`*[_type == "event"] {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    location,
+    price,
+    image,
+    description
+} | order(date asc)`;
+
+const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    date,
+    location,
+    price,
+    image,
+    description
+}`;
+
+const mapSanityEvent = (sanityEvent: any): Event => ({
+    id: sanityEvent._id,
+    title: sanityEvent.title,
+    slug: sanityEvent.slug,
+    date: sanityEvent.date,
+    location: sanityEvent.location,
+    price: sanityEvent.price,
+    image: sanityEvent.image ? urlFor(sanityEvent.image).url() : "/placeholder-event.jpg",
+    description: sanityEvent.description,
+});
+
+export const getEvents = async (): Promise<Event[]> => {
+    try {
+        const data = await client.fetch(eventsQuery);
+        return data.map(mapSanityEvent);
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        return [];
+    }
+};
+
+export const getEventBySlug = async (slug: string): Promise<Event | null> => {
+    try {
+        const data = await client.fetch(eventBySlugQuery, { slug });
+        if (!data) return null;
+        return mapSanityEvent(data);
+    } catch (error) {
+        console.error(`Error fetching event ${slug}:`, error);
+        return null;
+    }
+};
