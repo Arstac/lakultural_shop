@@ -1,6 +1,6 @@
 
 import { createClient } from "next-sanity";
-import { performSanityFetch } from "../lib/sanity.client"; // If that exists, or just use createClient directly
+
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "vo84ei3l";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
