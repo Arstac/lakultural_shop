@@ -49,51 +49,67 @@ export default function QRScannerPage() {
         // console.warn(`Code scan error = ${error}`);
     };
 
+
+    // Use an effect to handle scanner initialization to ensure DOM element exists
+    useEffect(() => {
+        if (!scannerActive || !scriptLoaded || !isAuthenticated) return;
+
+        const initializeScanner = () => {
+            if (!(window as any).Html5QrcodeScanner) return;
+
+            const element = document.getElementById("reader");
+            if (!element) {
+                // If element not found yet, wait for next tick
+                setTimeout(initializeScanner, 100);
+                return;
+            }
+
+            try {
+                // Clear any existing instance first
+                if (scannerRef.current) {
+                    scannerRef.current.clear().catch(console.error);
+                }
+
+                const html5QrcodeScanner = new (window as any).Html5QrcodeScanner(
+                    "reader",
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    /* verbose= */ false
+                );
+                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                scannerRef.current = html5QrcodeScanner;
+            } catch (e) {
+                console.error("Error starting scanner", e);
+            }
+        };
+
+        // Small delay to ensure render cycle is complete
+        const timer = setTimeout(initializeScanner, 100);
+
+        return () => {
+            clearTimeout(timer);
+            if (scannerRef.current) {
+                scannerRef.current.clear().catch((error: any) => {
+                    console.error("Failed to clear html5QrcodeScanner. ", error);
+                });
+            }
+        };
+    }, [scannerActive, scriptLoaded, isAuthenticated]);
+
     const startScanner = () => {
-        if (!isAuthenticated || !scriptLoaded) return;
         setScanResult(null);
         setScannerActive(true);
-
-        // Allow DOM to update
-        // Wait for DOM element and Script to be ready
-        if (!(window as any).Html5QrcodeScanner) return;
-
-        try {
-            const html5QrcodeScanner = new (window as any).Html5QrcodeScanner(
-                "reader",
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                /* verbose= */ false
-            );
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-            scannerRef.current = html5QrcodeScanner;
-        } catch (e) {
-            console.error("Error starting scanner", e);
-        }
     };
 
     const resetScanner = () => {
         setScanResult(null);
+        // If we just resume, we might have issues if component re-rendered or lost ref
+        // Safer to just ensure we are active and let effect handle or resume if ref exists
         if (scannerRef.current) {
             scannerRef.current.resume();
         } else {
-            startScanner();
+            setScannerActive(true);
         }
     };
-
-    // Cleanup scanner on unmount
-    useEffect(() => {
-        return () => {
-            if (scannerRef.current) {
-                try {
-                    scannerRef.current.clear().catch((error: any) => {
-                        console.error("Failed to clear html5QrcodeScanner. ", error);
-                    });
-                } catch (e) {
-                    console.error("Error clearing scanner", e);
-                }
-            }
-        };
-    }, []);
 
     if (!isAuthenticated) {
         return (

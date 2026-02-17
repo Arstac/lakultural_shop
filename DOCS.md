@@ -298,6 +298,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 - Ruta: `/qr`
 - Protegida por PIN (`QR_ACCESS_PIN` en `.env`).
 - Funcionalidad: Escáner de cámara (html5-qrcode) que valida el UUID contra Sanity.
+- **Mejora**: Inicialización controlada mediante `useEffect` para evitar condiciones de carrera en la carga del elemento DOM.
 - Lógica implementada en `app/actions/tickets.ts` (`validateTicket`):
   - Si existe y `status: 'active'` -> Marca como `used` y permite acceso.
   - Si `used` o `cancelled` -> Deniega acceso.
