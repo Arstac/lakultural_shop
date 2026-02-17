@@ -2,7 +2,8 @@
     "Header": {
         "contact": "Contacto",
         "rework": "REWORK",
-        "collection": "Colección"
+        "collection": "Música",
+        "events": "Eventos"
     },
     "Hero": {
         "title": "Sonido Analógico.",

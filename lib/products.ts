@@ -112,6 +112,7 @@ export interface HomePageContent {
     subheadline: string;
     description: string;
     heroImage: string;
+    titleImage?: string; // New field for title image
     ctaText: string;
 }
 
@@ -123,7 +124,8 @@ export const getHomePageContent = async (): Promise<HomePageContent | null> => {
             subheadline,
             description,
             ctaText,
-            heroImage
+            heroImage,
+            titleImage
         }`;
         const data = await client.fetch(query);
         if (!data) return null;
@@ -133,7 +135,8 @@ export const getHomePageContent = async (): Promise<HomePageContent | null> => {
             subheadline: data.subheadline,
             description: data.description,
             ctaText: data.ctaText || "Explorar Catálogo",
-            heroImage: data.heroImage ? urlFor(data.heroImage).url() : "/hero_music.jpg"
+            heroImage: data.heroImage ? urlFor(data.heroImage).url() : "/background_kultural.jpeg",
+            titleImage: data.titleImage ? urlFor(data.titleImage).url() : "/kultural.svg"
         };
     } catch (error) {
         console.error("Error fetching home page content:", error);

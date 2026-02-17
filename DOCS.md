@@ -41,7 +41,7 @@ Los usuarios pueden:
 
 El stack base se mantiene respecto a la versión anterior:
 - **Framework**: Next.js 16 (App Router)
-- **UI**: Tailwind CSS + Shadcn UI (Tipografía: Space Grotesk)
+- **UI**: Tailwind CSS + Shadcn UI + **Framer Motion** (Animaciones)
 - **Estado**: Zustand (Carrito + Reproductor)
 - **i18n**: next-intl
 - **Pagos**: Stripe (Checkout + Webhooks)
@@ -64,13 +64,10 @@ graph TB
     end
 
     subgraph "Pages"
-        Home[Home Page]
+        Home[Home Page (Parallax)]
         ProductPage[Product Detail]
-    end
-
-    subgraph "Global State (Zustand)"
-        CartStore[Cart Store]
-        PlayerStore[Player Store]
+        CollectionPage[Collection Page]
+        EventsPage[Events Page]
     end
 
     subgraph "Global State (Zustand)"
@@ -88,6 +85,8 @@ graph TB
     Layout --> Intl
     Intl --> Home
     Intl --> ProductPage
+    Intl --> CollectionPage
+    Intl --> EventsPage
     Layout --> PlayerBar
     
     Sanity --> Albums
@@ -150,6 +149,7 @@ interface Album {
     tracks: Track[];
     genre: string;
 }
+```
 
 ### Order
 ```typescript
@@ -205,6 +205,14 @@ Gestiona la reproducción de música global.
 
 ## Componentes Principales
 
+### `ParallaxHome.tsx`
+- **Nuevo**: Componente principal de la Home con efectos de scroll (Framer Motion).
+- **Estructura**:
+  - Hero Sticky: Imagen de fondo fija que se escala y desvanece al hacer scroll.
+  - Título Animado: Aparece desde abajo (`translateY`) y cambia de opacidad.
+  - Capa de Contenido: Se desliza sobre el Hero creando un efecto de profundidad.
+- Recibe `EventBanner` como prop (`slot`) para evitar problemas de componentes servidor/cliente.
+
 ### `Player.tsx`
 - Barra persistente en la parte inferior (`components/site/Player.tsx`).
 - Incluido en `app/[locale]/layout.tsx`.
@@ -227,14 +235,21 @@ Gestiona la reproducción de música global.
 - Adaptado para mostrar iconos diferentes según el tipo de producto (Disco, Descarga, Nota Musical).
 - Calcula totales sumando precios variados.
 
+### `EventBanner.tsx`
+- Componente visual para la Home.
+- Muestra el próximo evento destacado con fecha, lugar y precio.
+- Botones para "Conseguir Entradas" o "Ver todos los eventos".
+
 ---
 
 ## Sistema de Rutas
 
 | Ruta | Descripción |
 |------|-------------|
-| `/[locale]/` | Home. Lista todos los álbumes. |
+| `/[locale]/` | Home Parallax. Hero dinámico + Event Banner + Lista de Álbumes. |
+| `/[locale]/collection` | Música. Colección completa de álbumes. |
 | `/[locale]/producto/[slug]` | Detalle del álbum y lista de canciones. |
+| `/[locale]/events` | Lista de eventos próximos. |
 | `/[locale]/events/[slug]` | Detalle del evento y compra de entradas. |
 | `/[locale]/rework` | **Desactivado** (Legacy). |
 

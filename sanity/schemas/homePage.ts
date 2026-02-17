@@ -21,6 +21,14 @@ export default defineType({
             },
         }),
         defineField({
+            name: 'titleImage',
+            title: 'Title Image (Logo)',
+            type: 'image',
+            options: {
+                hotspot: true,
+            },
+        }),
+        defineField({
             name: 'headline',
             title: 'Main Headline',
             type: 'string',
