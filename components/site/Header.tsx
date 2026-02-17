@@ -13,9 +13,19 @@ const LanguageSwitcher = dynamic(
     { ssr: false }
 );
 
-export function Header() {
+import { SiteSettings } from "@/lib/siteSettings";
+
+interface HeaderProps {
+    settings?: SiteSettings | null;
+}
+
+export function Header({ settings }: HeaderProps) {
     const locale = useLocale();
     const t = useTranslations("Header");
+
+    // Default links if not configured
+    const instagramLink = settings?.social?.instagram || "https://instagram.com";
+    const contactLink = settings?.social?.contact || "mailto:hola@kroma.com";
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -56,12 +66,12 @@ export function Header() {
                 <div className="flex items-center gap-2 md:gap-4">
                     <LanguageSwitcher />
                     <CartButton />
-                    <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+                    <Link href={instagramLink} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
                         <Instagram className="h-5 w-5" />
                         <span className="sr-only">Instagram</span>
                     </Link>
                     <Button variant="outline" size="sm" asChild className="hidden md:flex">
-                        <Link href="mailto:hola@kroma.com">
+                        <Link href={contactLink}>
                             {t("contact")}
                         </Link>
                     </Button>

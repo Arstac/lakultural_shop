@@ -20,13 +20,18 @@ export interface SiteSettings {
         input?: string;
         ring?: string;
     };
+    social?: {
+        instagram?: string;
+        contact?: string;
+    };
 }
 
 const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
     title,
     description,
     radius,
-    colors
+    colors,
+    social
 }`;
 
 export const getSiteSettings = async (): Promise<SiteSettings | null> => {
