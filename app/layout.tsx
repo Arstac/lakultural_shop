@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-space",
   display: "swap",
 });
 
@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${outfit.variable} antialiased min-h-screen flex flex-col font-sans`}>
+      <body className={`${spaceGrotesk.variable} antialiased min-h-screen flex flex-col font-sans`}>
         {children}
       </body>
     </html>

@@ -29,7 +29,7 @@ export function ProductDetail({ album }: ProductDetailProps) {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-start">
             {/* Left: Album Cover */}
             <div className="relative group perspective-1000">
                 <div className="relative w-full aspect-square rounded-lg shadow-2xl overflow-hidden bg-muted transition-transform duration-700 ease-out group-hover:rotate-y-12">
@@ -46,7 +46,7 @@ export function ProductDetail({ album }: ProductDetailProps) {
                     )}
                 </div>
                 {/* Vinyl Record sliding out */}
-                <div className="absolute top-2 bottom-2 right-2 w-[95%] rounded-full bg-black -z-10 flex items-center justify-center transition-transform duration-700 ease-out group-hover:translate-x-1/3">
+                <div className="absolute top-2 bottom-2 right-2 w-[95%] rounded-full bg-black -z-10 flex items-center justify-center transition-transform duration-700 ease-out group-hover:translate-x-12 lg:group-hover:translate-x-16">
                     <div className="w-1/3 h-1/3 bg-zinc-800 rounded-full border-4 border-zinc-900"></div>
                 </div>
             </div>

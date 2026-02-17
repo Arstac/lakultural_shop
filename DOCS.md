@@ -41,7 +41,7 @@ Los usuarios pueden:
 
 El stack base se mantiene respecto a la versión anterior:
 - **Framework**: Next.js 16 (App Router)
-- **UI**: Tailwind CSS + Shadcn UI
+- **UI**: Tailwind CSS + Shadcn UI (Tipografía: Space Grotesk)
 - **Estado**: Zustand (Carrito + Reproductor)
 - **i18n**: next-intl
 - **Pagos**: Stripe (Checkout + Webhooks)
@@ -211,8 +211,9 @@ Gestiona la reproducción de música global.
 - Muestra: Carátula, Título, Artista.
 
 ### `ProductCard.tsx`
-- Diseño estilo "Vinilo".
-- Efecto hover: El disco sale de la funda.
+- Diseño estilo "Vinilo" con animación mejorada (mayor desplazamiento).
+- Efecto hover: El disco sale de la funda y la carátula se oscurece.
+- **Interacción**: Toda la imagen es clicable y lleva al detalle del producto.
 - Muestra precios de Vinilo y Digital.
 
 ### `ProductDetail.tsx`
@@ -266,6 +267,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 **Event**
 - Representa un evento físico (con fecha, lugar, precio, imagen).
 - Se puede añadir al carrito como un producto más (type: 'event').
+- **Interacción**: Las tarjetas de eventos son clicables en la imagen y tienen efecto de oscurecido al pasar el mouse.
 
 **Ticket**
 - Se genera automáticamente tras la compra de un Evento.
