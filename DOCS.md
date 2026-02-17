@@ -116,6 +116,7 @@ Se ha integrado **Sanity.io** para gestionar el contenido dinámico sin necesida
 ### Rutas
 - `/studio`: Panel de administración (requiere login).
 - Librería `lib/products.ts`: Contiene las queries GROQ para obtener datos.
+- Librería `lib/sanity.server.ts`: Cliente de Sanity **con permisos de escritura** (usa `SANITY_API_TOKEN`) para operaciones server-side (checkout, tickets).
 - Fallback: Si Sanity no devuelve datos, se usa contenido estático de seguridad.
 
 ---

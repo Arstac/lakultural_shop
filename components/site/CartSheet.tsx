@@ -70,7 +70,10 @@ export function CartSheet() {
 
 
     const handleFreeCheckout = async () => {
-        if (!customerName || !customerEmail) return;
+        if (!customerName || !customerEmail) {
+            alert(t("fillRequiredFields") || "Please fill in all fields");
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -92,9 +95,12 @@ export function CartSheet() {
                 setIsOpen(false);
                 setIsFreeCheckoutOpen(false);
                 router.push(`/${locale}/success?order_id=${data.orderId}`);
+            } else {
+                alert(t("orderError") || "Something went wrong. Please try again.");
             }
         } catch (error) {
             console.error(error);
+            alert(t("orderError") || "Something went wrong. Please try again.");
         } finally {
             setIsLoading(false);
         }

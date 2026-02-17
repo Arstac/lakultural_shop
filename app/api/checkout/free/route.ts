@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { client } from "@/lib/sanity.client";
+import { serverClient } from "@/lib/sanity.server";
 import { CartItem } from "@/lib/store";
 
 export async function POST(req: Request) {
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             })
         };
 
-        const createdOrder = await client.create(orderDoc);
+        const createdOrder = await serverClient.create(orderDoc);
 
         // 2. Generate Tickets for Events
         const tickets = [];
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
                         attendeeName: customerName,
                         attendeeEmail: customerEmail
                     };
-                    const createdTicket = await client.create(ticketDoc);
+                    const createdTicket = await serverClient.create(ticketDoc);
                     tickets.push(createdTicket);
                 }
             }
