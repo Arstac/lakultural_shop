@@ -136,9 +136,20 @@ export function ProductDetail({ album }: ProductDetailProps) {
                                             </span>
                                         </div>
                                         {track.price > 0 && (
-                                            <span className="text-sm font-semibold whitespace-nowrap">
-                                                {track.price.toFixed(2)}€
-                                            </span>
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-sm font-semibold whitespace-nowrap">
+                                                    {track.price.toFixed(2)}€
+                                                </span>
+                                                <Button
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="h-8 w-8 rounded-full hover:bg-primary hover:text-primary-foreground"
+                                                    onClick={() => { addTrack(album, track); setIsOpen(true); }}
+                                                    title={t("addToCart")}
+                                                >
+                                                    <ShoppingCart className="w-4 h-4" />
+                                                </Button>
+                                            </div>
                                         )}
                                     </div>
                                 </div>

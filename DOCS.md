@@ -220,6 +220,7 @@ Gestiona la reproducción de música global.
 - Página de detalle del álbum.
 - **Tracklist interactivo**: Botones de Play para cada canción.
 - **Opciones de Compra**: Bloque para Vinilo/Digital y botones individuales por canción.
+- **Carrito**: Botón de "Añadir al carrito" individual para cada canción.
 
 ### `CartSheet.tsx`
 - Adaptado para mostrar iconos diferentes según el tipo de producto (Disco, Descarga, Nota Musical).
