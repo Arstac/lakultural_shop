@@ -153,5 +153,14 @@
             "todoterreno": "La Todoterreno: Mòbil + Ulleres + Cartera",
             "maxi": "La Maxi: Ampolla 50cl + Agenda + Tot el demés"
         }
+    },
+    "Events": {
+        "title": "Propers Esdeveniments",
+        "noEvents": "No hi ha esdeveniments propers.",
+        "getTickets": "Aconseguir Entradas",
+        "addToCart": "Afegir al Carret",
+        "free": "Gratis",
+        "generalAdmission": "Entrada General",
+        "secureCheckout": "Pagament segur via Stripe."
     }
 }

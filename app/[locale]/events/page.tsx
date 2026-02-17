@@ -1,5 +1,5 @@
 import { getEvents } from "@/lib/products";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Calendar, MapPin, Ticket } from "lucide-react";
 
 export default async function EventsPage() {
     const events = await getEvents();
-    const t = useTranslations("Events"); // You might need to add translations later
+    const t = await getTranslations("Events"); // You might need to add translations later
 
     return (
         <div className="container mx-auto px-4 py-12">
@@ -53,7 +53,7 @@ export default async function EventsPage() {
                                 </p>
 
                                 <Button asChild className="w-full mt-auto">
-                                    <Link href={`/tickets/${event.slug}`}>
+                                    <Link href={`/events/${event.slug}`}>
                                         {t("getTickets") || "Get Tickets"}
                                     </Link>
                                 </Button>

@@ -51,7 +51,8 @@
         "viewCollection": "Ver colección",
         "total": "Total",
         "checkout": "Tramitar Pedido",
-        "processing": "Procesando..."
+        "processing": "Procesando...",
+        "completeFreeOrder": "Completar Pedido Gratis"
     },
     "Footer": {
         "rights": "Todos los derechos reservados.",
@@ -149,5 +150,14 @@
             "todoterreno": "La Todoterreno: Móvil + Gafas + Cartera",
             "maxi": "La Maxi: Botella 50cl + Agenda + Todo lo demás"
         }
+    },
+    "Events": {
+        "title": "Próximos Eventos",
+        "noEvents": "No hay eventos próximos.",
+        "getTickets": "Conseguir Entradas",
+        "addToCart": "Añadir al Carrito",
+        "free": "Gratis",
+        "generalAdmission": "Entrada General",
+        "secureCheckout": "Pago seguro vía Stripe."
     }
 }

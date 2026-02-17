@@ -14,8 +14,9 @@
 4. [Modelo de Datos](#modelo-de-datos)
 5. [Gestión del Estado (Zustand)](#gestión-del-estado-zustand)
 6. [Componentes Principales](#componentes-principales)
-7. [Sistema de Rutas](#sistema-de-rutas)
-8. [Internacionalización](#internacionalización)
+7. [Server Actions](#server-actions)
+8. [Sistema de Rutas](#sistema-de-rutas)
+9. [Internacionalización](#internacionalización)
 
 ---
 
@@ -178,14 +179,16 @@ Gestiona el carrito de compras. Soporta tres tipos de items:
 - `album_physical`: Vinilo.
 - `album_digital`: Descarga completa.
 - `track`: Canción individual.
+- `event`: Entrada para evento.
 
 **Estructura del CartItem:**
 ```typescript
 interface CartItem {
     cartId: string; // Unique ID
-    type: 'album_physical' | 'album_digital' | 'track';
-    album: Album;
+    type: 'album_physical' | 'album_digital' | 'track' | 'event';
+    album?: Album;
     track?: Track; // Solo si type === 'track'
+    event?: Event; // Solo si type === 'event'
     quantity: number;
 }
 ```
@@ -229,14 +232,30 @@ Gestiona la reproducción de música global.
 |------|-------------|
 | `/[locale]/` | Home. Lista todos los álbumes. |
 | `/[locale]/producto/[slug]` | Detalle del álbum y lista de canciones. |
+| `/[locale]/events/[slug]` | Detalle del evento y compra de entradas. |
 | `/[locale]/rework` | **Desactivado** (Legacy). |
+
+---
+
+## Server Actions
+
+Ubicación: `app/actions/`
+
+Funciones que se ejecutan en el servidor para operaciones sensibles o interacciones con APIs externas:
+
+- **`auth.ts`**: Verificación del PIN de administrador (`verifyAdminPin`) para acceder al escáner de QR.
+- **`sanity_orders.ts`**: Obtención de detalles de pedidos desde Sanity (`getSanityOrderDetails`) para la página de confirmación.
+- **`stripe.ts`**: Recuperación de detalles de la sesión de Stripe (`getOrderDetails`) tras el pago.
+- **`tickets.ts`**: Lógica central del sistema de entradas:
+    - `getTicketsByOrderId`: Busca tickets asociados a un pedido.
+    - `validateTicket`: Valida y "quema" (marca como usado) un ticket mediante su código QR.
 
 ---
 
 ## Internacionalización
 
 Se mantienen los archivos en `messages/` (es, en, ca, fr).
-**Nota:** Es necesario actualizar las claves de traducción para cubrir los nuevos términos ("Vinyl", "Digital Album", "Tracklist", etc.). Actualmente se usan fallbacks en inglés en el código si faltan las traducciones.
+**Estado:** Completo. Las traducciones para los 4 idiomas están implementadas, incluyendo nuevos términos para eventos y checkout.
 
 ---
 
@@ -269,7 +288,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 - Ruta: `/qr`
 - Protegida por PIN (`QR_ACCESS_PIN` en `.env`).
 - Funcionalidad: Escáner de cámara (html5-qrcode) que valida el UUID contra Sanity.
-- Lógica:
+- Lógica implementada en `app/actions/tickets.ts` (`validateTicket`):
   - Si existe y `status: 'active'` -> Marca como `used` y permite acceso.
   - Si `used` o `cancelled` -> Deniega acceso.
 

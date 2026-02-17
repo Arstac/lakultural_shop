@@ -55,7 +55,8 @@
         "viewCollection": "View collection",
         "total": "Total",
         "checkout": "Checkout",
-        "processing": "Processing..."
+        "processing": "Processing...",
+        "completeFreeOrder": "Complete Free Order"
     },
     "Footer": {
         "rights": "All rights reserved.",
@@ -153,5 +154,14 @@
             "todoterreno": "La Todoterreno: Phone + Sunglasses + Wallet",
             "maxi": "La Maxi: 50cl Bottle + Planner + Everything else"
         }
+    },
+    "Events": {
+        "title": "Upcoming Events",
+        "noEvents": "No upcoming events.",
+        "getTickets": "Get Tickets",
+        "addToCart": "Add to Cart",
+        "free": "Free",
+        "generalAdmission": "General Admission",
+        "secureCheckout": "Secure checkout via Stripe."
     }
 }

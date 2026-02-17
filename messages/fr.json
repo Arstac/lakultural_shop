@@ -153,5 +153,14 @@
             "todoterreno": "La Todoterreno: Téléphone + Lunettes + Portefeuille",
             "maxi": "La Maxi: Bouteille 50cl + Agenda + Tout le reste"
         }
+    },
+    "Events": {
+        "title": "Événements à venir",
+        "noEvents": "Aucun événement à venir.",
+        "getTickets": "Obtenir des billets",
+        "addToCart": "Ajouter au Panier",
+        "free": "Gratuit",
+        "generalAdmission": "Entrée Générale",
+        "secureCheckout": "Paiement sécurisé via Stripe."
     }
 }
