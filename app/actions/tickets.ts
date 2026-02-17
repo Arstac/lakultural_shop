@@ -17,7 +17,11 @@ export async function getTicketsByOrderId(orderId: string) {
     try {
         // Find the Order _id first because tickets reference user's orderId by reference to document, 
         // but easier to search by order->orderId
-        const query = `*[_type == "ticket" && order->orderId == $orderId] {
+        // Search by:
+        // 1. Ticket Code (direct match)
+        // 2. Order internal ID (_ref)
+        // 3. Order external ID (orderId field)
+        const query = `*[_type == "ticket"] {
             _id,
             code,
             status,
@@ -27,8 +31,12 @@ export async function getTicketsByOrderId(orderId: string) {
                 date,
                 location,
                 image
+            },
+            "order": order->{
+                _id,
+                orderId
             }
-        }`;
+        }[code == $orderId || order._id == $orderId || order.orderId == $orderId]`;
 
         const tickets = await client.fetch(query, { orderId });
         return tickets;

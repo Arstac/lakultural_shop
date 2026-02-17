@@ -250,7 +250,10 @@ Funciones que se ejecutan en el servidor para operaciones sensibles o interaccio
 - **`sanity_orders.ts`**: Obtención de detalles de pedidos desde Sanity (`getSanityOrderDetails`) para la página de confirmación.
 - **`stripe.ts`**: Recuperación de detalles de la sesión de Stripe (`getOrderDetails`) tras el pago.
 - **`tickets.ts`**: Lógica central del sistema de entradas:
-    - `getTicketsByOrderId`: Busca tickets asociados a un pedido.
+    - `getTicketsByOrderId`: Busca tickets asociados a un pedido. Soporta búsqueda por:
+        - `code` (UUID del ticket).
+        - `order._ref` (ID interno de Sanity).
+        - `order.orderId` (ID público del pedido).
     - `validateTicket`: Valida y "quema" (marca como usado) un ticket mediante su código QR.
 
 ---
@@ -289,7 +292,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
    - **Pago (Stripe)**: Si total > 0. Webhook genera los tickets.
    - **Gratis (0€)**: Flow específico (`/api/checkout/free`) que crea Order y Tickets directamente en Sanity.
 3. Success Page: Enlace a "Ver Entradas" o envío por email (pendiente de implementar email).
-4. Visualización: `/tickets/[orderId]` muestra los códigos QR.
+4. Visualización: `/tickets/[id]` muestra los códigos QR. El parámetro `[id]` puede ser el OrderId, el ID interno de Sanity o el UUID del Ticket.
 
 ### 3. Validación (Admin)
 - Ruta: `/qr`

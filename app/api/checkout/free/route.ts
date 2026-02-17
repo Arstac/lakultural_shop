@@ -7,6 +7,12 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { items, customerName, customerEmail, locale } = body;
 
+
+        if (!process.env.SANITY_API_TOKEN) {
+            console.error("SANITY_API_TOKEN is missing");
+            return NextResponse.json({ error: "Configuration Error", details: "SANITY_API_TOKEN is missing in server environment" }, { status: 500 });
+        }
+
         if (!items || items.length === 0) {
             return NextResponse.json({ error: "Empty cart" }, { status: 400 });
         }
@@ -20,7 +26,7 @@ export async function POST(req: Request) {
         // 1. Create Order in Sanity
         const orderDoc = {
             _type: 'order',
-            orderNumber: orderId,
+            orderId: orderId,
             stripeSessionId: `free-${orderId}`,
             customerName,
             customerEmail,
