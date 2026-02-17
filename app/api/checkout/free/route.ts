@@ -77,10 +77,14 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ success: true, orderId: createdOrder._id, tickets });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Free Checkout Error:", error);
         return NextResponse.json(
-            { error: "Internal Server Error" },
+            {
+                error: "Internal Server Error",
+                details: error.message,
+                stack: error.stack
+            },
             { status: 500 }
         );
     }

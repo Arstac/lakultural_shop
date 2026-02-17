@@ -52,7 +52,10 @@
         "total": "Total",
         "checkout": "Tramitar Pedido",
         "processing": "Procesando...",
-        "completeFreeOrder": "Completar Pedido Gratis"
+        "completeFreeOrder": "Completar Pedido Gratis",
+        "orderSuccess": "¡Pedido confirmado!",
+        "orderError": "Algo ha ido mal. Por favor, inténtalo de nuevo.",
+        "fillRequiredFields": "Por favor, rellena todos los campos."
     },
     "Footer": {
         "rights": "Todos los derechos reservados.",
