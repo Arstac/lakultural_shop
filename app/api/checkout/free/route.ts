@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { serverClient } from "@/lib/sanity.server";
 import { CartItem } from "@/lib/store";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
     try {
@@ -76,9 +77,33 @@ export async function POST(req: Request) {
                         attendeeEmail: customerEmail
                     };
                     const createdTicket = await serverClient.create(ticketDoc);
-                    tickets.push(createdTicket);
+                    tickets.push({
+                        code: ticketCode,
+                        eventName: item.event.title,
+                        attendeeName: customerName
+                    });
                 }
             }
+        }
+
+        // 3. Send Confirmation Email
+        try {
+            await sendOrderConfirmationEmail({
+                orderId: createdOrder.orderId,
+                customerName: customerName,
+                customerEmail: customerEmail,
+                items: items.map((item: CartItem) => ({
+                    title: item.type === 'event' && item.event ? item.event.title :
+                        item.type === 'track' && item.track ? item.track.title :
+                            item.album ? item.album.title : "Unknown",
+                    quantity: item.quantity,
+                    price: 0 // Free checkout
+                })),
+                total: 0
+            }, tickets);
+        } catch (emailError) {
+            console.error("Failed to send email for free order:", emailError);
+            // Don't fail the request, just log it
         }
 
         return NextResponse.json({ success: true, orderId: createdOrder._id, tickets });

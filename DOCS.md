@@ -46,6 +46,7 @@ El stack base se mantiene respecto a la versión anterior:
 - **i18n**: next-intl
 - **Pagos**: Stripe (Checkout + Webhooks)
 - **Base de Datos**: Sanity.io (Productos + Pedidos)
+- **Emails**: Nodemailer (Notificaciones de pedidos)
 
 ---
 
@@ -321,3 +322,13 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 ### 4. Variables de Entorno Nuevas
 - `QR_ACCESS_PIN`: PIN para acceder al escáner.
 - `SANITY_API_TOKEN`: Token con permisos de escritura (Editor) para crear Orders y Tickets y actualizar estado.
+
+### 5. Configuración SMTP (Ionos)
+Dado que el dominio `lakultural.eu` utiliza Ionos, la configuración recomendada para el archivo `.env.local` es:
+
+```env
+SMTP_HOST=smtp.ionos.es
+SMTP_PORT=587
+SMTP_USER=info@lakultural.eu
+SMTP_PASS=tu_contraseña_del_correo
+```

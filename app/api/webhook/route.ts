@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
     apiVersion: "2025-12-15.clover" as any,
@@ -81,12 +82,14 @@ export async function POST(req: Request) {
             });
 
             // 4. Generate Tickets for Events
+            const tickets = [];
             for (const item of orderItems) {
                 if (item.type === 'event' && item.sanity_id) {
                     for (let i = 0; i < item.quantity; i++) {
+                        const ticketCode = crypto.randomUUID();
                         await client.create({
                             _type: 'ticket',
-                            code: crypto.randomUUID(),
+                            code: ticketCode,
                             status: 'active',
                             event: {
                                 _type: 'reference',
@@ -99,7 +102,31 @@ export async function POST(req: Request) {
                             attendeeName: session.customer_details?.name || 'Guest',
                             attendeeEmail: session.customer_details?.email || ''
                         });
+                        tickets.push({
+                            code: ticketCode,
+                            eventName: item.name || "Evento",
+                            attendeeName: session.customer_details?.name || 'Guest'
+                        });
                     }
+                }
+            }
+
+            // 5. Send Confirmation Email
+            if (session.customer_details?.email) {
+                try {
+                    await sendOrderConfirmationEmail({
+                        orderId: session.id,
+                        customerName: session.customer_details?.name || 'Guest',
+                        customerEmail: session.customer_details?.email,
+                        items: orderItems.map(item => ({
+                            title: item.name || "Producto",
+                            quantity: item.quantity,
+                            price: item.price
+                        })),
+                        total: (session.amount_total || 0) / 100
+                    }, tickets);
+                } catch (emailError) {
+                    console.error("Failed to send email for paid order:", emailError);
                 }
             }
 
