@@ -268,6 +268,9 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 - Representa un evento físico (con fecha, lugar, precio, imagen).
 - Se puede añadir al carrito como un producto más (type: 'event').
 - **Interacción**: Las tarjetas de eventos son clicables en la imagen y tienen efecto de oscurecido al pasar el mouse.
+- **Nuevos Campos**:
+  - `mapUrl`: URL para embeber mapa (Google Maps). **Si se deja vacío, se usa la `location` para generar uno automático.**
+  - `organizer`: Objeto con `name`, `email`, `phone`, `image`.
 
 **Ticket**
 - Se genera automáticamente tras la compra de un Evento.

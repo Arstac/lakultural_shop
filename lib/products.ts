@@ -168,6 +168,13 @@ export interface Event {
     price: number;
     image: string;
     description: string;
+    mapUrl?: string; // Optional
+    organizer?: {
+        name: string;
+        email: string;
+        phone: string;
+        image: string;
+    };
 }
 
 const eventsQuery = groq`*[_type == "event"] {
@@ -178,7 +185,14 @@ const eventsQuery = groq`*[_type == "event"] {
     location,
     price,
     image,
-    description
+    description,
+    mapUrl,
+    organizer {
+        name,
+        email,
+        phone,
+        "image": image.asset->url
+    }
 } | order(date asc)`;
 
 const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
@@ -189,7 +203,14 @@ const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
     location,
     price,
     image,
-    description
+    description,
+    mapUrl,
+    organizer {
+        name,
+        email,
+        phone,
+        "image": image.asset->url
+    }
 }`;
 
 const mapSanityEvent = (sanityEvent: any): Event => ({
@@ -201,6 +222,13 @@ const mapSanityEvent = (sanityEvent: any): Event => ({
     price: sanityEvent.price,
     image: sanityEvent.image ? urlFor(sanityEvent.image).url() : "/placeholder-event.jpg",
     description: sanityEvent.description,
+    mapUrl: sanityEvent.mapUrl,
+    organizer: sanityEvent.organizer ? {
+        name: sanityEvent.organizer.name,
+        email: sanityEvent.organizer.email,
+        phone: sanityEvent.organizer.phone,
+        image: sanityEvent.organizer.image || "/placeholder-avatar.jpg"
+    } : undefined
 });
 
 export const getEvents = async (): Promise<Event[]> => {

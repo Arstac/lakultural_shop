@@ -47,5 +47,22 @@ export default defineType({
             title: 'Description',
             type: 'text',
         }),
+        defineField({
+            name: 'mapUrl',
+            title: 'Google Maps Embed URL',
+            type: 'url',
+            description: 'Paste the "Embed a map" src URL from Google Maps here',
+        }),
+        defineField({
+            name: 'organizer',
+            title: 'Organizer',
+            type: 'object',
+            fields: [
+                defineField({ name: 'name', type: 'string', title: 'Name' }),
+                defineField({ name: 'email', type: 'string', title: 'Email' }),
+                defineField({ name: 'phone', type: 'string', title: 'Phone' }),
+                defineField({ name: 'image', type: 'image', title: 'Image', options: { hotspot: true } }),
+            ]
+        }),
     ],
 })
