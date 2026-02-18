@@ -189,5 +189,10 @@
         "selectSize": "Seleccionar Talla",
         "size": "Talla",
         "outOfStock": "Esgotat"
+    },
+    "Cookies": {
+        "message": "Utilitzem cookies per millorar la teva experiència de navegació i processar pagaments de forma segura. No compartim les teves dades amb tercers.",
+        "accept": "Acceptar",
+        "reject": "Rebutjar"
     }
 }

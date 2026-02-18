@@ -286,6 +286,14 @@ Gestiona la reproducción de música global.
 - **Integración**: Se inyecta en `ParallaxHome` y aparece con animación `sticky` al hacer scroll.
 - **Lógica**: Recibe el evento más próximo desde `page.tsx` (filtrado por fecha). Si no hay eventos futuros, no se renderiza.
 
+### `CookieConsent.tsx`
+- **Nuevo**: Componente cliente (`components/site/CookieConsent.tsx`).
+- **Funcionalidad**: Banner de consentimiento de cookies GDPR. Aparece la primera vez que el usuario visita la web.
+- **Diseño**: Estética "Technical & Acid" — fondo negro, bordes sólidos, icono de cookie verde ácido, tipografía mono.
+- **Lógica**: Guarda la preferencia del usuario (`accepted` / `rejected`) en `localStorage`. No vuelve a aparecer tras la elección.
+- **Animación**: Entrada slide-up con spring (Framer Motion).
+- **Traducciones**: Namespace `Cookies` en los 4 idiomas (es, en, ca, fr).
+
 ---
 
 ## Sistema de Rutas

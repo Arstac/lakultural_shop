@@ -189,5 +189,10 @@
         "selectSize": "Choisir la Taille",
         "size": "Taille",
         "outOfStock": "Rupture de Stock"
+    },
+    "Cookies": {
+        "message": "Nous utilisons des cookies pour améliorer votre expérience de navigation et traiter les paiements en toute sécurité. Nous ne partageons pas vos données avec des tiers.",
+        "accept": "Accepter",
+        "reject": "Refuser"
     }
 }

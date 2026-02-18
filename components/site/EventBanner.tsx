@@ -74,13 +74,13 @@ export async function EventBanner({ events, locale, primaryColor = "#CCFF00" }: 
                     {nextEvent.description}
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <Button asChild size="lg" className="w-full sm:w-auto transition-all duration-300 hover:scale-105 hover:opacity-90">
+                <div className="flex flex-col md:flex-row gap-4">
+                    <Button asChild size="lg" className="w-full md:w-auto transition-all duration-300 hover:scale-105 hover:opacity-90">
                         <Link href={`/${locale}/events/${nextEvent.slug}`}>
                             {t("getTickets") || "Get Tickets"}
                         </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg" className="w-full sm:w-auto transition-all duration-300 hover:scale-105" style={{ ['--hover-bg' as string]: primaryColor }}>
+                    <Button asChild variant="outline" size="lg" className="w-full md:w-auto whitespace-nowrap transition-all duration-300 hover:scale-105" style={{ ['--hover-bg' as string]: primaryColor }}>
                         <Link href={`/${locale}/events`} className="hover:!bg-[var(--hover-bg)] hover:!text-black hover:!border-[var(--hover-bg)]">
                             See All Events
                         </Link>

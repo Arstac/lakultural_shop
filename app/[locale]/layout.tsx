@@ -6,6 +6,7 @@ import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
 import { CartSheet } from '@/components/site/CartSheet';
 import { Player } from '@/components/site/Player';
+import { CookieConsent } from '@/components/site/CookieConsent';
 import { GridBackground } from '@/components/site/GridBackground';
 import { getSiteSettings } from '@/lib/siteSettings';
 
@@ -41,6 +42,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
                 {children}
             </main>
             <Footer />
+            <CookieConsent />
             <Player />
         </NextIntlClientProvider>
     );

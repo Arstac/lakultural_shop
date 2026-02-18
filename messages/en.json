@@ -189,5 +189,10 @@
         "selectSize": "Select Size",
         "size": "Size",
         "outOfStock": "Out of Stock"
+    },
+    "Cookies": {
+        "message": "We use cookies to enhance your browsing experience and process payments securely. We do not share your data with third parties.",
+        "accept": "Accept",
+        "reject": "Reject"
     }
 }

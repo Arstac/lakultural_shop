@@ -28,6 +28,7 @@ export function LanguageSwitcher({ primaryColor }: LanguageSwitcherProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [hovered, setHovered] = useState(false);
+    const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
     const handleLocaleChange = (newLocale: string) => {
         // Replace current locale in path
@@ -42,6 +43,25 @@ export function LanguageSwitcher({ primaryColor }: LanguageSwitcherProps) {
     };
 
     const currentLocale = locales.find((l) => l.code === locale);
+
+    const getItemStyle = (code: string) => {
+        const isSelected = locale === code;
+        const isHovered = hoveredItem === code;
+
+        if (isSelected && primaryColor) {
+            return {
+                backgroundColor: `${primaryColor}25`,
+                color: primaryColor,
+            };
+        }
+        if (isHovered && primaryColor) {
+            return {
+                backgroundColor: `${primaryColor}15`,
+                color: primaryColor,
+            };
+        }
+        return {};
+    };
 
     return (
         <DropdownMenu>
@@ -63,7 +83,10 @@ export function LanguageSwitcher({ primaryColor }: LanguageSwitcherProps) {
                     <DropdownMenuItem
                         key={l.code}
                         onClick={() => handleLocaleChange(l.code)}
-                        className={locale === l.code ? "bg-accent" : ""}
+                        className="transition-colors duration-200 cursor-pointer focus:bg-transparent focus:text-inherit"
+                        style={getItemStyle(l.code)}
+                        onMouseEnter={() => setHoveredItem(l.code)}
+                        onMouseLeave={() => setHoveredItem(null)}
                     >
                         {l.label}
                     </DropdownMenuItem>
