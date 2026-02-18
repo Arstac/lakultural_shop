@@ -56,19 +56,18 @@ export async function POST(req: Request) {
                         date,
                         location,
                         price,
-                        earlyBirdPrice,
-                        earlyBirdLimit,
+                        pricingTiers[] {
+                            name,
+                            price,
+                            startDate,
+                            endDate,
+                            ticketLimit
+                        },
                         "image": image.asset->url
                     }`;
-                    // We dynamically import serverClient to avoid build issues if mixed with client-side code?
-                    // But this is an API route, so it's fine.
-                    // We need to import it at the top, I'll add the import in the next step or assume it's there.
-                    // Wait, I can't add import here easily without replace_file having issues if I don't see the top.
-                    // I'll assume I can add the import with a separate replace call or just use `require` if needed, 
-                    // but better to use `MultiReplace` to add import. 
-                    // For now, let's write the logic assuming `serverClient` and `getTicketCount` are available or fetched here.
 
                     const { serverClient } = await import("@/lib/sanity.server");
+                    const { getActiveTier } = await import("@/lib/products");
                     const sanityEvent = await serverClient.fetch(query, { eventId });
 
                     if (sanityEvent) {
@@ -76,30 +75,14 @@ export async function POST(req: Request) {
                         description = `Event Ticket - ${new Date(sanityEvent.date).toLocaleDateString()} @ ${sanityEvent.location}`;
                         image = sanityEvent.image;
 
-                        // Dynamic Price Logic
+                        // Dynamic Price Logic using Pricing Tiers
                         let finalPrice = sanityEvent.price;
-                        if (sanityEvent.earlyBirdPrice !== undefined) {
-                            const hasLimit = sanityEvent.earlyBirdLimit !== undefined;
-                            const hasDeadline = sanityEvent.earlyBirdDeadline !== undefined;
-
-                            let limitCondition = true;
-                            let deadlineCondition = true;
-
-                            if (hasLimit) {
-                                const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
-                                const soldCount = await serverClient.fetch(countQuery, { eventId });
-                                // Check if we can fulfill the ENTIRE quantity with early bird
-                                limitCondition = soldCount + item.quantity <= sanityEvent.earlyBirdLimit;
-                            }
-
-                            if (hasDeadline) {
-                                // Compare current time with deadline
-                                // Sanity datetime is ISO string
-                                deadlineCondition = new Date() < new Date(sanityEvent.earlyBirdDeadline);
-                            }
-
-                            if (limitCondition && deadlineCondition) {
-                                finalPrice = sanityEvent.earlyBirdPrice;
+                        if (sanityEvent.pricingTiers && sanityEvent.pricingTiers.length > 0) {
+                            const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
+                            const soldCount = await serverClient.fetch(countQuery, { eventId });
+                            const activeTier = getActiveTier(sanityEvent.pricingTiers, soldCount);
+                            if (activeTier) {
+                                finalPrice = activeTier.price;
                             }
                         }
 

@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { headers } from 'next/headers';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
@@ -27,17 +28,30 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         notFound();
     }
 
+    // Detect admin route to hide site shell
+    const headersList = await headers();
+    const pathname = headersList.get('x-pathname') || '';
+    const isAdmin = pathname.includes('/admin');
+
     // Fetch messages for the locale
     const messages = await getMessages();
 
-    // Fetch site settings
-    const settings = await getSiteSettings();
+    // Fetch site settings (skip for admin routes to improve perf)
+    const settings = isAdmin ? null : await getSiteSettings();
+
+    if (isAdmin) {
+        return (
+            <NextIntlClientProvider locale={locale} messages={messages}>
+                {children}
+            </NextIntlClientProvider>
+        );
+    }
 
     return (
         <NextIntlClientProvider locale={locale} messages={messages}>
             <GridBackground />
             <CartSheet />
-            <Header settings={settings} />
+            <Header settings={settings!} />
             <main className="flex-1">
                 {children}
             </main>
@@ -47,4 +61,3 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         </NextIntlClientProvider>
     );
 }
-

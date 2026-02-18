@@ -43,8 +43,13 @@ export async function POST(req: Request) {
                         _id,
                         title,
                         price,
-                        earlyBirdPrice,
-                        earlyBirdLimit
+                        pricingTiers[] {
+                            name,
+                            price,
+                            startDate,
+                            endDate,
+                            ticketLimit
+                        }
                     }`;
                 const sanityEvent = await serverClient.fetch(query, { eventId: item.event.id });
 
@@ -52,26 +57,13 @@ export async function POST(req: Request) {
                     title = sanityEvent.title;
                     price = sanityEvent.price;
 
-                    if (sanityEvent.earlyBirdPrice !== undefined) {
-                        const hasLimit = sanityEvent.earlyBirdLimit !== undefined;
-                        const hasDeadline = sanityEvent.earlyBirdDeadline !== undefined;
-
-                        let limitCondition = true;
-                        let deadlineCondition = true;
-
-                        if (hasLimit) {
-                            const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
-                            const soldCount = await serverClient.fetch(countQuery, { eventId: item.event.id });
-
-                            limitCondition = soldCount + item.quantity <= sanityEvent.earlyBirdLimit;
-                        }
-
-                        if (hasDeadline) {
-                            deadlineCondition = new Date() < new Date(sanityEvent.earlyBirdDeadline);
-                        }
-
-                        if (limitCondition && deadlineCondition) {
-                            price = sanityEvent.earlyBirdPrice;
+                    if (sanityEvent.pricingTiers && sanityEvent.pricingTiers.length > 0) {
+                        const { getActiveTier } = await import("@/lib/products");
+                        const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
+                        const soldCount = await serverClient.fetch(countQuery, { eventId: item.event.id });
+                        const activeTier = getActiveTier(sanityEvent.pricingTiers, soldCount);
+                        if (activeTier) {
+                            price = activeTier.price;
                         }
                     }
                 }

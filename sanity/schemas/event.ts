@@ -35,22 +35,28 @@ export default defineType({
             type: 'number',
         }),
         defineField({
-            name: 'earlyBirdPrice',
-            title: 'Early Bird Price',
-            type: 'number',
-            description: 'Discounted price for early buyers. Leave empty if not applicable.',
-        }),
-        defineField({
-            name: 'earlyBirdLimit',
-            title: 'Early Bird Limit',
-            type: 'number',
-            description: 'Number of tickets available at Early Bird Price.',
-        }),
-        defineField({
-            name: 'earlyBirdDeadline',
-            title: 'Early Bird Deadline',
-            type: 'datetime',
-            description: 'Date and time when the Early Bird price expires.',
+            name: 'pricingTiers',
+            title: 'Pricing Tiers',
+            type: 'array',
+            description: 'Define multiple pricing tiers. They are evaluated in order — the first tier whose conditions are met will be the active price. If none match, the base Price above is used.',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        defineField({ name: 'name', type: 'string', title: 'Tier Name', description: 'e.g. "Early Bird", "General", "Last Minute"' }),
+                        defineField({ name: 'price', type: 'number', title: 'Ticket Price' }),
+                        defineField({ name: 'startDate', type: 'datetime', title: 'Start Date', description: 'When this tier becomes available (optional).' }),
+                        defineField({ name: 'endDate', type: 'datetime', title: 'End Date', description: 'When this tier expires (optional).' }),
+                        defineField({ name: 'ticketLimit', type: 'number', title: 'Ticket Limit', description: 'Max tickets sold at this price (optional, based on total sold count).' }),
+                    ],
+                    preview: {
+                        select: { title: 'name', subtitle: 'price' },
+                        prepare({ title, subtitle }) {
+                            return { title: title || 'Unnamed Tier', subtitle: subtitle !== undefined ? `${subtitle}€` : 'No price set' }
+                        }
+                    }
+                }
+            ],
         }),
         defineField({
             name: 'image',

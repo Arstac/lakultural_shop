@@ -173,6 +173,14 @@ export const staticAlbums: Album[] = [
     }
 ];
 
+export interface PricingTier {
+    name: string;
+    price: number;
+    startDate?: string;
+    endDate?: string;
+    ticketLimit?: number;
+}
+
 export interface Event {
     id: string;
     title: string;
@@ -180,18 +188,37 @@ export interface Event {
     date: string;
     location: string;
     price: number;
-    earlyBirdPrice?: number;
-    earlyBirdLimit?: number;
-    earlyBirdDeadline?: string;
+    pricingTiers?: PricingTier[];
     image: string;
     description: string;
-    mapUrl?: string; // Optional
+    mapUrl?: string;
     organizer?: {
         name: string;
         email: string;
         phone: string;
         image: string;
     };
+}
+
+/**
+ * Evaluates pricing tiers in order and returns the first active one.
+ * A tier is active if ALL its defined conditions are met:
+ *  - startDate: now >= startDate
+ *  - endDate: now < endDate
+ *  - ticketLimit: soldCount < ticketLimit
+ * Returns null if no tier is active (fallback to event.price).
+ */
+export function getActiveTier(tiers: PricingTier[] | undefined, soldCount: number): PricingTier | null {
+    if (!tiers || tiers.length === 0) return null;
+    const now = new Date();
+    for (const tier of tiers) {
+        let matches = true;
+        if (tier.startDate && now < new Date(tier.startDate)) matches = false;
+        if (tier.endDate && now >= new Date(tier.endDate)) matches = false;
+        if (tier.ticketLimit !== undefined && soldCount >= tier.ticketLimit) matches = false;
+        if (matches) return tier;
+    }
+    return null;
 }
 
 const eventsQuery = groq`*[_type == "event"] {
@@ -203,11 +230,14 @@ const eventsQuery = groq`*[_type == "event"] {
     price,
     image,
     description,
-    image,
-    description,
-    price,
-    earlyBirdPrice,
-    earlyBirdLimit,
+    pricingTiers[] {
+        _key,
+        name,
+        price,
+        startDate,
+        endDate,
+        ticketLimit
+    },
     mapUrl,
     organizer {
         name,
@@ -248,11 +278,14 @@ const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
     price,
     image,
     description,
-    image,
-    description,
-    price,
-    earlyBirdPrice,
-    earlyBirdLimit,
+    pricingTiers[] {
+        _key,
+        name,
+        price,
+        startDate,
+        endDate,
+        ticketLimit
+    },
     mapUrl,
     organizer {
         name,
@@ -269,9 +302,13 @@ const mapSanityEvent = (sanityEvent: any): Event => ({
     date: sanityEvent.date,
     location: sanityEvent.location,
     price: sanityEvent.price,
-    earlyBirdPrice: sanityEvent.earlyBirdPrice,
-    earlyBirdLimit: sanityEvent.earlyBirdLimit,
-    earlyBirdDeadline: sanityEvent.earlyBirdDeadline,
+    pricingTiers: sanityEvent.pricingTiers?.map((t: any) => ({
+        name: t.name,
+        price: t.price,
+        startDate: t.startDate,
+        endDate: t.endDate,
+        ticketLimit: t.ticketLimit,
+    })) || [],
     image: sanityEvent.image ? urlFor(sanityEvent.image).url() : "/placeholder-event.jpg",
     description: sanityEvent.description,
     mapUrl: sanityEvent.mapUrl,
@@ -307,14 +344,14 @@ export const getMerch = async (): Promise<Merch[]> => {
     try {
         const data = await client.fetch(merchQuery);
         return data.map((merch: any) => ({
-             id: merch._id,
-             title: merch.title,
-             slug: merch.slug,
-             price: merch.price,
-             images: merch.images ? merch.images.map((img: any) => urlFor(img).url()) : [],
-             description: merch.description,
-             sizes: merch.sizes || [],
-             stock: merch.stock || 0
+            id: merch._id,
+            title: merch.title,
+            slug: merch.slug,
+            price: merch.price,
+            images: merch.images ? merch.images.map((img: any) => urlFor(img).url()) : [],
+            description: merch.description,
+            sizes: merch.sizes || [],
+            stock: merch.stock || 0
         }));
     } catch (error) {
         console.error('Error fetching merch:', error);
@@ -327,14 +364,14 @@ export const getMerchBySlug = async (slug: string): Promise<Merch | null> => {
         const data = await client.fetch(merchBySlugQuery, { slug });
         if (!data) return null;
         return {
-             id: data._id,
-             title: data.title,
-             slug: data.slug,
-             price: data.price,
-             images: data.images ? data.images.map((img: any) => urlFor(img).url()) : [],
-             description: data.description,
-             sizes: data.sizes || [],
-             stock: data.stock || 0
+            id: data._id,
+            title: data.title,
+            slug: data.slug,
+            price: data.price,
+            images: data.images ? data.images.map((img: any) => urlFor(img).url()) : [],
+            description: data.description,
+            sizes: data.sizes || [],
+            stock: data.stock || 0
         };
     } catch (error) {
         console.error(`Error fetching merch ${slug}:`, error);

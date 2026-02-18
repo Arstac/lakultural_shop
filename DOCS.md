@@ -49,6 +49,7 @@ El stack base se mantiene respecto a la versión anterior:
 - **Pagos**: Stripe (Checkout + Webhooks)
 - **Base de Datos**: Sanity.io (Productos + Pedidos)
 - **Emails**: Nodemailer (Notificaciones de pedidos)
+- **Charts**: Recharts (Dashboard de administración)
 
 ---
 
@@ -294,6 +295,20 @@ Gestiona la reproducción de música global.
 - **Animación**: Entrada slide-up con spring (Framer Motion).
 - **Traducciones**: Namespace `Cookies` en los 4 idiomas (es, en, ca, fr).
 
+### `AdminDashboard` (page.tsx)
+- **Nuevo**: Página cliente en `app/[locale]/admin/page.tsx`.
+- **Protección**: PIN de administrador (reutiliza `verifyAdminPin` de `app/actions/auth.ts`).
+- **Server Action**: `getDashboardData()` en `app/actions/dashboard.ts`. Consulta Sanity para obtener todos los pedidos, tickets, eventos, merch y álbumes. Calcula summary (ingresos totales, nº pedidos, items vendidos por categoría).
+- **Dashboard UI**:
+  - **KPI Cards**: Ingresos Totales, Pedidos, Entradas Vendidas, Merch Vendido, Música Vendida.
+  - **AreaChart**: Ingresos por mes (`recharts`).
+  - **PieChart**: Distribución de ventas por categoría (Eventos / Merch / Música).
+  - **BarChart**: Estado de entradas por evento (Activa / Usada / Cancelada).
+  - **Tabla**: Últimos 15 pedidos con cliente, items, importe y estado.
+  - **Inventario**: Listado de eventos con tickets vendidos y stock de merch.
+- **Estética**: "Technical & Acid" — fondo oscuro (#0A0A0A), tipografía mono, acento verde ácido (#CCFF00).
+- **Traducciones**: Namespace `Admin` en los 4 idiomas.
+
 ---
 
 ## Sistema de Rutas
@@ -309,6 +324,7 @@ Gestiona la reproducción de música global.
 | `/[locale]/events/[slug]` | Detalle del evento y compra de entradas. |
 | `/[locale]/merch` | Lista de productos de merchandising. |
 | `/[locale]/merch/[slug]` | Detalle del producto de merchandising (selección de talla). |
+| `/[locale]/admin` | Dashboard de administración (protegido por PIN). Visualiza métricas de ventas, entradas, merch y música. |
 | `/[locale]/rework` | **Desactivado** (Legacy). |
 
 ---
@@ -346,12 +362,15 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 - Representa un evento físico (con fecha, lugar, precio, imagen).
 - Se puede añadir al carrito como un producto más (type: 'event').
 - **Interacción**: Las tarjetas de eventos son clicables en la imagen y tienen efecto de oscurecido al pasar el mouse.
-- **Nuevos Campos**:
-  - `mapUrl`: URL para embeber mapa (Google Maps). **Si se deja vacío, se usa la `location` para generar uno automático.**
-  - `organizer`: Objeto con `name`, `email`, `phone`, `image`.
-  - `earlyBirdPrice`: Precio reducido para las primeras X entradas.
-  - `earlyBirdLimit`: Cantidad de entradas disponibles a precio reducido.
-  - `earlyBirdDeadline`: Fecha límite para el precio reducido.
+- **Sistema de Tarifas (Pricing Tiers)**:
+  - `pricingTiers`: Array de objetos que define múltiples precios por evento. Cada uno con:
+    - `name`: Nombre de la tarifa (ej: "Early Bird", "General", "Última hora").
+    - `price`: Precio de la entrada.
+    - `startDate`: Fecha desde la cual aplica (opcional).
+    - `endDate`: Fecha hasta la cual aplica (opcional).
+    - `ticketLimit`: Máximo de entradas vendidas para esta tarifa (opcional).
+  - **Evaluación**: Las tarifas se evalúan en orden del array. La primera cuyas condiciones se cumplen es la activa. Si ninguna cumple, se usa `price` como fallback.
+  - **Función helper**: `getActiveTier(tiers, soldCount)` en `lib/products.ts` implementa esta lógica, reutilizada tanto en el frontend como en los checkouts server-side.
 
 **Ticket**
 - Se genera automáticamente tras la compra de un Evento.
@@ -365,7 +384,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 ### 2. Flujo de Compra y Generación
 1. Usuario añade Evento al carrito.
 2. Checkout:
-   - **Validación de Precio (Seguridad)**: Tanto Stripe como el flujo gratuito recalcula el precio en el servidor (`api/checkout`) consultando Sanity en tiempo real. Esto permite aplicar precios dinámicos (Early Bird) de forma segura sin confiar en el cliente.
+   - **Validación de Precio (Seguridad)**: Tanto Stripe como el flujo gratuito recalcula el precio en el servidor (`api/checkout`) consultando Sanity en tiempo real. Usa `getActiveTier()` para evaluar las tarifas y determinar el precio correcto sin confiar en el cliente.
    - **Pago (Stripe)**: Si total > 0. Webhook genera los tickets.
    - **Gratis (0€)**: Flow específico (`/api/checkout/free`) que crea Order y Tickets directamente en Sanity.
 3. Success Page: Enlace a "Ver Entradas" o envío por email (pendiente de implementar email).
