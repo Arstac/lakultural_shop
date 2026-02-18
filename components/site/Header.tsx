@@ -25,8 +25,8 @@ export function Header({ settings }: HeaderProps) {
     const t = useTranslations("Header");
 
     // Default links if not configured
-    const instagramLink = settings?.social?.instagram || "https://instagram.com";
-    const contactLink = settings?.social?.contact || "mailto:hola@kroma.com";
+    const instagramLink = settings?.social?.instagram || "https://www.instagram.com/lakultural/";
+    const contactLink = settings?.social?.contact || "mailto:info@lakultural.eu";
 
     const headerBg = "rgba(255, 255, 255, 0.9)";
     const headerFg = "#000000";

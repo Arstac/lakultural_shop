@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Album, Track } from "@/lib/products";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, ShoppingCart, Disc, Download, Music } from "lucide-react";
+import { Play, Pause, ShoppingCart, Disc, Download, Music, ChevronDown, Check } from "lucide-react";
 import { useCart, usePlayer } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -15,6 +16,7 @@ interface ProductDetailProps {
 export function ProductDetail({ album }: ProductDetailProps) {
     const { addAlbum, addTrack, setIsOpen } = useCart();
     const { currentTrack, isPlaying, play, pause } = usePlayer();
+    const [expandedFormat, setExpandedFormat] = useState<'vinyl' | 'digital' | null>(null);
 
     // Translations
     // Note: ensure these keys exist in your messages/*.json or add fallback strings
@@ -27,6 +29,22 @@ export function ProductDetail({ album }: ProductDetailProps) {
             play(track, album);
         }
     };
+
+    const toggleFormat = (format: 'vinyl' | 'digital') => {
+        setExpandedFormat(prev => prev === format ? null : format);
+    };
+
+    const vinylFeatures = [
+        t("vinylFeature1"),
+        t("vinylFeature2"),
+        t("vinylFeature3"),
+    ];
+
+    const digitalFeatures = [
+        t("digitalFeature1"),
+        t("digitalFeature2"),
+        t("digitalFeature3"),
+    ];
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-start">
@@ -67,31 +85,86 @@ export function ProductDetail({ album }: ProductDetailProps) {
                 </div>
 
                 {/* Purchase Options */}
-                <div className="flex flex-col gap-4 mb-10 p-6 bg-secondary/20 rounded-xl border">
-                    <h3 className="font-semibold text-lg">{t("purchaseOptions") || "Purchase Options"}</h3>
+                <div className="flex flex-col gap-2 mb-10 p-6 bg-secondary/20 rounded-xl border">
+                    <h3 className="font-semibold text-lg mb-2">{t("purchaseOptions") || "Purchase Options"}</h3>
 
-                    <div className="flex gap-4 flex-wrap">
-                        <Button
-                            size="lg"
-                            className="flex-1 min-w-[200px] transition-all duration-300 hover:scale-105 hover:opacity-90"
-                            onClick={() => { addAlbum(album, 'physical'); setIsOpen(true); }}
-                        >
-                            <Disc className="w-5 h-5 mr-2" />
-                            <span>Vinyl Record</span>
-                            <span className="ml-auto font-bold">{album.physicalPrice}€</span>
-                        </Button>
+                    {/* Vinyl Record Row — only if price > 0 */}
+                    {album.physicalPrice > 0 && (
+                        <div className="rounded-lg border border-border/60 overflow-hidden transition-all">
+                            <div className="flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/40 transition-colors"
+                                onClick={() => toggleFormat('vinyl')}
+                            >
+                                <Disc className="w-5 h-5 text-foreground flex-shrink-0" />
+                                <span className="font-medium flex-1">{t("vinylName") || "Vinyl Record"}</span>
+                                <ChevronDown className={cn(
+                                    "w-4 h-4 text-muted-foreground transition-transform duration-300",
+                                    expandedFormat === 'vinyl' && "rotate-180"
+                                )} />
+                                <span className="font-bold text-base ml-2">{album.physicalPrice}€</span>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-9 w-9 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110 flex-shrink-0"
+                                    onClick={(e) => { e.stopPropagation(); addAlbum(album, 'physical'); setIsOpen(true); }}
+                                    title={t("addToCart")}
+                                >
+                                    <ShoppingCart className="w-4 h-4" />
+                                </Button>
+                            </div>
+                            <div className={cn(
+                                "overflow-hidden transition-all duration-300 ease-in-out",
+                                expandedFormat === 'vinyl' ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+                            )}>
+                                <ul className="px-6 pb-4 pt-1 space-y-2">
+                                    {vinylFeatures.map((feature, i) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Check className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
 
-                        <Button
-                            size="lg"
-                            variant="secondary"
-                            className="flex-1 min-w-[200px] transition-all duration-300 hover:scale-105 hover:opacity-90"
-                            onClick={() => { addAlbum(album, 'digital'); setIsOpen(true); }}
-                        >
-                            <Download className="w-5 h-5 mr-2" />
-                            <span>Digital Album</span>
-                            <span className="ml-auto font-bold">{album.digitalPrice}€</span>
-                        </Button>
-                    </div>
+                    {/* Digital Album Row — only if price > 0 */}
+                    {album.digitalPrice > 0 && (
+                        <div className="rounded-lg border border-border/60 overflow-hidden transition-all">
+                            <div className="flex items-center gap-3 p-4 cursor-pointer hover:bg-muted/40 transition-colors"
+                                onClick={() => toggleFormat('digital')}
+                            >
+                                <Download className="w-5 h-5 text-foreground flex-shrink-0" />
+                                <span className="font-medium flex-1">{t("digitalName") || "Digital Album"}</span>
+                                <ChevronDown className={cn(
+                                    "w-4 h-4 text-muted-foreground transition-transform duration-300",
+                                    expandedFormat === 'digital' && "rotate-180"
+                                )} />
+                                <span className="font-bold text-base ml-2">{album.digitalPrice}€</span>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-9 w-9 rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:scale-110 flex-shrink-0"
+                                    onClick={(e) => { e.stopPropagation(); addAlbum(album, 'digital'); setIsOpen(true); }}
+                                    title={t("addToCart")}
+                                >
+                                    <ShoppingCart className="w-4 h-4" />
+                                </Button>
+                            </div>
+                            <div className={cn(
+                                "overflow-hidden transition-all duration-300 ease-in-out",
+                                expandedFormat === 'digital' ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
+                            )}>
+                                <ul className="px-6 pb-4 pt-1 space-y-2">
+                                    {digitalFeatures.map((feature, i) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                            <Check className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Tracklist */}

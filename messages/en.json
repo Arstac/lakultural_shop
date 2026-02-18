@@ -3,7 +3,8 @@
         "contact": "Contact",
         "rework": "REWORK",
         "collection": "Music",
-        "events": "Events"
+        "events": "Events",
+        "merch": "Merch"
     },
     "Hero": {
         "title": "Analog Sound.",
@@ -14,7 +15,10 @@
     "Products": {
         "title": "New Releases",
         "description": "Discover the latest musical gems in our collection.",
-        "viewDetails": "View Album"
+        "viewDetails": "View Album",
+        "vinyls": "Vinyls",
+        "music": "Music",
+        "addToCart": "Add to Cart"
     },
     "ReworkPage": {
         "title": "Special Editions",
@@ -48,7 +52,15 @@
         "vinyl": "Vinyl LP",
         "digital": "Digital Album",
         "play": "Play",
-        "pause": "Pause"
+        "pause": "Pause",
+        "vinylName": "Vinyl Record",
+        "digitalName": "Digital Album",
+        "vinylFeature1": "Limited edition vinyl pressing",
+        "vinylFeature2": "Includes all songs in digital format",
+        "vinylFeature3": "High-quality 180g pressing",
+        "digitalFeature1": "Maximum quality .WAV audio",
+        "digitalFeature2": "Instant delivery via email",
+        "digitalFeature3": "DRM-free, yours forever"
     },
     "Cart": {
         "title": "Your Cart",
@@ -57,7 +69,10 @@
         "total": "Total",
         "checkout": "Checkout",
         "processing": "Processing...",
-        "completeFreeOrder": "Complete Free Order"
+        "completeFreeOrder": "Complete Free Order",
+        "orderSuccess": "Order confirmed!",
+        "orderError": "Something went wrong. Please try again.",
+        "fillRequiredFields": "Please fill in all required fields."
     },
     "Footer": {
         "rights": "All rights reserved.",
@@ -165,5 +180,14 @@
         "free": "Free",
         "generalAdmission": "General Admission",
         "secureCheckout": "Secure checkout via Stripe."
+    },
+    "Merch": {
+        "title": "Official Merch",
+        "description": "Clothing, accessories and more. Exclusive designs by La Kultural.",
+        "noItems": "No merchandise available at the moment.",
+        "addToCart": "Add to Cart",
+        "selectSize": "Select Size",
+        "size": "Size",
+        "outOfStock": "Out of Stock"
     }
 }

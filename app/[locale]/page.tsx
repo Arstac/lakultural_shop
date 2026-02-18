@@ -33,7 +33,7 @@ export default async function Home() {
         albums={displayAlbums}
         locale={locale}
         translations={translations}
-        eventBannerSlot={<EventBanner events={events} locale={locale} />}
+        eventBannerSlot={<EventBanner events={events} locale={locale} primaryColor={primaryColor} />}
         nextEvent={nextEvent}
         primaryColor={primaryColor}
       />

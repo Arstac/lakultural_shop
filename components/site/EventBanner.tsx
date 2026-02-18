@@ -8,9 +8,10 @@ import { getTranslations } from "next-intl/server";
 interface EventBannerProps {
     events: Event[];
     locale: string;
+    primaryColor?: string;
 }
 
-export async function EventBanner({ events, locale }: EventBannerProps) {
+export async function EventBanner({ events, locale, primaryColor = "#CCFF00" }: EventBannerProps) {
     const t = await getTranslations("Events");
 
     if (!events || events.length === 0) {
@@ -79,8 +80,8 @@ export async function EventBanner({ events, locale }: EventBannerProps) {
                             {t("getTickets") || "Get Tickets"}
                         </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-                        <Link href={`/${locale}/events`}>
+                    <Button asChild variant="outline" size="lg" className="w-full sm:w-auto transition-all duration-300 hover:scale-105" style={{ ['--hover-bg' as string]: primaryColor }}>
+                        <Link href={`/${locale}/events`} className="hover:!bg-[var(--hover-bg)] hover:!text-black hover:!border-[var(--hover-bg)]">
                             See All Events
                         </Link>
                     </Button>

@@ -172,7 +172,7 @@ export function CartSheet() {
                         <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-4">
                             <ShoppingBag className="w-12 h-12 opacity-20" />
                             <p>{t("empty") || "Your cart is empty"}</p>
-                            <Button variant="link" onClick={() => setIsOpen(false)}>
+                            <Button variant="link" onClick={() => { setIsOpen(false); router.push(`/${locale}/collection`); }}>
                                 {t("viewCollection") || "Start shopping"}
                             </Button>
                         </div>

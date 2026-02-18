@@ -48,7 +48,15 @@
         "pause": "Pausar",
         "features": "Detalles",
         "dimensions": "Duración",
-        "materials": "Créditos"
+        "materials": "Créditos",
+        "vinylName": "Vinilo",
+        "digitalName": "Álbum Digital",
+        "vinylFeature1": "Vinilo producido en edición limitada",
+        "vinylFeature2": "Incluye todas las canciones en formato digital",
+        "vinylFeature3": "Prensado de alta calidad en 180g",
+        "digitalFeature1": "Audio .WAV de máxima calidad",
+        "digitalFeature2": "Envío inmediato por correo electrónico",
+        "digitalFeature3": "Sin DRM, tuyo para siempre"
     },
     "Cart": {
         "title": "Tu Carrito",

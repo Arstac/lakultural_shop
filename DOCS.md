@@ -259,7 +259,7 @@ Gestiona la reproducción de música global.
 ### `ProductDetail.tsx`
 - Página de detalle del álbum.
 - **Tracklist interactivo**: Botones de Play para cada canción.
-- **Opciones de Compra**: Bloque para Vinilo/Digital y botones individuales por canción.
+- **Opciones de Compra**: Filas expandibles para Vinilo y Digital. El nombre del formato abre un desplegable con características del producto (edición limitada, .WAV, envío inmediato, etc.). Un icono de carrito separado al lado del precio permite añadir al carrito.
 - **Carrito**: Botón de "Añadir al carrito" individual para cada canción.
 
 ### `CartSheet.tsx`

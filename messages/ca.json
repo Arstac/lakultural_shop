@@ -3,7 +3,8 @@
         "contact": "Contacte",
         "rework": "REWORK",
         "collection": "Música",
-        "events": "Esdeveniments"
+        "events": "Esdeveniments",
+        "merch": "Merch"
     },
     "Hero": {
         "title": "So Analògic.",
@@ -14,7 +15,10 @@
     "Products": {
         "title": "Nous Llançaments",
         "description": "Descobreix les últimes joies musicals de la nostra col·lecció.",
-        "viewDetails": "Veure Àlbum"
+        "viewDetails": "Veure Àlbum",
+        "vinyls": "Vinils",
+        "music": "Música",
+        "addToCart": "Afegir al carret"
     },
     "ReworkPage": {
         "title": "Edicions Especials",
@@ -48,7 +52,15 @@
         "vinyl": "Vinil LP",
         "digital": "Àlbum Digital",
         "play": "Escoltar",
-        "pause": "Pausar"
+        "pause": "Pausar",
+        "vinylName": "Vinil",
+        "digitalName": "Àlbum Digital",
+        "vinylFeature1": "Vinil produït en edició limitada",
+        "vinylFeature2": "Inclou totes les cançons en format digital",
+        "vinylFeature3": "Premsatge d'alta qualitat en 180g",
+        "digitalFeature1": "Àudio .WAV de màxima qualitat",
+        "digitalFeature2": "Enviament immediat per correu electrònic",
+        "digitalFeature3": "Sense DRM, teu per sempre"
     },
     "Cart": {
         "title": "El Teu Carret",
@@ -56,7 +68,11 @@
         "viewCollection": "Veure col·lecció",
         "total": "Total",
         "checkout": "Tramitar Comanda",
-        "processing": "Processant..."
+        "processing": "Processant...",
+        "completeFreeOrder": "Completar Comanda Gratuïta",
+        "orderSuccess": "Comanda confirmada!",
+        "orderError": "Alguna cosa ha anat malament. Si us plau, torna-ho a provar.",
+        "fillRequiredFields": "Si us plau, omple tots els camps."
     },
     "Footer": {
         "rights": "Tots els drets reservats.",
@@ -158,10 +174,20 @@
     "Events": {
         "title": "Propers Esdeveniments",
         "noEvents": "No hi ha esdeveniments propers.",
-        "getTickets": "Aconseguir Entradas",
+        "description": "Concerts, sessions i experiències en viu.",
+        "getTickets": "Aconseguir Entrades",
         "addToCart": "Afegir al Carret",
         "free": "Gratis",
         "generalAdmission": "Entrada General",
         "secureCheckout": "Pagament segur via Stripe."
+    },
+    "Merch": {
+        "title": "Merchandising Oficial",
+        "description": "Roba, accessoris i més. Dissenys exclusius de La Kultural.",
+        "noItems": "No hi ha productes de merchandising disponibles de moment.",
+        "addToCart": "Afegir al Carret",
+        "selectSize": "Seleccionar Talla",
+        "size": "Talla",
+        "outOfStock": "Esgotat"
     }
 }

@@ -3,7 +3,8 @@
         "contact": "Contact",
         "rework": "REWORK",
         "collection": "Musique",
-        "events": "Événements"
+        "events": "Événements",
+        "merch": "Merch"
     },
     "Hero": {
         "title": "Son Analogique.",
@@ -14,7 +15,10 @@
     "Products": {
         "title": "Nouveautés",
         "description": "Découvrez les derniers joyaux musicaux de notre collection.",
-        "viewDetails": "Voir l'Album"
+        "viewDetails": "Voir l'Album",
+        "vinyls": "Vinyles",
+        "music": "Musique",
+        "addToCart": "Ajouter au panier"
     },
     "ReworkPage": {
         "title": "Éditions Spéciales",
@@ -48,7 +52,15 @@
         "vinyl": "Vinyle LP",
         "digital": "Album Numérique",
         "play": "Écouter",
-        "pause": "Pause"
+        "pause": "Pause",
+        "vinylName": "Vinyle",
+        "digitalName": "Album Numérique",
+        "vinylFeature1": "Vinyle produit en édition limitée",
+        "vinylFeature2": "Inclut toutes les chansons en format numérique",
+        "vinylFeature3": "Pressage de haute qualité en 180g",
+        "digitalFeature1": "Audio .WAV de qualité maximale",
+        "digitalFeature2": "Livraison instantanée par e-mail",
+        "digitalFeature3": "Sans DRM, à toi pour toujours"
     },
     "Cart": {
         "title": "Ton Panier",
@@ -56,7 +68,11 @@
         "viewCollection": "Voir collection",
         "total": "Total",
         "checkout": "Commander",
-        "processing": "Traitement..."
+        "processing": "Traitement...",
+        "completeFreeOrder": "Compléter la Commande Gratuite",
+        "orderSuccess": "Commande confirmée !",
+        "orderError": "Quelque chose s'est mal passé. Veuillez réessayer.",
+        "fillRequiredFields": "Veuillez remplir tous les champs."
     },
     "Footer": {
         "rights": "Tous droits réservés.",
@@ -158,10 +174,20 @@
     "Events": {
         "title": "Événements à venir",
         "noEvents": "Aucun événement à venir.",
+        "description": "Concerts, sessions et expériences en direct.",
         "getTickets": "Obtenir des billets",
         "addToCart": "Ajouter au Panier",
         "free": "Gratuit",
         "generalAdmission": "Entrée Générale",
         "secureCheckout": "Paiement sécurisé via Stripe."
+    },
+    "Merch": {
+        "title": "Merchandising Officiel",
+        "description": "Vêtements, accessoires et plus. Designs exclusifs de La Kultural.",
+        "noItems": "Aucun produit de merchandising disponible pour le moment.",
+        "addToCart": "Ajouter au Panier",
+        "selectSize": "Choisir la Taille",
+        "size": "Taille",
+        "outOfStock": "Rupture de Stock"
     }
 }
