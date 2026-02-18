@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { getSiteSettings } from "@/lib/siteSettings";
 
-const spaceGrotesk = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-space",
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -49,7 +56,7 @@ export default async function RootLayout({
               `}} />
         )}
       </head>
-      <body className={`${spaceGrotesk.variable} antialiased min-h-screen flex flex-col font-sans`}>
+      <body className={`${inter.variable} ${spaceMono.variable} antialiased min-h-screen flex flex-col font-mono`}>
         {children}
       </body>
     </html>

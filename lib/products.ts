@@ -23,6 +23,17 @@ export interface Album {
     genre?: string;
 }
 
+export interface Merch {
+    id: string; // Sanity _id
+    title: string;
+    slug: string;
+    price: number;
+    images: string[];
+    description: string;
+    sizes: string[];
+    stock: number;
+}
+
 // GROQ Queries
 const albumsQuery = groq`*[_type == "album"] {
     _id,
@@ -169,6 +180,9 @@ export interface Event {
     date: string;
     location: string;
     price: number;
+    earlyBirdPrice?: number;
+    earlyBirdLimit?: number;
+    earlyBirdDeadline?: string;
     image: string;
     description: string;
     mapUrl?: string; // Optional
@@ -189,6 +203,11 @@ const eventsQuery = groq`*[_type == "event"] {
     price,
     image,
     description,
+    image,
+    description,
+    price,
+    earlyBirdPrice,
+    earlyBirdLimit,
     mapUrl,
     organizer {
         name,
@@ -197,6 +216,28 @@ const eventsQuery = groq`*[_type == "event"] {
         "image": image.asset->url
     }
 } | order(date asc)`;
+
+const merchQuery = groq`*[_type == "merch"] {
+    _id,
+    title,
+    "slug": slug.current,
+    price,
+    images,
+    description,
+    sizes,
+    stock
+}`;
+
+const merchBySlugQuery = groq`*[_type == "merch" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    price,
+    images,
+    description,
+    sizes,
+    stock
+}`;
 
 const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
     _id,
@@ -207,6 +248,11 @@ const eventBySlugQuery = groq`*[_type == "event" && slug.current == $slug][0] {
     price,
     image,
     description,
+    image,
+    description,
+    price,
+    earlyBirdPrice,
+    earlyBirdLimit,
     mapUrl,
     organizer {
         name,
@@ -223,6 +269,9 @@ const mapSanityEvent = (sanityEvent: any): Event => ({
     date: sanityEvent.date,
     location: sanityEvent.location,
     price: sanityEvent.price,
+    earlyBirdPrice: sanityEvent.earlyBirdPrice,
+    earlyBirdLimit: sanityEvent.earlyBirdLimit,
+    earlyBirdDeadline: sanityEvent.earlyBirdDeadline,
     image: sanityEvent.image ? urlFor(sanityEvent.image).url() : "/placeholder-event.jpg",
     description: sanityEvent.description,
     mapUrl: sanityEvent.mapUrl,
@@ -251,6 +300,44 @@ export const getEventBySlug = async (slug: string): Promise<Event | null> => {
         return mapSanityEvent(data);
     } catch (error) {
         console.error(`Error fetching event ${slug}:`, error);
+        return null;
+    }
+};
+export const getMerch = async (): Promise<Merch[]> => {
+    try {
+        const data = await client.fetch(merchQuery);
+        return data.map((merch: any) => ({
+             id: merch._id,
+             title: merch.title,
+             slug: merch.slug,
+             price: merch.price,
+             images: merch.images ? merch.images.map((img: any) => urlFor(img).url()) : [],
+             description: merch.description,
+             sizes: merch.sizes || [],
+             stock: merch.stock || 0
+        }));
+    } catch (error) {
+        console.error('Error fetching merch:', error);
+        return [];
+    }
+};
+
+export const getMerchBySlug = async (slug: string): Promise<Merch | null> => {
+    try {
+        const data = await client.fetch(merchBySlugQuery, { slug });
+        if (!data) return null;
+        return {
+             id: data._id,
+             title: data.title,
+             slug: data.slug,
+             price: data.price,
+             images: data.images ? data.images.map((img: any) => urlFor(img).url()) : [],
+             description: data.description,
+             sizes: data.sizes || [],
+             stock: data.stock || 0
+        };
+    } catch (error) {
+        console.error(`Error fetching merch ${slug}:`, error);
         return null;
     }
 };

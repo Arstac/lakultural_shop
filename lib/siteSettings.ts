@@ -19,6 +19,8 @@ export interface SiteSettings {
         border?: string;
         input?: string;
         ring?: string;
+        headerBackground?: string;
+        headerForeground?: string;
     };
     social?: {
         instagram?: string;
@@ -30,7 +32,11 @@ const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
     title,
     description,
     radius,
-    colors,
+    colors {
+        ...,
+        headerBackground,
+        headerForeground
+    },
     social
 }`;
 

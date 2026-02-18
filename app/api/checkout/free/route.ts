@@ -24,7 +24,78 @@ export async function POST(req: Request) {
 
         const orderId = `order-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
-        // 1. Create Order in Sanity
+        // 1. Validate Prices & Create Order in Sanity
+        let calculatedTotal = 0;
+
+        const orderItems = await Promise.all(items.map(async (item: CartItem) => {
+            const sanityId = item.type === 'event' && item.event ? item.event.id :
+                item.type === 'track' && item.track ? item.track.id :
+                    item.album ? item.album.id : "";
+
+            let price = 0;
+            let title = item.type === 'event' && item.event ? item.event.title :
+                item.type === 'track' && item.track ? item.track.title :
+                    item.album ? item.album.title : "Unknown";
+
+            // Server-side validation for Events
+            if (item.type === 'event' && item.event) {
+                const query = `*[_type == "event" && _id == $eventId][0] {
+                        _id,
+                        title,
+                        price,
+                        earlyBirdPrice,
+                        earlyBirdLimit
+                    }`;
+                const sanityEvent = await serverClient.fetch(query, { eventId: item.event.id });
+
+                if (sanityEvent) {
+                    title = sanityEvent.title;
+                    price = sanityEvent.price;
+
+                    if (sanityEvent.earlyBirdPrice !== undefined) {
+                        const hasLimit = sanityEvent.earlyBirdLimit !== undefined;
+                        const hasDeadline = sanityEvent.earlyBirdDeadline !== undefined;
+
+                        let limitCondition = true;
+                        let deadlineCondition = true;
+
+                        if (hasLimit) {
+                            const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
+                            const soldCount = await serverClient.fetch(countQuery, { eventId: item.event.id });
+
+                            limitCondition = soldCount + item.quantity <= sanityEvent.earlyBirdLimit;
+                        }
+
+                        if (hasDeadline) {
+                            deadlineCondition = new Date() < new Date(sanityEvent.earlyBirdDeadline);
+                        }
+
+                        if (limitCondition && deadlineCondition) {
+                            price = sanityEvent.earlyBirdPrice;
+                        }
+                    }
+                }
+            }
+
+            calculatedTotal += price * item.quantity;
+
+            return {
+                _key: item.cartId,
+                type: item.type,
+                title: title,
+                price: price,
+                quantity: item.quantity,
+                sanityId: sanityId
+            };
+        }));
+
+        if (calculatedTotal > 0) {
+            return NextResponse.json({
+                error: "Price Mismatch",
+                details: "Items are not free. Please use standard checkout."
+            }, { status: 400 });
+        }
+
         const orderDoc = {
             _type: 'order',
             orderId: orderId,
@@ -35,22 +106,7 @@ export async function POST(req: Request) {
             currency: 'eur',
             status: 'completed', // Free orders are effectively completed immediately
             createdAt: new Date().toISOString(),
-            items: items.map((item: CartItem) => {
-                const sanityId = item.type === 'event' && item.event ? item.event.id :
-                    item.type === 'track' && item.track ? item.track.id :
-                        item.album ? item.album.id : "";
-
-                return {
-                    _key: item.cartId,
-                    type: item.type,
-                    title: item.type === 'event' && item.event ? item.event.title :
-                        item.type === 'track' && item.track ? item.track.title :
-                            item.album ? item.album.title : "Unknown",
-                    price: 0,
-                    quantity: item.quantity,
-                    sanityId: sanityId
-                };
-            })
+            items: orderItems
         };
 
         const createdOrder = await serverClient.create(orderDoc);

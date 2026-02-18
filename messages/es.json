@@ -3,7 +3,8 @@
         "contact": "Contacto",
         "rework": "REWORK",
         "collection": "Música",
-        "events": "Eventos"
+        "events": "Eventos",
+        "merch": "Merch"
     },
     "Hero": {
         "title": "Sonido Analógico.",
@@ -14,7 +15,10 @@
     "Products": {
         "title": "Nuevos Lanzamientos",
         "description": "Descubre las últimas joyas musicales de nuestra colección.",
-        "viewDetails": "Ver Álbum"
+        "viewDetails": "Ver Álbum",
+        "vinyls": "Vinilos",
+        "music": "Música",
+        "addToCart": "Añadir al carrito"
     },
     "ReworkPage": {
         "title": "Ediciones Especiales",
@@ -158,10 +162,20 @@
     "Events": {
         "title": "Próximos Eventos",
         "noEvents": "No hay eventos próximos.",
+        "description": "Conciertos, sesiones y experiencias en vivo.",
         "getTickets": "Conseguir Entradas",
         "addToCart": "Añadir al Carrito",
         "free": "Gratis",
         "generalAdmission": "Entrada General",
         "secureCheckout": "Pago seguro vía Stripe."
+    },
+    "Merch": {
+        "title": "Merchandising Oficial",
+        "description": "Ropa, accesorios y más. Diseños exclusivos de La Kultural.",
+        "noItems": "No hay productos de merchandising disponibles por el momento.",
+        "addToCart": "Añadir al Carrito",
+        "selectSize": "Seleccionar Talla",
+        "size": "Talla",
+        "outOfStock": "Agotado"
     }
 }

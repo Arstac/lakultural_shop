@@ -11,7 +11,12 @@ export default async function EventsPage() {
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-bold mb-8 text-center">{t("title") || "Upcoming Events"}</h1>
+            <header className="mb-12 text-center">
+                <h1 className="text-4xl font-bold tracking-tight mb-4">{t("title") || "Upcoming Events"}</h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    {t("description")}
+                </p>
+            </header>
 
             {events.length === 0 ? (
                 <div className="text-center text-muted-foreground py-12">
@@ -53,7 +58,7 @@ export default async function EventsPage() {
                                     {event.description}
                                 </p>
 
-                                <Button asChild className="w-full mt-auto">
+                                <Button asChild className="w-full mt-auto transition-all duration-300 hover:scale-105 hover:opacity-90">
                                     <Link href={`/events/${event.slug}`}>
                                         {t("getTickets") || "Get Tickets"}
                                     </Link>

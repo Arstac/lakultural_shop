@@ -9,7 +9,7 @@ import {
     SheetFooter,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2, ShoppingBag, Disc, Download, Music, Ticket } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, Disc, Download, Music, Ticket, Shirt } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -45,6 +45,7 @@ export function CartSheet() {
             else if (item.type === 'album_digital' && item.album) price = item.album.digitalPrice;
             else if (item.type === 'track' && item.track) price = item.track.price;
             else if (item.type === 'event' && item.event) price = item.event.price;
+            else if (item.type === 'merch' && item.merch) price = item.merch.price;
             return acc + price * item.quantity;
         },
         0
@@ -109,6 +110,7 @@ export function CartSheet() {
     const getItemName = (item: any) => {
         if (item.type === 'track' && item.track) return item.track.title;
         if (item.type === 'event' && item.event) return item.event.title;
+        if (item.type === 'merch' && item.merch) return item.merch.title;
         if (item.album) return item.album.title;
         return "Unknown Item";
     };
@@ -118,6 +120,7 @@ export function CartSheet() {
         if (item.type === 'album_physical') return `Vinyl Record`;
         if (item.type === 'album_digital') return `Digital Album`;
         if (item.type === 'event' && item.event) return `Event Ticket - ${new Date(item.event.date).toLocaleDateString()}`;
+        if (item.type === 'merch' && item.merch) return item.size ? `Size: ${item.size}` : `Merch`;
         return "";
     };
 
@@ -125,7 +128,9 @@ export function CartSheet() {
         if (item.type === 'album_physical' && item.album) return item.album.physicalPrice;
         if (item.type === 'album_digital' && item.album) return item.album.digitalPrice;
         if (item.type === 'track' && item.track) return item.track.price;
+        if (item.type === 'track' && item.track) return item.track.price;
         if (item.type === 'event' && item.event) return item.event.price;
+        if (item.type === 'merch' && item.merch) return item.merch.price;
         return 0;
     };
 
@@ -133,17 +138,20 @@ export function CartSheet() {
         if (type === 'album_physical') return <Disc className="w-4 h-4" />;
         if (type === 'album_digital') return <Download className="w-4 h-4" />;
         if (type === 'event') return <Ticket className="w-4 h-4" />;
+        if (type === 'merch') return <Shirt className="w-4 h-4" />;
         return <Music className="w-4 h-4" />;
     };
 
     const getItemImage = (item: any) => {
         if (item.type === 'event' && item.event) return item.event.image;
+        if (item.type === 'merch' && item.merch && item.merch.images.length > 0) return item.merch.images[0];
         if (item.album) return item.album.coverImage;
         return null;
     }
 
     const getItemLink = (item: any) => {
         if (item.type === 'event' && item.event) return `/tickets/${item.event.slug}`;
+        if (item.type === 'merch' && item.merch) return `/merch/${item.merch.slug}`;
         if (item.album) return `/producto/${item.album.slug}`;
         return "#";
     }
@@ -172,7 +180,7 @@ export function CartSheet() {
                         <div className="space-y-6 px-1">
                             {items.map((item) => {
                                 // Safety check
-                                if (!item.album && !item.event) {
+                                if (!item.album && !item.event && !item.merch) {
                                     return null;
                                 }
 

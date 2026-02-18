@@ -1,13 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Album, Track, Event } from "@/lib/products";
+import { Album, Track, Event, Merch } from "@/lib/products";
 
 export interface CartItem {
     cartId: string;
-    type: 'album_physical' | 'album_digital' | 'track' | 'event';
+    type: 'album_physical' | 'album_digital' | 'track' | 'event' | 'merch';
     album?: Album;
     track?: Track; // Only if type === 'track'
     event?: Event; // Only if type === 'event'
+    merch?: Merch; // Only if type === 'merch'
+    size?: string; // Only if type === 'merch' and has sizes
     quantity: number;
 }
 
@@ -16,6 +18,7 @@ interface CartState {
     addAlbum: (album: Album, format: 'physical' | 'digital') => void;
     addTrack: (album: Album, track: Track) => void;
     addEvent: (event: Event) => void;
+    addMerch: (merch: Merch, size?: string) => void;
     removeItem: (cartId: string) => void;
     updateQuantity: (cartId: string, quantity: number) => void;
     clearCart: () => void;
@@ -123,7 +126,33 @@ export const useCart = create<CartState>()(
                 }
             },
 
+            addMerch: (merch, size) => {
+                const { items } = get();
+                const cartId = `merch-${merch.id}-${size || 'default'}`;
+                const existingItem = items.find((item) => item.cartId === cartId);
 
+                if (existingItem) {
+                    set({
+                        items: items.map((item) =>
+                            item.cartId === cartId
+                                ? { ...item, quantity: item.quantity + 1 }
+                                : item
+                        ),
+                        isOpen: true,
+                    });
+                } else {
+                    set({
+                        items: [...items, {
+                            cartId,
+                            type: 'merch',
+                            merch,
+                            size,
+                            quantity: 1
+                        }],
+                        isOpen: true,
+                    });
+                }
+            },
 
             removeItem: (cartId) => {
                 set({ items: get().items.filter((item) => item.cartId !== cartId) });

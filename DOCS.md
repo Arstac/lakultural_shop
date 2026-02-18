@@ -17,6 +17,7 @@
 7. [Server Actions](#server-actions)
 8. [Sistema de Rutas](#sistema-de-rutas)
 9. [Internacionalización](#internacionalización)
+10. [Sistema de Diseño: The Studio Lab](#sistema-de-diseño-the-studio-lab)
 
 ---
 
@@ -29,6 +30,7 @@ Los usuarios pueden:
 - Comprar el **Vinilo Físico**.
 - Comprar el **Álbum Digital**.
 - Comprar **Canciones Individuales**.
+- Comprar **Merchandising** (Ropa y Accesorios).
 
 ### Catálogo Actual (Mock)
 - **Neon Nights** (Synthwave) - La Kultural
@@ -110,6 +112,7 @@ Se ha integrado **Sanity.io** para gestionar el contenido dinámico sin necesida
 ### Schemas
 - **Album**: Productos principales (Título, Artista, Precios, Tracks).
 - **Track**: Canciones individuales (Audio Preview [MP3], Precio).
+- **Merch**: Productos de merchandising (Precio, Tallas, Stock, Imágenes).
 - **Order**: Registro de pedidos (Cliente, Items, Estado, Total).
 - **HomePage**: Singleton para editar la Portada (Hero Image, Textos, CTA).
 
@@ -150,6 +153,20 @@ interface Album {
     tracks: Track[];
     genre: string;
 }
+
+### Merch
+```typescript
+interface Merch {
+    id: string;
+    title: string;
+    slug: string;
+    price: number;
+    images: string[];
+    description: string;
+    sizes: string[];
+    stock: number;
+}
+```
 ```
 
 ### Order
@@ -181,16 +198,22 @@ Gestiona el carrito de compras. Soporta tres tipos de items:
 - `album_physical`: Vinilo.
 - `album_digital`: Descarga completa.
 - `track`: Canción individual.
+- `album_physical`: Vinilo.
+- `album_digital`: Descarga completa.
+- `track`: Canción individual.
 - `event`: Entrada para evento.
+- `merch`: Producto de merchandising.
 
 **Estructura del CartItem:**
 ```typescript
 interface CartItem {
     cartId: string; // Unique ID
-    type: 'album_physical' | 'album_digital' | 'track' | 'event';
+    type: 'album_physical' | 'album_digital' | 'track' | 'event' | 'merch';
     album?: Album;
     track?: Track; // Solo si type === 'track'
     event?: Event; // Solo si type === 'event'
+    merch?: Merch; // Solo si type === 'merch'
+    size?: string; // Solo si type === 'merch'
     quantity: number;
 }
 ```
@@ -205,6 +228,12 @@ Gestiona la reproducción de música global.
 ---
 
 ## Componentes Principales
+
+### `CollectionViews.tsx`
+- **Nuevo**: Componente cliente para la página de colección (`components/site/CollectionViews.tsx`).
+- **Funcionalidad**: Permite alternar entre vista de "Vinilos" (Grid de álbumes) y "Música" (Lista de canciones).
+- **Estado**: Gestiona localmente la vista activa.
+- **Integración**: Usa `useCart` y `usePlayer` para reproducir música y añadir al carrito desde la lista.
 
 ### `ParallaxHome.tsx`
 - **Nuevo**: Componente principal de la Home con efectos de scroll (Framer Motion).
@@ -239,7 +268,15 @@ Gestiona la reproducción de música global.
 ### `EventBanner.tsx`
 - Componente visual para la Home.
 - Muestra el próximo evento destacado con fecha, lugar y precio.
+- **Mejora UI**: Refactorizado para eliminar contenedores redundantes. Diseño responsive con botones apilados en móvil para asegurar visibilidad.
 - Botones para "Conseguir Entradas" o "Ver todos los eventos".
+
+### `EventDescription.tsx`
+- **Nuevo**: Componente para renderizar descripciones de eventos.
+- **Funcionalidad**:
+  - Parsea Markdown (negritas, listas, etc.) usando `react-markdown`.
+  - Detecta automáticamente handles de Instagram (`@usuario`) y los convierte en badges estilizados con gradiente.
+  - Abre los enlaces de Instagram en una nueva pestaña.
 
 ---
 
@@ -252,6 +289,10 @@ Gestiona la reproducción de música global.
 | `/[locale]/producto/[slug]` | Detalle del álbum y lista de canciones. |
 | `/[locale]/events` | Lista de eventos próximos. |
 | `/[locale]/events/[slug]` | Detalle del evento y compra de entradas. |
+| `/[locale]/events` | Lista de eventos próximos. |
+| `/[locale]/events/[slug]` | Detalle del evento y compra de entradas. |
+| `/[locale]/merch` | Lista de productos de merchandising. |
+| `/[locale]/merch/[slug]` | Detalle del producto de merchandising (selección de talla). |
 | `/[locale]/rework` | **Desactivado** (Legacy). |
 
 ---
@@ -292,6 +333,9 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 - **Nuevos Campos**:
   - `mapUrl`: URL para embeber mapa (Google Maps). **Si se deja vacío, se usa la `location` para generar uno automático.**
   - `organizer`: Objeto con `name`, `email`, `phone`, `image`.
+  - `earlyBirdPrice`: Precio reducido para las primeras X entradas.
+  - `earlyBirdLimit`: Cantidad de entradas disponibles a precio reducido.
+  - `earlyBirdDeadline`: Fecha límite para el precio reducido.
 
 **Ticket**
 - Se genera automáticamente tras la compra de un Evento.
@@ -305,6 +349,7 @@ Se mantienen los archivos en `messages/` (es, en, ca, fr).
 ### 2. Flujo de Compra y Generación
 1. Usuario añade Evento al carrito.
 2. Checkout:
+   - **Validación de Precio (Seguridad)**: Tanto Stripe como el flujo gratuito recalcula el precio en el servidor (`api/checkout`) consultando Sanity en tiempo real. Esto permite aplicar precios dinámicos (Early Bird) de forma segura sin confiar en el cliente.
    - **Pago (Stripe)**: Si total > 0. Webhook genera los tickets.
    - **Gratis (0€)**: Flow específico (`/api/checkout/free`) que crea Order y Tickets directamente en Sanity.
 3. Success Page: Enlace a "Ver Entradas" o envío por email (pendiente de implementar email).
@@ -332,3 +377,31 @@ SMTP_PORT=587
 SMTP_USER=info@lakultural.eu
 SMTP_PASS=tu_contraseña_del_correo
 ```
+
+---
+
+## Sistema de Diseño: The Studio Lab
+
+El proyecto ha evolucionado hacia una estética "Technical & Acid" inspirada en secuenciadores de música y espacios de ingeniería de sonido.
+
+### Principios Visuales
+- **Minimalismo Técnico**: Ausencia de adornos. La belleza está en la función y la estructura.
+- **Contraste Extremo**: Blanco puro vs Negro absoluto.
+- **Acento Digital**: Uso de un verde ácido (#CCFF00) para indicar interactividad y estado activo.
+
+### Paleta de Colores (Regla 60-30-10)
+| Color | Hex | Uso | Porcentaje |
+|-------|-----|-----|------------|
+| **Base** | `#FFFFFF` | Fondo general | 60% |
+| **Grid** | `#E5E5E5` | Rejilla técnica (Muted) | - |
+| **Structure** | `#000000` | Textos, bordes, divisores | 30% |
+| **Accent** | `#CCFF00` | Botones, hovers, cursores | 10% |
+
+### Componentes Clave
+1.  **GridBackground**: Fondo interactivo con rejilla técnica. Las celdas se iluminan en verde ácido al paso del ratón.
+2.  **ProductCard**: Tarjetas con bordes negros sólidos (`border-2 border-black`). Tipografía mono-espaciada para detalles técnicos. Mantiene el efecto de "disco de vinilo" al hacer hover.
+4.  **Header**: Fondo blanco translúcido (`rgba(255,255,255,0.9)`) con textos y bordes negros.
+5.  **Botones y Enlaces**:
+    -   **Ver Álbum / Conseguir Entradas**: Escala (1.05) y cambio de opacidad (0.9) progresivo (`duration-300`).
+    -   **Logo**: Rotación de 12-15 grados al hacer hover.
+    -   **Navegación**: Escala (1.10) y texto en negrita al hacer hover.

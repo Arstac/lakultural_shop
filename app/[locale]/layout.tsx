@@ -6,6 +6,8 @@ import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
 import { CartSheet } from '@/components/site/CartSheet';
 import { Player } from '@/components/site/Player';
+import { GridBackground } from '@/components/site/GridBackground';
+import { getSiteSettings } from '@/lib/siteSettings';
 
 interface LocaleLayoutProps {
     children: React.ReactNode;
@@ -27,10 +29,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     // Fetch messages for the locale
     const messages = await getMessages();
 
+    // Fetch site settings
+    const settings = await getSiteSettings();
+
     return (
         <NextIntlClientProvider locale={locale} messages={messages}>
+            <GridBackground />
             <CartSheet />
-            <Header />
+            <Header settings={settings} />
             <main className="flex-1">
                 {children}
             </main>

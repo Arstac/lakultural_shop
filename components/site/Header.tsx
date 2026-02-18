@@ -27,8 +27,18 @@ export function Header({ settings }: HeaderProps) {
     const instagramLink = settings?.social?.instagram || "https://instagram.com";
     const contactLink = settings?.social?.contact || "mailto:hola@kroma.com";
 
+    const headerBg = "rgba(255, 255, 255, 0.9)";
+    const headerFg = "#000000";
+
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-[#0C5752] text-white backdrop-blur supports-[backdrop-filter]:bg-[#0C5752]/90 border-white/10">
+        <header
+            className="sticky top-0 z-50 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-opacity-90 transition-colors duration-300"
+            style={{
+                backgroundColor: headerBg,
+                color: headerFg,
+                borderColor: "#000000"
+            }}
+        >
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
@@ -38,7 +48,7 @@ export function Header({ settings }: HeaderProps) {
                             alt="KROMA"
                             width={120}
                             height={40}
-                            className="h-8 w-auto object-contain brightness-0 invert" // Make logo white if it's black
+                            className="h-8 w-auto object-contain transition-transform duration-300 hover:rotate-12" // Removed invert to keep it dark/original
                             priority
                         />
                     </Link>
@@ -48,15 +58,24 @@ export function Header({ settings }: HeaderProps) {
                 <nav className="flex items-center gap-2 md:gap-8">
                     <Link
                         href={`/${locale}/collection`}
-                        className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+                        className="text-sm font-medium transition-all duration-300 hover:opacity-100 opacity-90 hover:scale-110 hover:font-bold"
+                        style={{ color: headerFg }}
                     >
                         {t("collection")}
                     </Link>
                     <Link
                         href={`/${locale}/events`}
-                        className="text-sm font-medium text-white/90 transition-colors hover:text-white"
+                        className="text-sm font-medium transition-all duration-300 hover:opacity-100 opacity-90 hover:scale-110 hover:font-bold"
+                        style={{ color: headerFg }}
                     >
                         {t("events")}
+                    </Link>
+                    <Link
+                        href={`/${locale}/merch`}
+                        className="text-sm font-medium transition-all duration-300 hover:opacity-100 opacity-90 hover:scale-110 hover:font-bold"
+                        style={{ color: headerFg }}
+                    >
+                        {t("merch")}
                     </Link>
                 </nav>
 
@@ -65,11 +84,26 @@ export function Header({ settings }: HeaderProps) {
                 <div className="flex items-center gap-2 md:gap-4 [&_button]:text-white [&_button:hover]:bg-white/10 [&_button:hover]:text-white">
                     <LanguageSwitcher />
                     <CartButton />
-                    <Link href={instagramLink} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition-colors hidden sm:block">
+                    <Link
+                        href={instagramLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:opacity-100 opacity-80 hidden sm:block"
+                        style={{ color: headerFg }}
+                    >
                         <Instagram className="h-5 w-5" />
                         <span className="sr-only">Instagram</span>
                     </Link>
-                    <Button variant="outline" size="sm" asChild className="hidden md:flex border-white/20 hover:bg-white/10 hover:text-white text-white bg-transparent">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="hidden md:flex hover:opacity-100 opacity-90 bg-transparent"
+                        style={{
+                            color: headerFg,
+                            borderColor: `${headerFg}33` // 20% opacity equivalent
+                        }}
+                    >
                         <Link href={contactLink}>
                             {t("contact")}
                         </Link>

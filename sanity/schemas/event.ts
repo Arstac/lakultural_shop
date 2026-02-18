@@ -35,6 +35,24 @@ export default defineType({
             type: 'number',
         }),
         defineField({
+            name: 'earlyBirdPrice',
+            title: 'Early Bird Price',
+            type: 'number',
+            description: 'Discounted price for early buyers. Leave empty if not applicable.',
+        }),
+        defineField({
+            name: 'earlyBirdLimit',
+            title: 'Early Bird Limit',
+            type: 'number',
+            description: 'Number of tickets available at Early Bird Price.',
+        }),
+        defineField({
+            name: 'earlyBirdDeadline',
+            title: 'Early Bird Deadline',
+            type: 'datetime',
+            description: 'Date and time when the Early Bird price expires.',
+        }),
+        defineField({
             name: 'image',
             title: 'Image',
             type: 'image',

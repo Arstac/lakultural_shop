@@ -7,6 +7,8 @@ import ticket from './ticket'
 
 import siteSettings from './siteSettings'
 
-export const schemaTypes = [album, track, homePage, order, event, ticket, siteSettings]
+import merch from './merch'
+
+export const schemaTypes = [album, track, homePage, order, event, ticket, siteSettings, merch]
 
 

@@ -105,7 +105,20 @@ export default defineType({
                 defineField({
                     name: 'border',
                     title: 'Bordes',
+                    description: 'Bordes',
                     type: 'string',
+                }),
+                defineField({
+                    name: 'headerBackground',
+                    title: 'Fondo del Header',
+                    type: 'string',
+                    description: 'Color de fondo específico para el header. Si no se define, usará el Primario.',
+                }),
+                defineField({
+                    name: 'headerForeground',
+                    title: 'Texto del Header',
+                    type: 'string',
+                    description: 'Color de texto para el header.',
                 }),
             ],
             options: {

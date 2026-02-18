@@ -73,7 +73,7 @@ export function ProductDetail({ album }: ProductDetailProps) {
                     <div className="flex gap-4 flex-wrap">
                         <Button
                             size="lg"
-                            className="flex-1 min-w-[200px]"
+                            className="flex-1 min-w-[200px] transition-all duration-300 hover:scale-105 hover:opacity-90"
                             onClick={() => { addAlbum(album, 'physical'); setIsOpen(true); }}
                         >
                             <Disc className="w-5 h-5 mr-2" />
@@ -84,7 +84,7 @@ export function ProductDetail({ album }: ProductDetailProps) {
                         <Button
                             size="lg"
                             variant="secondary"
-                            className="flex-1 min-w-[200px]"
+                            className="flex-1 min-w-[200px] transition-all duration-300 hover:scale-105 hover:opacity-90"
                             onClick={() => { addAlbum(album, 'digital'); setIsOpen(true); }}
                         >
                             <Download className="w-5 h-5 mr-2" />

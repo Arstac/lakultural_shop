@@ -76,3 +76,13 @@ export async function validateTicket(code: string) {
         return { success: false, message: "Error validating ticket" };
     }
 }
+
+export async function getTicketCount(eventId: string) {
+    try {
+        const count = await client.fetch(`count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`, { eventId });
+        return count;
+    } catch (error) {
+        console.error("Error counting tickets:", error);
+        return 0;
+    }
+}

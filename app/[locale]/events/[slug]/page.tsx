@@ -5,6 +5,9 @@ import { Calendar, MapPin, Clock, Mail, Phone, User, ExternalLink } from "lucide
 import { EventPurchase } from "@/components/events/EventPurchase";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { EventDescription } from "@/components/site/EventDescription";
+
+import { getTicketCount } from "@/app/actions/tickets";
 
 export default async function EventPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
     const { slug, locale } = await params;
@@ -13,6 +16,8 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
     if (!event) {
         notFound();
     }
+
+    const soldCount = await getTicketCount(event.id);
 
     const date = new Date(event.date);
 
@@ -50,7 +55,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                         </div>
 
                         <div className="prose max-w-none pt-4 text-foreground/90 leading-relaxed whitespace-pre-line">
-                            {event.description}
+                            <EventDescription description={event.description} />
                         </div>
 
                         {/* Location Map */}
@@ -150,7 +155,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                 {/* Right Column: Purchase Card */}
                 <div className="md:col-span-1">
                     <div className="sticky top-24">
-                        <EventPurchase event={event} />
+                        <EventPurchase event={event} soldCount={soldCount} />
                     </div>
                 </div>
             </div>

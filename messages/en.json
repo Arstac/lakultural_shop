@@ -159,6 +159,7 @@
     "Events": {
         "title": "Upcoming Events",
         "noEvents": "No upcoming events.",
+        "description": "Concerts, sessions and live experiences.",
         "getTickets": "Get Tickets",
         "addToCart": "Add to Cart",
         "free": "Free",

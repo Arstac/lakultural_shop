@@ -24,7 +24,8 @@ export async function POST(req: Request) {
         }
 
         // Transform cart items to Stripe line items
-        const lineItems = items.map((item) => {
+        // We need to fetch fresh data for events to ensure price is correct (Early Bird)
+        const lineItems = await Promise.all(items.map(async (item) => {
             let name = "";
             let description = "";
             let image = "";
@@ -46,10 +47,79 @@ export async function POST(req: Request) {
                 image = item.album.coverImage;
                 unitAmount = Math.round(item.track.price * 100);
             } else if (item.type === 'event' && item.event) {
-                name = `Ticket: ${item.event.title}`;
-                description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
-                image = item.event.image;
-                unitAmount = Math.round(item.event.price * 100);
+                // SERVER-SIDE PRICE VALIDATION
+                try {
+                    const eventId = item.event.id;
+                    const query = `*[_type == "event" && _id == $eventId][0] {
+                        _id,
+                        title,
+                        date,
+                        location,
+                        price,
+                        earlyBirdPrice,
+                        earlyBirdLimit,
+                        "image": image.asset->url
+                    }`;
+                    // We dynamically import serverClient to avoid build issues if mixed with client-side code?
+                    // But this is an API route, so it's fine.
+                    // We need to import it at the top, I'll add the import in the next step or assume it's there.
+                    // Wait, I can't add import here easily without replace_file having issues if I don't see the top.
+                    // I'll assume I can add the import with a separate replace call or just use `require` if needed, 
+                    // but better to use `MultiReplace` to add import. 
+                    // For now, let's write the logic assuming `serverClient` and `getTicketCount` are available or fetched here.
+
+                    const { serverClient } = await import("@/lib/sanity.server");
+                    const sanityEvent = await serverClient.fetch(query, { eventId });
+
+                    if (sanityEvent) {
+                        name = `Ticket: ${sanityEvent.title}`;
+                        description = `Event Ticket - ${new Date(sanityEvent.date).toLocaleDateString()} @ ${sanityEvent.location}`;
+                        image = sanityEvent.image;
+
+                        // Dynamic Price Logic
+                        let finalPrice = sanityEvent.price;
+                        if (sanityEvent.earlyBirdPrice !== undefined) {
+                            const hasLimit = sanityEvent.earlyBirdLimit !== undefined;
+                            const hasDeadline = sanityEvent.earlyBirdDeadline !== undefined;
+
+                            let limitCondition = true;
+                            let deadlineCondition = true;
+
+                            if (hasLimit) {
+                                const countQuery = `count(*[_type == "ticket" && event._ref == $eventId && status != "cancelled"])`;
+                                const soldCount = await serverClient.fetch(countQuery, { eventId });
+                                // Check if we can fulfill the ENTIRE quantity with early bird
+                                limitCondition = soldCount + item.quantity <= sanityEvent.earlyBirdLimit;
+                            }
+
+                            if (hasDeadline) {
+                                // Compare current time with deadline
+                                // Sanity datetime is ISO string
+                                deadlineCondition = new Date() < new Date(sanityEvent.earlyBirdDeadline);
+                            }
+
+                            if (limitCondition && deadlineCondition) {
+                                finalPrice = sanityEvent.earlyBirdPrice;
+                            }
+                        }
+
+                        unitAmount = Math.round(finalPrice * 100);
+                    } else {
+                        // Fallback to client data if sanity fetch fails (should not happen)
+                        name = `Ticket: ${item.event.title}`;
+                        description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
+                        image = item.event.image;
+                        unitAmount = Math.round(item.event.price * 100);
+                    }
+
+                } catch (e) {
+                    console.error("Error fetching event details in checkout:", e);
+                    // Fallback
+                    name = `Ticket: ${item.event.title}`;
+                    description = `Event Ticket - ${new Date(item.event.date).toLocaleDateString()} @ ${item.event.location}`;
+                    image = item.event.image;
+                    unitAmount = Math.round(item.event.price * 100);
+                }
             } else {
                 return undefined;
             }
@@ -85,7 +155,9 @@ export async function POST(req: Request) {
                 },
                 quantity: item.quantity,
             };
-        }).filter((item) => item !== undefined) as Stripe.Checkout.SessionCreateParams.LineItem[];
+        }));
+
+        const validLineItems = lineItems.filter((item) => item !== undefined) as Stripe.Checkout.SessionCreateParams.LineItem[];
 
         const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
@@ -93,7 +165,7 @@ export async function POST(req: Request) {
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
-            line_items: lineItems,
+            line_items: validLineItems,
             shipping_address_collection: {
                 allowed_countries: ["ES", "FR", "GB", "US"],
             },
