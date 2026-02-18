@@ -22,7 +22,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
     const date = new Date(event.date);
 
     return (
-        <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="container mx-auto px-4 py-12 max-w-4xl pb-48 md:pb-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Left Column: Image & Details */}
                 <div className="md:col-span-2 space-y-8">
@@ -152,12 +152,17 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
                     </div>
                 </div>
 
-                {/* Right Column: Purchase Card */}
-                <div className="md:col-span-1">
+                {/* Right Column: Purchase Card (Desktop only) */}
+                <div className="hidden md:block md:col-span-1">
                     <div className="sticky top-24">
                         <EventPurchase event={event} soldCount={soldCount} />
                     </div>
                 </div>
+            </div>
+
+            {/* Fixed Bottom Purchase Bar (Mobile only) */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background/95 backdrop-blur-md border-t shadow-[0_-4px_20px_rgba(0,0,0,0.1)] p-4">
+                <EventPurchase event={event} soldCount={soldCount} />
             </div>
         </div>
     );

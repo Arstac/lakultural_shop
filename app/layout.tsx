@@ -18,7 +18,7 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: "La Kultural Records | Tienda de Música",
-  description: "Vinilos, Cassettes y Descargas Digitales. Tu tienda de música independiente.",
+  description: "Independent label, Bass music Soundsystem & Collective",
   icons: {
     icon: "/icon.png", // TODO: Replace with music icon
   },
