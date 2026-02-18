@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Instagram } from "lucide-react";
@@ -29,6 +30,10 @@ export function Header({ settings }: HeaderProps) {
 
     const headerBg = "rgba(255, 255, 255, 0.9)";
     const headerFg = "#000000";
+    const primaryColor = settings?.colors?.primary || headerFg;
+
+    const [contactHover, setContactHover] = useState(false);
+    const [igHover, setIgHover] = useState(false);
 
     return (
         <header
@@ -81,15 +86,17 @@ export function Header({ settings }: HeaderProps) {
 
 
                 {/* Right Side: Social & Contact */}
-                <div className="flex items-center gap-2 md:gap-4 [&_button]:text-white [&_button:hover]:bg-white/10 [&_button:hover]:text-white">
-                    <LanguageSwitcher />
-                    <CartButton />
+                <div className="flex items-center gap-2 md:gap-4">
+                    <LanguageSwitcher primaryColor={primaryColor} />
+                    <CartButton primaryColor={primaryColor} />
                     <Link
                         href={instagramLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="transition-colors hover:opacity-100 opacity-80 hidden sm:block"
-                        style={{ color: headerFg }}
+                        className="transition-colors duration-300 hover:opacity-100 opacity-80 hidden sm:block"
+                        style={{ color: igHover ? primaryColor : headerFg }}
+                        onMouseEnter={() => setIgHover(true)}
+                        onMouseLeave={() => setIgHover(false)}
                     >
                         <Instagram className="h-5 w-5" />
                         <span className="sr-only">Instagram</span>
@@ -98,11 +105,13 @@ export function Header({ settings }: HeaderProps) {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="hidden md:flex hover:opacity-100 opacity-90 bg-transparent"
+                        className="hidden md:flex opacity-90 bg-transparent hover:bg-transparent hover:!text-[inherit] transition-colors duration-300"
                         style={{
-                            color: headerFg,
-                            borderColor: `${headerFg}33` // 20% opacity equivalent
+                            color: contactHover ? primaryColor : headerFg,
+                            borderColor: contactHover ? primaryColor : `${headerFg}33`,
                         }}
+                        onMouseEnter={() => setContactHover(true)}
+                        onMouseLeave={() => setContactHover(false)}
                     >
                         <Link href={contactLink}>
                             {t("contact")}

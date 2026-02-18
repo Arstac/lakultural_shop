@@ -1,5 +1,6 @@
 import { ParallaxHome } from "@/components/site/ParallaxHome";
 import { getAlbums, staticAlbums, getHomePageContent, getEvents } from "@/lib/products";
+import { getSiteSettings } from "@/lib/siteSettings";
 import { getTranslations, getLocale } from "next-intl/server";
 import { EventBanner } from "@/components/site/EventBanner";
 
@@ -10,6 +11,8 @@ export default async function Home() {
   const albums = await getAlbums();
   const events = await getEvents();
   const homeContent = await getHomePageContent();
+  const settings = await getSiteSettings();
+  const primaryColor = settings?.colors?.primary || "#CCFF00";
   const displayAlbums = albums.length > 0 ? albums : staticAlbums;
 
   const translations = {
@@ -20,6 +23,9 @@ export default async function Home() {
     collectionDesc: t("description") || "Discover the latest sounds.",
   };
 
+  const bookings = events.filter((e) => new Date(e.date) > new Date());
+  const nextEvent = bookings.length > 0 ? bookings[0] : null;
+
   return (
     <main className="min-h-screen">
       <ParallaxHome
@@ -28,6 +34,8 @@ export default async function Home() {
         locale={locale}
         translations={translations}
         eventBannerSlot={<EventBanner events={events} locale={locale} />}
+        nextEvent={nextEvent}
+        primaryColor={primaryColor}
       />
     </main>
   );

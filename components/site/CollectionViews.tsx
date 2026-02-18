@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Album, Track } from "@/lib/products";
 import { ProductCard } from "./ProductCard";
+import { PageBanner } from "./PageBanner";
 import { Button } from "@/components/ui/button";
 import { Disc, Music, Play, Pause, ShoppingCart } from "lucide-react";
 import { useCart, usePlayer } from "@/lib/store";
@@ -14,9 +15,11 @@ interface CollectionViewsProps {
     title: string;
     description: string;
     locale: string;
+    primaryColor: string;
+    primaryForeground: string;
 }
 
-export function CollectionViews({ albums, title, description, locale }: CollectionViewsProps) {
+export function CollectionViews({ albums, title, description, locale, primaryColor, primaryForeground }: CollectionViewsProps) {
     const [view, setView] = useState<'vinyls' | 'music'>('vinyls');
     const { addTrack, setIsOpen } = useCart();
     const { currentTrack, isPlaying, play, pause } = usePlayer();
@@ -36,28 +39,36 @@ export function CollectionViews({ albums, title, description, locale }: Collecti
     };
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))] py-12">
-            <div className="container mx-auto px-4">
+        <div className="flex flex-col min-h-[calc(100vh-theme(spacing.16))]">
+            <PageBanner title={title} subtitle={description} primaryColor={primaryColor} />
+            <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col items-center mb-12">
-                    <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold tracking-tight mb-4">
-                            {title}
-                        </h1>
-                        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            {description}
-                        </p>
-                    </div>
 
                     {/* View Selector */}
-                    <div className="flex p-1 bg-muted rounded-full mb-8">
+                    <div className="flex p-1.5 bg-muted/60 backdrop-blur-sm rounded-full mb-8 border border-border/40">
                         <button
                             onClick={() => setView('vinyls')}
                             className={cn(
-                                "flex items-center gap-2 px-6 py-2 rounded-full transition-all text-sm font-medium",
+                                "relative flex items-center gap-2 px-6 py-2.5 rounded-full transition-all duration-300 text-sm font-semibold",
                                 view === 'vinyls'
-                                    ? "bg-background shadow-sm text-foreground"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "shadow-lg scale-[1.02]"
+                                    : "text-muted-foreground hover:text-foreground hover:scale-[1.02]"
                             )}
+                            style={view === 'vinyls' ? {
+                                backgroundColor: primaryColor,
+                                color: primaryForeground,
+                                boxShadow: `0 4px 14px ${primaryColor}44`,
+                            } : {}}
+                            onMouseEnter={(e) => {
+                                if (view !== 'vinyls') {
+                                    e.currentTarget.style.backgroundColor = `${primaryColor}15`;
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (view !== 'vinyls') {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                }
+                            }}
                         >
                             <Disc className="w-4 h-4" />
                             <span>{t("vinyls") || "Vinyls"}</span>
@@ -65,11 +76,26 @@ export function CollectionViews({ albums, title, description, locale }: Collecti
                         <button
                             onClick={() => setView('music')}
                             className={cn(
-                                "flex items-center gap-2 px-6 py-2 rounded-full transition-all text-sm font-medium",
+                                "relative flex items-center gap-2 px-6 py-2.5 rounded-full transition-all duration-300 text-sm font-semibold",
                                 view === 'music'
-                                    ? "bg-background shadow-sm text-foreground"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? "shadow-lg scale-[1.02]"
+                                    : "text-muted-foreground hover:text-foreground hover:scale-[1.02]"
                             )}
+                            style={view === 'music' ? {
+                                backgroundColor: primaryColor,
+                                color: primaryForeground,
+                                boxShadow: `0 4px 14px ${primaryColor}44`,
+                            } : {}}
+                            onMouseEnter={(e) => {
+                                if (view !== 'music') {
+                                    e.currentTarget.style.backgroundColor = `${primaryColor}15`;
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (view !== 'music') {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                }
+                            }}
                         >
                             <Music className="w-4 h-4" />
                             <span>{t("music") || "Music"}</span>

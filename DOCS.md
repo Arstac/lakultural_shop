@@ -247,6 +247,7 @@ Gestiona la reproducción de música global.
 - Barra persistente en la parte inferior (`components/site/Player.tsx`).
 - Incluido en `app/[locale]/layout.tsx`.
 - Controles: Play/Pause, Prev/Next, Volumen.
+- **Seek Slider**: Barra de progreso interactiva con tiempo transcurrido y restante. Permite avanzar y retroceder en la canción arrastrando el slider.
 - Muestra: Carátula, Título, Artista.
 
 ### `ProductCard.tsx`
@@ -277,6 +278,13 @@ Gestiona la reproducción de música global.
   - Parsea Markdown (negritas, listas, etc.) usando `react-markdown`.
   - Detecta automáticamente handles de Instagram (`@usuario`) y los convierte en badges estilizados con gradiente.
   - Abre los enlaces de Instagram en una nueva pestaña.
+
+### `CountdownBanner.tsx`
+- **Nuevo**: Componente cliente (`components/site/CountdownBanner.tsx`).
+- **Funcionalidad**: Muestra una cuenta atrás en tiempo real hasta la fecha del próximo evento.
+- **Diseño**: Estética "Técnica" con colores de alto contraste (Verde Ácido/Negro).
+- **Integración**: Se inyecta en `ParallaxHome` y aparece con animación `sticky` al hacer scroll.
+- **Lógica**: Recibe el evento más próximo desde `page.tsx` (filtrado por fecha). Si no hay eventos futuros, no se renderiza.
 
 ---
 
@@ -400,7 +408,7 @@ El proyecto ha evolucionado hacia una estética "Technical & Acid" inspirada en 
 ### Componentes Clave
 1.  **GridBackground**: Fondo interactivo con rejilla técnica. Las celdas se iluminan en verde ácido al paso del ratón.
 2.  **ProductCard**: Tarjetas con bordes negros sólidos (`border-2 border-black`). Tipografía mono-espaciada para detalles técnicos. Mantiene el efecto de "disco de vinilo" al hacer hover.
-4.  **Header**: Fondo blanco translúcido (`rgba(255,255,255,0.9)`) con textos y bordes negros.
+4.  **Header**: Fondo blanco translúcido (`rgba(255,255,255,0.9)`) con textos y bordes negros. El botón de **Contacto** utiliza el color **Primario** definido en Sanity (`settings.colors.primary`).
 5.  **Botones y Enlaces**:
     -   **Ver Álbum / Conseguir Entradas**: Escala (1.05) y cambio de opacidad (0.9) progresivo (`duration-300`).
     -   **Logo**: Rotación de 12-15 grados al hacer hover.

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -18,10 +19,15 @@ const locales = [
     { code: "en", label: "English" },
 ];
 
-export function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+    primaryColor?: string;
+}
+
+export function LanguageSwitcher({ primaryColor }: LanguageSwitcherProps) {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
+    const [hovered, setHovered] = useState(false);
 
     const handleLocaleChange = (newLocale: string) => {
         // Replace current locale in path
@@ -40,7 +46,14 @@ export function LanguageSwitcher() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-1">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1 transition-colors duration-300 hover:bg-transparent"
+                    style={{ color: hovered && primaryColor ? primaryColor : undefined }}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                >
                     <Globe className="h-4 w-4" />
                     <span className="hidden sm:inline">{currentLocale?.label}</span>
                 </Button>

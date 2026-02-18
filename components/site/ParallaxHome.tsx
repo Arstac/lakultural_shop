@@ -7,6 +7,9 @@ import { ValueProps } from "@/components/site/ValueProps";
 import { HomePageContent, Album } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
+import { CountdownBanner } from "@/components/site/CountdownBanner";
+import { Event } from "@/lib/products";
+
 interface ParallaxHomeProps {
     homeContent: HomePageContent | null;
     albums: Album[];
@@ -19,6 +22,8 @@ interface ParallaxHomeProps {
         collectionDesc: string;
     };
     eventBannerSlot: React.ReactNode;
+    nextEvent: Event | null;
+    primaryColor: string;
 }
 
 export function ParallaxHome({
@@ -27,6 +32,8 @@ export function ParallaxHome({
     locale,
     translations,
     eventBannerSlot,
+    nextEvent,
+    primaryColor,
 }: ParallaxHomeProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollY } = useScroll();
@@ -46,8 +53,9 @@ export function ParallaxHome({
     const vinylRotate = useTransform(scrollY, [0, 1000], [0, 180]);
     const vinylOpacity = useTransform(scrollY, [0, 400], [0.8, 0]);
 
-    // Content entry - Smooth transition
-    // Instead of a hard cut, we use a negative margin and a gradient mask on the content top
+    // Banner visibility: Slide up when scrolled past 100px
+    const bannerY = useTransform(scrollY, [0, 200], [100, 0]); // Moves from 100px down to 0px
+    const bannerOpacity = useTransform(scrollY, [0, 200], [0, 1]);
 
     // Use CMS content or fallbacks
     const headline = homeContent?.headline || translations.title;
@@ -57,6 +65,16 @@ export function ParallaxHome({
 
     return (
         <div ref={containerRef} className="relative w-full overflow-hidden bg-background">
+
+            {/* Sticky Countdown Banner */}
+            {nextEvent && (
+                <motion.div
+                    style={{ y: bannerY, opacity: bannerOpacity }}
+                    className="fixed top-20 left-0 right-0 z-50 pointer-events-auto"
+                >
+                    <CountdownBanner event={nextEvent} locale={locale} primaryColor={primaryColor} />
+                </motion.div>
+            )}
 
             {/* -- HERO SECTION (Fixed/Parallax) -- */}
             <div className="relative h-[110vh] w-full overflow-hidden">
