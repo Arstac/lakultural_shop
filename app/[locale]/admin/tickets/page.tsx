@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData, cancelTicket } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { StatusBadge, FilterButton, EmptyState } from "@/components/admin/SharedComponents";
 import { Loader2, MapPin, Calendar, X } from "lucide-react";
 
@@ -23,6 +24,7 @@ function getEventStatus(date: string): "upcoming" | "past" | "today" {
 
 export default function TicketsPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [eventFilter, setEventFilter] = useState<string>("all");
@@ -82,8 +84,8 @@ export default function TicketsPage() {
 
     return (
         <>
-            <AdminHeader title={t("tickets_title")} subtitle={t("tickets_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} />
-            <div className="px-6 py-8 space-y-8">
+            <AdminHeader title={t("tickets_title")} subtitle={t("tickets_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} onMenuToggle={toggleMobileMenu} />
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6 lg:space-y-8">
                 {/* Event cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     {data?.events.map((event) => {
@@ -156,7 +158,7 @@ export default function TicketsPage() {
                 {/* Tickets table */}
                 <div className="rounded-xl overflow-hidden" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[600px]">
                             <thead>
                                 <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
                                     {[t("tickets_code"), t("tickets_event"), t("tickets_attendee"), t("status"), ""].map((h, i) => (

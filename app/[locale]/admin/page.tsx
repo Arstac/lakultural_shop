@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { StatusBadge } from "@/components/admin/SharedComponents";
 import {
     Loader2,
@@ -200,10 +201,10 @@ const STATUS_COLORS: Record<string, string> = {
 function ChartCard({ title, children, span = 1 }: { title: string; children: React.ReactNode; span?: number }) {
     return (
         <div
-            className={`rounded-xl p-6 ${span === 2 ? "lg:col-span-2" : ""}`}
+            className={`rounded-xl p-4 lg:p-6 ${span === 2 ? "lg:col-span-2" : ""}`}
             style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}
         >
-            <h3 className="font-mono font-bold text-[11px] uppercase tracking-[0.15em] mb-5" style={{ color: TEXT_MUTED }}>{title}</h3>
+            <h3 className="font-mono font-bold text-[11px] uppercase tracking-[0.15em] mb-4 lg:mb-5" style={{ color: TEXT_MUTED }}>{title}</h3>
             {children}
         </div>
     );
@@ -218,6 +219,7 @@ function NoData() {
 // ═══════════════════════════════════════════════════════════════
 export default function AdminDashboardPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [activeView, setActiveView] = useState<ActiveView>("overview");
@@ -268,18 +270,19 @@ export default function AdminDashboardPage() {
                 onRefresh={fetchData}
                 refreshLabel={t("refresh")}
                 isRefreshing={loading}
+                onMenuToggle={toggleMobileMenu}
             />
 
-            <div className="px-6 py-8 space-y-8">
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6 lg:space-y-8">
                 {/* ── KPI BUTTONS ── */}
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 sm:gap-3">
                     {kpis.map(({ key, label, value, icon: Icon }) => {
                         const isActive = activeView === key;
                         return (
                             <button
                                 key={key}
                                 onClick={() => setActiveView(key)}
-                                className="relative overflow-hidden rounded-xl p-5 text-left transition-all duration-300 hover:scale-[1.02] group"
+                                className="relative overflow-hidden rounded-xl p-3 sm:p-5 text-left transition-all duration-300 hover:scale-[1.02] group"
                                 style={{
                                     backgroundColor: isActive ? `${ACCENT}08` : CARD_BG,
                                     border: `1.5px solid ${isActive ? ACCENT : BORDER}`,
@@ -380,7 +383,7 @@ export default function AdminDashboardPage() {
                         {/* Avg Order Value */}
                         <ChartCard title={t("avgOrderValue")} span={2}>
                             {monthly.length > 0 ? (
-                                <div className="flex items-center gap-8">
+                                <div className="flex flex-col md:flex-row items-center gap-4 lg:gap-8">
                                     <div className="flex-shrink-0 text-center">
                                         <p className="text-4xl font-bold font-mono" style={{ color: ACCENT }}>{summary.averageOrderValue.toFixed(2)}€</p>
                                         <p className="text-[10px] font-mono uppercase tracking-widest mt-1" style={{ color: TEXT_MUTED }}>promedio global</p>
@@ -471,11 +474,11 @@ export default function AdminDashboardPage() {
 
                         {/* Recent Orders Table */}
                         <div className="rounded-xl overflow-hidden" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
-                            <div className="px-6 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
+                            <div className="px-4 lg:px-6 py-4" style={{ borderBottom: `1px solid ${BORDER}` }}>
                                 <h3 className="font-mono font-bold text-[11px] uppercase tracking-[0.15em]" style={{ color: TEXT_MUTED }}>{t("recentOrders")}</h3>
                             </div>
                             <div className="overflow-x-auto">
-                                <table className="w-full">
+                                <table className="w-full min-w-[600px]">
                                     <thead>
                                         <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
                                             {[t("date"), t("customer"), t("items"), t("amount"), t("status")].map(h => (
@@ -594,7 +597,7 @@ export default function AdminDashboardPage() {
                                                     {event.date ? new Date(event.date).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" }) : "—"} · {event.price}€
                                                 </p>
                                             </div>
-                                            <div className="w-32 flex-shrink-0">
+                                            <div className="w-24 sm:w-32 flex-shrink-0">
                                                 <div className="flex justify-between mb-1">
                                                     <span className="text-[9px] font-mono" style={{ color: TEXT_MUTED }}>{used}/{total}</span>
                                                     <span className="text-[9px] font-mono font-bold" style={{ color: ACCENT }}>{pct.toFixed(0)}%</span>

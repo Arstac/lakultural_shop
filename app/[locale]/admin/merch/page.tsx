@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData, updateMerchStock } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { EmptyState } from "@/components/admin/SharedComponents";
 import { Loader2, Save, AlertTriangle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -27,6 +28,7 @@ function CustomTooltip({ active, payload, label }: any) {
 
 export default function MerchPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [stockEdits, setStockEdits] = useState<Record<string, number>>({});
@@ -90,8 +92,8 @@ export default function MerchPage() {
 
     return (
         <>
-            <AdminHeader title={t("merch_title")} subtitle={t("merch_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} />
-            <div className="px-6 py-8 space-y-8">
+            <AdminHeader title={t("merch_title")} subtitle={t("merch_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} onMenuToggle={toggleMobileMenu} />
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6 lg:space-y-8">
                 {/* Low stock alert */}
                 {lowStockItems.length > 0 && (
                     <div className="rounded-xl p-4 flex items-center gap-3" style={{ backgroundColor: "#FF6B6B10", border: "1px solid #FF6B6B40" }}>
@@ -105,7 +107,7 @@ export default function MerchPage() {
                 {/* Merch table */}
                 <div className="rounded-xl overflow-hidden" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[600px]">
                             <thead>
                                 <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
                                     {[t("merch_product"), t("merch_price"), t("merch_stock"), t("merch_sold"), t("merch_updateStock")].map((h) => (
@@ -167,7 +169,7 @@ export default function MerchPage() {
 
                 {/* Sales chart */}
                 {salesChartData.length > 0 && (
-                    <div className="rounded-xl p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
+                    <div className="rounded-xl p-4 lg:p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                         <h2 className="font-mono font-bold text-sm uppercase tracking-widest mb-6" style={{ color: TEXT_MUTED }}>{t("merch_salesChart")}</h2>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={salesChartData}>

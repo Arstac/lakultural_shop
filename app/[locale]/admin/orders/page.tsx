@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData, updateOrderStatus } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { StatusBadge, SearchBar, FilterButton, ExportCSV, EmptyState } from "@/components/admin/SharedComponents";
 import { Loader2, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -16,6 +17,7 @@ const STATUS_FILTERS = ["all", "paid", "pending", "shipped", "cancelled"] as con
 
 export default function OrdersPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -78,8 +80,8 @@ export default function OrdersPage() {
 
     return (
         <>
-            <AdminHeader title={t("orders_title")} subtitle={t("orders_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} />
-            <div className="px-6 py-8 space-y-6">
+            <AdminHeader title={t("orders_title")} subtitle={t("orders_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} onMenuToggle={toggleMobileMenu} />
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6">
                 {/* Search + Filters */}
                 <SearchBar value={search} onChange={setSearch} placeholder={t("orders_search")}>
                     <div className="flex gap-2 flex-wrap">
@@ -95,7 +97,7 @@ export default function OrdersPage() {
                 {/* Orders Table */}
                 <div className="rounded-xl overflow-hidden" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[700px]">
                             <thead>
                                 <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
                                     {[t("orders_id"), t("date"), t("customer"), t("items"), t("amount"), t("status"), ""].map((h, i) => (
@@ -111,8 +113,8 @@ export default function OrdersPage() {
                                             <td colSpan={7} className="p-0">
                                                 {/* Main row */}
                                                 <div
-                                                    className="grid items-center cursor-pointer transition-colors hover:bg-[#1a1a1a] px-5 py-4"
-                                                    style={{ gridTemplateColumns: "120px 100px 1fr 1fr 90px 100px 40px" }}
+                                                    className="grid items-center cursor-pointer transition-colors hover:bg-[#1a1a1a] px-3 sm:px-5 py-4"
+                                                    style={{ gridTemplateColumns: "100px 80px 1fr 1fr 80px 90px 32px" }}
                                                     onClick={() => setExpandedOrder(isExpanded ? null : order._id)}
                                                 >
                                                     <span className="text-xs font-mono" style={{ color: ACCENT }}>
@@ -149,7 +151,7 @@ export default function OrdersPage() {
                                                     <div className="px-5 pb-5 pt-2 space-y-4" style={{ borderTop: `1px solid ${BORDER}` }}>
                                                         {/* Items table */}
                                                         <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${BORDER}` }}>
-                                                            <table className="w-full">
+                                                            <table className="w-full min-w-[400px]">
                                                                 <thead>
                                                                     <tr style={{ backgroundColor: BORDER }}>
                                                                         {[t("items"), t("orders_type"), t("orders_qty"), t("orders_unitPrice"), t("amount")].map((h) => (
@@ -173,7 +175,7 @@ export default function OrdersPage() {
                                                             </table>
                                                         </div>
                                                         {/* Change status */}
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-2 flex-wrap">
                                                             <span className="font-mono text-xs" style={{ color: TEXT_MUTED }}>{t("orders_changeStatus")}:</span>
                                                             {["pending", "paid", "shipped", "cancelled"].map((s) => (
                                                                 <button

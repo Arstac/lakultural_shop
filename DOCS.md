@@ -307,6 +307,9 @@ Gestiona la reproducción de música global.
   - **Tabla**: Últimos 15 pedidos con cliente, items, importe y estado.
   - **Inventario**: Listado de eventos con tickets vendidos y stock de merch.
 - **Estética**: "Technical & Acid" — fondo oscuro (#0A0A0A), tipografía mono, acento verde ácido (#CCFF00).
+- **Responsive** (Dashboard + todas las sub-páginas: orders, tickets, merch, music, customers):
+  - **Mobile**: Sidebar oculta por defecto, se abre como overlay con botón hamburguesa (☰) en el header de cada página. KPIs en grid de 2 columnas. Gráficos apilados en 1 columna. Tablas con `min-w` + `overflow-x-auto` para scroll horizontal. Padding reducido (`px-4 py-6`). Fondo oscuro explícito en `<main>` con `overflow-x-hidden` para evitar fondo blanco.
+  - **Desktop**: Sidebar fija (260px/72px colapsada) con margin-left en el contenido principal. Padding `px-6 py-8`.
 - **Traducciones**: Namespace `Admin` en los 4 idiomas.
 
 ---

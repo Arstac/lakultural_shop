@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { StatusBadge, SearchBar, EmptyState } from "@/components/admin/SharedComponents";
 import { Loader2, Crown, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -23,6 +24,7 @@ interface CustomerRow {
 
 export default function CustomersPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -83,14 +85,14 @@ export default function CustomersPage() {
 
     return (
         <>
-            <AdminHeader title={t("customers_title")} subtitle={t("customers_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} />
-            <div className="px-6 py-8 space-y-6">
+            <AdminHeader title={t("customers_title")} subtitle={t("customers_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} onMenuToggle={toggleMobileMenu} />
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6">
                 <SearchBar value={search} onChange={setSearch} placeholder={t("customers_search")} />
 
                 {/* Customers table */}
                 <div className="rounded-xl overflow-hidden" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[700px]">
                             <thead>
                                 <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
                                     {["", t("customers_name"), t("customers_email"), t("customers_orderCount"), t("customers_totalSpent"), t("customers_lastOrder"), ""].map((h, i) => (
@@ -106,8 +108,8 @@ export default function CustomersPage() {
                                         <tr key={customer.email} style={{ borderBottom: `1px solid ${BORDER}` }}>
                                             <td colSpan={7} className="p-0">
                                                 <div
-                                                    className="grid items-center cursor-pointer transition-colors hover:bg-[#1a1a1a] px-5 py-4"
-                                                    style={{ gridTemplateColumns: "40px 1fr 1fr 90px 110px 110px 40px" }}
+                                                    className="grid items-center cursor-pointer transition-colors hover:bg-[#1a1a1a] px-3 sm:px-5 py-4"
+                                                    style={{ gridTemplateColumns: "32px 1fr 1fr 70px 90px 100px 32px" }}
                                                     onClick={() => setExpandedCustomer(isExpanded ? null : customer.email)}
                                                 >
                                                     <div>

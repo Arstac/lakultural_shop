@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import { AdminAuthProvider, useAdminAuth } from "@/components/admin/AdminAuthProvider";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { useTranslations } from "next-intl";
@@ -13,6 +13,18 @@ const BG_DARK = "#0A0A0A";
 const CARD_BG = "#111111";
 const BORDER = "#222222";
 const TEXT_MUTED = "#888888";
+
+// ─── Mobile menu context ──────────────────────────────────────
+interface AdminMobileMenuContextType {
+    toggleMobileMenu: () => void;
+}
+const AdminMobileMenuContext = createContext<AdminMobileMenuContextType | null>(null);
+
+export function useAdminMobileMenu() {
+    const ctx = useContext(AdminMobileMenuContext);
+    if (!ctx) throw new Error("useAdminMobileMenu must be used inside AdminLayout");
+    return ctx;
+}
 
 function LoginGate({ children }: { children: ReactNode }) {
     const { isAuthenticated, isLoading, login } = useAdminAuth();
@@ -77,16 +89,23 @@ function LoginGate({ children }: { children: ReactNode }) {
 }
 
 function AdminShell({ children }: { children: ReactNode }) {
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const toggleMobileMenu = () => setMobileOpen((v) => !v);
+    const closeMobileMenu = () => setMobileOpen(false);
+
     return (
-        <div className="flex min-h-screen" style={{ backgroundColor: BG_DARK }}>
-            <AdminSidebar />
-            {/* Content area — offset by sidebar width. The sidebar is 260px or 72px collapsed.
-                We use ml-[72px] for both, and the sidebar overlays when expanded on mobile.
-                On large screens we give full margin. */}
-            <main className="flex-1 ml-[72px] lg:ml-[260px] transition-all duration-300 min-h-screen">
-                {children}
-            </main>
-        </div>
+        <AdminMobileMenuContext.Provider value={{ toggleMobileMenu }}>
+            <div className="flex min-h-screen" style={{ backgroundColor: BG_DARK }}>
+                <AdminSidebar mobileOpen={mobileOpen} onMobileClose={closeMobileMenu} />
+                {/* Content area — no margin on mobile, sidebar overlays instead */}
+                <main
+                    className="flex-1 ml-0 lg:ml-[260px] transition-all duration-300 min-h-screen overflow-x-hidden"
+                    style={{ backgroundColor: BG_DARK }}
+                >
+                    {children}
+                </main>
+            </div>
+        </AdminMobileMenuContext.Provider>
     );
 }
 
@@ -99,3 +118,4 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </AdminAuthProvider>
     );
 }
+

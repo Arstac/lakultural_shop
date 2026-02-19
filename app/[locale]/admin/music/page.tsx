@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { getDashboardData, DashboardData } from "@/app/actions/dashboard";
 import { useTranslations } from "next-intl";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { useAdminMobileMenu } from "@/app/[locale]/admin/layout";
 import { EmptyState } from "@/components/admin/SharedComponents";
 import { Loader2, Disc3 } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
@@ -28,6 +29,7 @@ function CustomTooltip({ active, payload, label }: any) {
 
 export default function MusicPage() {
     const t = useTranslations("Admin");
+    const { toggleMobileMenu } = useAdminMobileMenu();
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -105,8 +107,8 @@ export default function MusicPage() {
 
     return (
         <>
-            <AdminHeader title={t("music_title")} subtitle={t("music_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} />
-            <div className="px-6 py-8 space-y-8">
+            <AdminHeader title={t("music_title")} subtitle={t("music_subtitle")} onRefresh={fetchData} refreshLabel={t("refresh")} isRefreshing={loading} onMenuToggle={toggleMobileMenu} />
+            <div className="px-4 py-6 lg:px-6 lg:py-8 space-y-6 lg:space-y-8">
                 {/* Album cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     {data?.albums.map((album) => {
@@ -143,7 +145,7 @@ export default function MusicPage() {
                 {/* Charts row */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Sales by Format */}
-                    <div className="rounded-xl p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
+                    <div className="rounded-xl p-4 lg:p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                         <h2 className="font-mono font-bold text-sm uppercase tracking-widest mb-6" style={{ color: TEXT_MUTED }}>{t("music_salesByFormat")}</h2>
                         {formatData.length > 0 ? (
                             <ResponsiveContainer width="100%" height={280}>
@@ -164,7 +166,7 @@ export default function MusicPage() {
                     </div>
 
                     {/* Album sales bar chart */}
-                    <div className="rounded-xl p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
+                    <div className="rounded-xl p-4 lg:p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                         <h2 className="font-mono font-bold text-sm uppercase tracking-widest mb-6" style={{ color: TEXT_MUTED }}>{t("music_albumSales")}</h2>
                         {albumSales.length > 0 ? (
                             <ResponsiveContainer width="100%" height={280}>
@@ -187,7 +189,7 @@ export default function MusicPage() {
 
                 {/* Top tracks */}
                 {topTracks.length > 0 && (
-                    <div className="rounded-xl p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
+                    <div className="rounded-xl p-4 lg:p-6" style={{ backgroundColor: CARD_BG, border: `1px solid ${BORDER}` }}>
                         <h2 className="font-mono font-bold text-sm uppercase tracking-widest mb-4" style={{ color: TEXT_MUTED }}>{t("music_topTracks")}</h2>
                         <div className="space-y-2">
                             {topTracks.map((track, i) => (
