@@ -76,20 +76,19 @@ export function ParallaxHome({
                 </motion.div>
             )}
 
-            {/* -- HERO SECTION (Fixed/Parallax) -- */}
-            <div className="relative h-[110vh] w-full overflow-hidden">
-                {/* Layer 1: Background Image */}
-                <motion.div
-                    style={{ y: backgroundY }}
-                    className="absolute inset-0 z-0"
-                >
-                    <div className="absolute inset-0 bg-black/40 z-10" />
-                    <img
-                        src={heroImage}
-                        alt="Hero Background"
-                        className="w-full h-full object-cover scale-110" // Initial scale to allow movement
-                    />
-                </motion.div>
+            {/* -- FIXED BACKGROUND -- */}
+            <div className="fixed inset-0 z-0">
+                <div className="absolute inset-0 bg-black/40 z-10" />
+                <img
+                    src={heroImage}
+                    alt="Hero Background"
+                    className="w-full h-full object-cover"
+                />
+            </div>
+
+            {/* -- HERO SECTION (Content Only) -- */}
+            <div className="relative h-[110vh] w-full overflow-hidden pointer-events-none">
+                {/* Layer 1: Background Image REMOVED - Now Fixed */}
 
                 {/* Layer 1.5: Floating Elements (Optional Visual Flair) */}
                 <motion.div
@@ -105,7 +104,7 @@ export function ParallaxHome({
                 {/* Layer 2: Main Text Content */}
                 <motion.div
                     style={{ y: textY, opacity: textOpacity, filter: `blur(${textBlur})` }} // Added dynamic blur manually via style string if motion supports it, otherwise class
-                    className="relative z-20 h-screen flex flex-col items-center justify-center text-center text-white p-4 pb-32"
+                    className="relative z-20 h-screen flex flex-col items-center justify-center text-center text-white p-4 pb-32 pointer-events-auto"
                 >
                     {/* Title Image */}
                     <div className="mb-8 w-full max-w-[600px] md:max-w-[800px] px-4">
@@ -136,9 +135,9 @@ export function ParallaxHome({
             </div>
 
             {/* -- CONTENT LAYERS (Background moves up to cover hero smoothly) -- */}
-            <div className="relative z-30 -mt-[15vh]">
+            <div className="relative z-30 -mt-[15vh] px-4 md:px-12 lg:px-24 mb-20">
 
-                <div className="bg-background min-h-screen relative pb-20 pt-20 rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.2)]">
+                <div className="bg-background min-h-screen relative pb-20 pt-20 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
                     <div className="container mx-auto px-4">
 
                         {/* Event Banner - Slightly overlapping into the hero space for depth */}

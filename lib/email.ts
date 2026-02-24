@@ -1,43 +1,44 @@
 import nodemailer from 'nodemailer';
 
 interface EmailItem {
-    title: string;
-    quantity: number;
-    price: number;
+  title: string;
+  quantity: number;
+  price: number;
 }
 
 interface OrderDetails {
-    orderId: string;
-    customerName: string;
-    customerEmail: string;
-    items: EmailItem[];
-    total: number;
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  items: EmailItem[];
+  total: number;
 }
 
 interface TicketDetails {
-    code: string;
-    eventName: string;
-    attendeeName: string;
+  code: string;
+  eventName: string;
+  attendeeName: string;
 }
 
 export async function sendOrderConfirmationEmail(
-    order: OrderDetails,
-    tickets: TicketDetails[] = []
+  order: OrderDetails,
+  tickets: TicketDetails[] = [],
+  audioFiles: { filename: string, url: string }[] = []
 ) {
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT) || 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-    });
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
-    const hasTickets = tickets.length > 0;
+  const hasTickets = tickets.length > 0;
 
-    // Generate Items List HTML
-    const itemsHtml = order.items.map(item => `
+  // Generate Items List HTML
+  const itemsHtml = order.items.map(item => `
     <tr>
       <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.title}</td>
       <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.quantity}</td>
@@ -45,20 +46,20 @@ export async function sendOrderConfirmationEmail(
     </tr>
   `).join('');
 
-    // Generate Tickets HTML
-    let ticketsHtml = '';
-    if (hasTickets) {
-        // Generate link to view tickets
-        // Assuming the orderId or a token is used to view tickets publicly or by the user
-        // The user mentioned: "si es una entrada con el codigo qr generado en el correo"
-        // Since we can't easily generate an image attachment without a library or external service, 
-        // we will provide a direct link to the ticket page which has the QR code.
-        // However, to make it better, we can also just list the codes.
+  // Generate Tickets HTML
+  let ticketsHtml = '';
+  if (hasTickets) {
+    // Generate link to view tickets
+    // Assuming the orderId or a token is used to view tickets publicly or by the user
+    // The user mentioned: "si es una entrada con el codigo qr generado en el correo"
+    // Since we can't easily generate an image attachment without a library or external service, 
+    // we will provide a direct link to the ticket page which has the QR code.
+    // However, to make it better, we can also just list the codes.
 
-        // Simplest robust approach: Link to the ticket page
-        const ticketLink = `https://lakultural.eu/tickets/${order.orderId}`; // Replace with actual domain in production or env var
+    // Simplest robust approach: Link to the ticket page
+    const ticketLink = `https://lakultural.eu/tickets/${order.orderId}`; // Replace with actual domain in production or env var
 
-        ticketsHtml = `
+    ticketsHtml = `
       <div style="margin-top: 20px; padding: 15px; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
         <h3 style="color: #166534; margin-top: 0;">¡Aquí tienes tus entradas!</h3>
         <p>Has comprado entradas para un evento. Puedes ver tus códigos QR en el siguiente enlace:</p>
@@ -66,9 +67,9 @@ export async function sendOrderConfirmationEmail(
         <p style="margin-top: 10px; font-size: 12px; color: #666;">Presenta el código QR de la web en la entrada del evento.</p>
       </div>
     `;
-    }
+  }
 
-    const htmlContent = `
+  const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
       <h1 style="color: #0C5752;">Confirmación de Pedido</h1>
       <p>Hola ${order.customerName},</p>
@@ -105,17 +106,21 @@ export async function sendOrderConfirmationEmail(
     </div>
   `;
 
-    try {
-        await transporter.sendMail({
-            from: '"La Kultural Shop" <info@lakultural.eu>',
-            to: order.customerEmail,
-            subject: hasTickets ? `Tus Entradas - Pedido ${order.orderId}` : `Confirmación de Pedido ${order.orderId}`,
-            html: htmlContent,
-        });
-        console.log(`Email sent to ${order.customerEmail} for order ${order.orderId}`);
-    } catch (error) {
-        console.error("Error sending email:", error);
-        // We don't throw here to avoid failing the response if email fails, 
-        // but in a production app you might want to queue it for retry.
-    }
+  try {
+    await transporter.sendMail({
+      from: '"La Kultural Shop" <info@lakultural.eu>',
+      to: order.customerEmail,
+      subject: hasTickets ? `Tus Entradas - Pedido ${order.orderId}` : `Confirmación de Pedido ${order.orderId}`,
+      html: htmlContent,
+      attachments: audioFiles.map(file => ({
+        filename: file.filename,
+        href: file.url,
+      })),
+    });
+    console.log(`Email sent to ${order.customerEmail} for order ${order.orderId}`);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    // We don't throw here to avoid failing the response if email fails, 
+    // but in a production app you might want to queue it for retry.
+  }
 }

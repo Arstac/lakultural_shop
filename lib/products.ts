@@ -378,3 +378,53 @@ export const getMerchBySlug = async (slug: string): Promise<Merch | null> => {
         return null;
     }
 };
+
+export interface AudioFile {
+    filename: string;
+    url: string;
+}
+
+export const getAudioFilesForOrder = async (items: { type: string, sanity_id?: string }[]): Promise<AudioFile[]> => {
+    try {
+        const audioFiles: AudioFile[] = [];
+
+        for (const item of items) {
+            if (!item.sanity_id) continue;
+
+            if (item.type === 'digital' || item.type === 'album_digital') {
+                const query = `*[_type == "album" && _id == $albumId][0] {
+                    tracks[] {
+                        title,
+                        "url": previewAudio.asset->url
+                    }
+                }`;
+                const data = await client.fetch(query, { albumId: item.sanity_id });
+                if (data && data.tracks) {
+                    data.tracks.forEach((track: any) => {
+                        if (track.url) {
+                            const safeTitle = track.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                            audioFiles.push({ filename: `${safeTitle}.mp3`, url: track.url });
+                        }
+                    });
+                }
+            } else if (item.type === 'track') {
+                const query = `*[_type == "album" && $trackId in tracks[]._key][0] {
+                    "track": tracks[_key == $trackId][0] {
+                        title,
+                        "url": previewAudio.asset->url
+                    }
+                }`;
+                const data = await client.fetch(query, { trackId: item.sanity_id });
+                if (data && data.track && data.track.url) {
+                    const safeTitle = data.track.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                    audioFiles.push({ filename: `${safeTitle}.mp3`, url: data.track.url });
+                }
+            }
+        }
+
+        return audioFiles;
+    } catch (error) {
+        console.error("Error fetching audio files for order:", error);
+        return [];
+    }
+};

@@ -4,6 +4,7 @@ import Stripe from "stripe";
 import { createClient } from "next-sanity";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
 import { sendOrderConfirmationEmail } from "@/lib/email";
+import { getAudioFilesForOrder } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
     apiVersion: "2025-12-15.clover" as any,
@@ -111,6 +112,13 @@ export async function POST(req: Request) {
                 }
             }
 
+            // 4.5 Fetch Audio files
+            const audioItems = orderItems.map(item => ({
+                type: item.type,
+                sanity_id: item.sanity_id
+            }));
+            const audioFiles = await getAudioFilesForOrder(audioItems);
+
             // 5. Send Confirmation Email
             if (session.customer_details?.email) {
                 try {
@@ -124,7 +132,7 @@ export async function POST(req: Request) {
                             price: item.price
                         })),
                         total: (session.amount_total || 0) / 100
-                    }, tickets);
+                    }, tickets, audioFiles);
                 } catch (emailError) {
                     console.error("Failed to send email for paid order:", emailError);
                 }

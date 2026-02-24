@@ -239,9 +239,9 @@ Gestiona la reproducción de música global.
 ### `ParallaxHome.tsx`
 - **Nuevo**: Componente principal de la Home con efectos de scroll (Framer Motion).
 - **Estructura**:
-  - Hero Sticky: Imagen de fondo fija que se escala y desvanece al hacer scroll.
+  - **Background Fixed**: Imagen de fondo estática que permanece visible en todo momento.
   - Título Animado: Aparece desde abajo (`translateY`) y cambia de opacidad.
-  - Capa de Contenido: Se desliza sobre el Hero creando un efecto de profundidad.
+  - Capa de Contenido: Se desliza sobre el fondo con márgenes laterales (`px-4 md:px-12 lg:px-24`) y **bordes totalmente redondeados** (`rounded-3xl` + sombra 3D) para resaltar sobre el fondo.
 - Recibe `EventBanner` como prop (`slot`) para evitar problemas de componentes servidor/cliente.
 
 ### `Player.tsx`
@@ -262,6 +262,7 @@ Gestiona la reproducción de música global.
 - **Tracklist interactivo**: Botones de Play para cada canción.
 - **Opciones de Compra**: Filas expandibles para Vinilo y Digital. El nombre del formato abre un desplegable con características del producto (edición limitada, .WAV, envío inmediato, etc.). Un icono de carrito separado al lado del precio permite añadir al carrito.
 - **Carrito**: Botón de "Añadir al carrito" individual para cada canción.
+- **Animación Vinilo**: Al hacer hover sobre la carátula, el disco se desliza hacia fuera (capas ajustadas para visibilidad correcta sobre background).
 
 ### `CartSheet.tsx`
 - Adaptado para mostrar iconos diferentes según el tipo de producto (Disco, Descarga, Nota Musical).
@@ -415,6 +416,15 @@ SMTP_PORT=587
 SMTP_USER=info@lakultural.eu
 SMTP_PASS=tu_contraseña_del_correo
 ```
+
+---
+
+## Sistema de Descargas Digitales (Audio)
+
+- **Productos Digitales**: Cuando un usuario compra un "Álbum Digital" (`album_digital`) o una "Canción Individual" (`track`), el sistema lo identifica.
+- **Webhook de Compra**: Al completarse la sesión de Stripe (`checkout.session.completed`), el servidor lee los _IDs_ de Sanity (almacenados como metadatos).
+- **Extracción de MP3**: Automáticamente se realiza una consulta GROQ utilizando la utilidad \`getAudioFilesForOrder\` que trae las URLs de los audios en MP3 (`previewAudio`) desde Sanity. Para álbumes digitales, se extraen todas las canciones que contiene.
+- **Envío por Email**: Nodemailer procesa y descarga estas URLs de forma instantánea, insertando los archivos .mp3 como adjuntos (`attachments`) en el correo de confirmación de compra enviado al cliente.
 
 ---
 
